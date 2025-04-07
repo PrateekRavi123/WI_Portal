@@ -1,0 +1,6 @@
+<div class="card order-card" [ngClass]="{'bg-c-blue': color() === 'blue', 'bg-c-green': color() === 'green', 'bg-c-yellow': color() === 'yellow','bg-c-pink': color() === 'pink', 'bg-c-red': color() === 'red'}">
+    <div class="card-block">
+        <h4 class="m-b-20">{{label()}}</h4>
+        <h2 class="text-right"><i class = {{icon()}}></i><span class="float-end">{{count()}}</span></h2>
+    </div>
+</div>

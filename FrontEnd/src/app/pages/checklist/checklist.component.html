@@ -1,0 +1,15 @@
+<div class="card shadow-lg border-0 rounded-3 ">
+    <nav>
+        <div class="nav nav-tabs bg-warning border-bottom" id="nav-tab" role="tablist">
+            <a *ngFor="let tab of tabs" [routerLink]="tab.path" routerLinkActive="active"
+               class="nav-link text-dark fw-semibold px-4 py-2 rounded-top"
+               role="tab">
+                {{ tab.label }}
+            </a>
+        </div>
+    </nav>
+
+    <div class="px-1">
+        <router-outlet></router-outlet>
+    </div>
+</div>

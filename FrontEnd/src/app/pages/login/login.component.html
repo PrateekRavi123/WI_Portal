@@ -1,0 +1,92 @@
+
+<div class="content" *ngIf="!otpSent">
+    <div class="container py-5">
+        <div class="row d-flex justify-content-center align-items-center h-100">
+            <div class="col-12 col-md-8 col-lg-6 col-xl-5">
+                <div class="card bg-dark text-white border border-dark border-2" style="opacity: 80%;">
+                    <div class="card-body p-4 text-center">
+                        <img src="assets/byplLogo.png" class="img-fluid align-items-left p-2" alt="Bypl"
+                            style="height: 20vh; border-radius: 5%;">
+                        <div class="mb-md-5 mt-md-4">
+                            <h3 class="fst-italic text-uppercase">Workplace Inspection Portal</h3>
+                        </div>
+                        <div class="mb-md-4">
+                            <form [formGroup]="loginForm">
+                                <div data-mdb-input-init class="form-outline form-white mb-4">
+                                    <input type="text" id="mobileNumber" class="form-control form-control-lg"
+                                        placeholder="Mobile Number" formControlName="mobileNumber" maxlength="10"/>
+                                    @if(loginForm.controls['mobileNumber'].invalid &&
+                                    loginForm.controls['mobileNumber'].touched){
+                                    <div class="text-danger fw-bold fs-4">
+                                        Please enter a valid mobile number.
+                                    </div>
+                                    }
+                                    @if(otpSent){
+                                        <div class="text-success fw-bold fs-4">
+                                            Otp sent successfully.
+                                        </div>
+                                    }
+                                </div>
+                                <button data-mdb-button-init data-mdb-ripple-init
+                                    class="btn btn-outline-light btn-lg px-5" type="submit"
+                                    (click)="onSubmit()">Login</button>
+                            </form>
+                        </div>
+                        <div>
+                            <p class="fw-bold">BSES Yamuna Power Limited &copy; All Rights Reserved</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="popup" *ngIf="otpSent">
+    <div class="content">
+        <div class="container py-5">
+            <div class="row d-flex justify-content-center align-items-center h-100">
+                <div class="col-12 col-md-8 col-lg-6 col-xl-5">
+                    <div class="card bg-dark text-white" style="border-radius: 1rem; opacity: 80%;">
+                        <div class="card-body p-4 text-center">
+                            <form [formGroup]="otpForm">
+                                <h6>Please enter the one time password <br> to verify your account</h6>
+                                <div> <span>A code has been sent to {{MobileNumber}} </span>  </div>
+                                <div id="otp" class="inputs d-flex flex-row justify-content-center mt-2"> <input
+                                        class="m-2 text-center form-control rounded border border-dark" type="text"
+                                        id="first" formControlName="otpFirst" maxlength="1"
+                                        (keyup)="onKeyUp($event, 'first')" />
+                                    <input class="m-2 text-center form-control rounded border border-dark" type="text"
+                                        id="second" formControlName="otpSecond" maxlength="1"
+                                        (keyup)="onKeyUp($event, 'second')" />
+                                    <input class="m-2 text-center form-control rounded border border-dark" type="text"
+                                        id="third" formControlName="otpThird" maxlength="1"
+                                        (keyup)="onKeyUp($event, 'third')" />
+                                    <input class="m-2 text-center form-control rounded border border-dark" type="text"
+                                        id="fourth" formControlName="otpFourth" maxlength="1"
+                                        (keyup)="onKeyUp($event, 'fourth')" />
+                                    <input class="m-2 text-center form-control rounded border border-dark" type="text"
+                                        id="fifth" formControlName="otpFifth" maxlength="1"
+                                        (keyup)="onKeyUp($event, 'fifth')" />
+                                    <input class="m-2 text-center form-control rounded border border-dark" type="text"
+                                        id="sixth" formControlName="otpSixth" maxlength="1"
+                                        (keyup)="onKeyUp($event, 'sixth')" />
+                                </div>
+                                @if(isOtpInvalid()){
+                                <div class="text-danger fw-bold fs-4">
+                                    Please enter a valid one time password.
+                                </div>
+                                }
+                                <span>Time Left : {{timeLeft}} seconds</span>
+                                <div class="d-flex flex-row justify-content-center mt-4">
+                                    <button class="btn btn-outline-light px-4" (click)="validateOtp()">Validate</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,14 @@
+[11/3/2025, 10:13:35 am] Connected to SQL Database
+[11/3/2025, 10:19:12 am] Connected to SQL Database
+[11/3/2025, 10:33:42 am] Connected to SQL Database
+[11/3/2025, 10:33:54 am] Error in adding checkpoint. Error: The INSERT statement conflicted with the FOREIGN KEY constraint "fk_type". The conflict occurred in database "WIP_TEST", table "dbo.CHECKPOINT_TYPE_MST", column 'TYPE_ID'.
+[11/3/2025, 10:35:48 am] Error in adding checkpoint. Error: The INSERT statement conflicted with the FOREIGN KEY constraint "fk_type". The conflict occurred in database "WIP_TEST", table "dbo.CHECKPOINT_TYPE_MST", column 'TYPE_ID'.
+[11/3/2025, 10:41:50 am] Connected to SQL Database
+[11/3/2025, 10:45:16 am] Connected to SQL Database
+[11/3/2025, 10:47:11 am] Failed to retrieve the checkpoint. Error: Invalid column name 'FORWARD_ROLE'.
+[11/3/2025, 10:47:59 am] Connected to SQL Database
+[11/3/2025, 10:47:59 am] Failed to retrieve the checkpoint. Error: Invalid column name 'TYPE'.
+[11/3/2025, 10:48:22 am] Connected to SQL Database
+[11/3/2025, 10:49:15 am] Connected to SQL Database
+[11/3/2025, 11:14:21 am] Connected to SQL Database
+[11/3/2025, 11:15:05 am] Connected to SQL Database

@@ -1,0 +1,6 @@
+  
+  <div class="popup-container">
+    <div *ngFor="let popup of popups$ | async; let i = index" class="popup" [ngClass]="popup.type" [style.top.px]="i * 80">
+      <span class="popup-message">{{ popup.message }}</span>
+    </div>
+  </div>

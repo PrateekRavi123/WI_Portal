@@ -1,0 +1,47 @@
+
+<div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+    <h5 class="mb-0">Location List</h5>
+    <input type="text" class="form-control w-25" #searchBox placeholder="Search..." (input)="onSearch(searchBox.value)">
+</div>
+
+<div class="table-responsive">
+    <table class="table table-hover">
+        <thead class="table-dark">
+            <tr>
+                <th (click)="sortData('loc_id')" class="sortable">ID <span *ngIf="sortColumn === 'loc_id'">{{ sortAscending ? '▲' : '▼' }}</span></th>
+                <th (click)="sortData('loc_name')" class="sortable">Name <span *ngIf="sortColumn === 'loc_name'">{{ sortAscending ? '▲' : '▼' }}</span></th>
+                <th (click)="sortData('div')" class="sortable">Division <span *ngIf="sortColumn === 'div'">{{ sortAscending ? '▲' : '▼' }}</span></th>
+                <th (click)="sortData('circle')" class="sortable">Circle <span *ngIf="sortColumn === 'circle'">{{ sortAscending ? '▲' : '▼' }}</span></th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let user of filteredData">
+                <td>{{ user.loc_id }}</td>
+                <td>{{ user.loc_name }}</td>
+                <td>{{ user.div }}</td>
+                <td>{{ user.circle }}</td>
+                <td>
+                    <button class="btn btn-sm btn-primary me-2" (click)="openEditModal(user)">
+                        <i class="bi bi-pencil-square"></i> Edit
+                    </button>
+                    <button class="btn btn-sm btn-danger" (click)="deleteUser(user.loc_id)">
+                        <i class="bi bi-trash"></i> Delete
+                    </button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<div class="card-footer d-flex justify-content-between align-items-center">
+    <span>Page {{ currentPage }} of {{ totalPages() }}</span>
+    <ul class="pagination mb-0">
+        <li class="page-item" [class.disabled]="currentPage === 1">
+            <a class="page-link" (click)="changePage(currentPage - 1)">Previous</a>
+        </li>
+        <li class="page-item" [class.disabled]="currentPage === totalPages()">
+            <a class="page-link" (click)="changePage(currentPage + 1)">Next</a>
+        </li>
+    </ul>
+</div>

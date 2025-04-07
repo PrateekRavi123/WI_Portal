@@ -1,0 +1,40 @@
+header {
+    width: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 5rem;
+    z-index: 2;
+/* background-color: rgba(185, 174, 174, 0.9); */
+background: linear-gradient(to bottom, #69c 40%, #316598);
+    opacity: 80%;
+  }
+
+  .container-fluid {
+    max-width: 100%;
+  }
+
+  .dropdown-toggle::after {
+    display: none; /* Hide the default dropdown arrow */
+  }
+
+  .dropdown-menu {
+    min-width: 1.5rem; /* Adjust as needed */
+/* transition: opacity 0.3s ease, visibility 0.3s ease; */
+  }
+
+  /* .dropdown-item {
+    padding: 0.2rem 0.5rem;
+    font-size: 16px;
+  } */
+
+  .dropdown-item:hover {
+    background-color: #0a58ca;
+    color: white;
+  }
+
+  @media (max-width: 768px) {
+    .container-fluid {
+      padding: 0 2rem;
+    }
+  }

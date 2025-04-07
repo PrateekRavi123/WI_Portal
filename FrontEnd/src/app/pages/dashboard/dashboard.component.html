@@ -1,0 +1,35 @@
+<div>
+    <app-header (toggleSidebar)="toggleSidebar()"></app-header>
+</div>
+<div class="content">
+    <app-sidebar [isOpen]="isSidebarOpen"></app-sidebar>
+    <div class="wrap" [ngClass]="{'wrap-shifted': isSidebarOpen}">
+        <div class="m-4">
+            <router-outlet></router-outlet>
+        </div>
+    </div>
+</div>
+
+<div class="modal-overlay" *ngIf="isModalOpen">
+    <div class="modal-content">
+      <button class="modal-close" (click)="closeModal()">×</button>
+      <ng-container *ngIf="currentModal === 'profile'">
+        <app-profile (formSubmitted)="closeModal()"></app-profile> 
+      </ng-container>
+      <ng-container *ngIf="currentModal === 'editincharge'">
+        <app-editincharge [user]="selectedData" (formSubmitted)="closeModal()"></app-editincharge>
+      </ng-container>
+      <ng-container *ngIf="currentModal === 'editcheckpt'">
+        <app-editcheckpt [user]="selectedData" (formSubmitted)="closeModal()"></app-editcheckpt>
+      </ng-container>
+      <ng-container *ngIf="currentModal === 'editloc'">
+        <app-editloc [user]="selectedData" (formSubmitted)="closeModal()"></app-editloc>
+      </ng-container>
+      <ng-container *ngIf="currentModal === 'editchecklist'">
+        <app-editchecklist [user]="selectedData" (formSubmitted)="closeModal()"></app-editchecklist>
+      </ng-container>
+      <ng-container *ngIf="currentModal === 'editpendingchecklist'">
+        <app-editpendingchecklist [user]="selectedData" (formSubmitted)="closeModal()"></app-editpendingchecklist>
+      </ng-container>
+    </div>
+  </div>

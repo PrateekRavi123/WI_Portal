@@ -1,0 +1,81 @@
+<form [formGroup]="checkpointForm" (ngSubmit)="onsubmit()">
+  <div class="container m-2">
+    <h5>Checklist Details</h5>
+    <div class="card shadow-lg mb-4 p-3">
+      <div class="mb-3 row">
+        <div class="col-md-4">
+          <label for="checklistID" class="col-form-label">Checklist ID:</label>
+            <input type="text" id="checklistID" formControlName="checklistID" class="form-control" />
+        </div>
+        <div class="col-md-4">
+          <label for="empCode" class="col-form-label">Employee ID:</label>
+            <input type="text" id="empCode" formControlName="empCode" class="form-control"
+              placeholder="Enter Employee Code" />
+        </div>
+        <div class="col-md-4">
+          <label for="division" class="col-form-label">Division:</label>
+          <input type="text" id="division" formControlName="division" class="form-control"
+            placeholder="Enter Division" />
+        </div>
+      </div>
+      <div class="mb-3 row">
+        <div class="col">
+          <label for="location" class="col-form-label">Location:</label>
+          <input type="text" id="location" formControlName="location" class="form-control"
+            placeholder="Enter Location" />
+        </div>
+      </div>
+    </div>
+    <h5>Checkpoint List</h5>
+    <div *ngFor="let type of Object.keys(groupedCheckpoints)">
+      <div class="card shadow-lg mb-4">
+        <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center"
+          (click)="toggleCollapse(type)">
+          <h5 class="mb-0">{{ type }}</h5>
+          <i class="bi" [ngClass]="{ 'bi-chevron-up': !isCollapsed(type), 'bi-chevron-down': isCollapsed(type) }"></i>
+        </div>
+        <div class="card-body" [id]="'collapse-' + type" class="collapse" [ngClass]="{ show: !isCollapsed(type) }">
+          <!-- Iterate over checkpoints of the current type -->
+          <div formArrayName="checkpoints">
+            <ul class="list-group list-group-flush">
+
+              <li class="list-group-item" *ngFor="let checkpoint of groupedCheckpoints[type]; let i = index">
+                <!-- Find the corresponding FormGroup index -->
+                <ng-container *ngFor="let ctrl of checkpoints2.controls; let j = index">
+                  <ng-container *ngIf="ctrl.value.id === checkpoint.id">
+                    <div [formGroupName]="j">
+                      <div class="row justify-content-between">
+                        <div class="col-12 col-md-6">
+                          <span>{{ checkpoint.name }}</span>
+                        </div>
+                        <div class="col-12 col-md-2">
+                          <select formControlName="status" class="form-select form-select-sm">
+                            <option value="OK">OK</option>
+                            <option value="NOT OK">NOT OK</option>
+                            <option value="NOT APPLICABLE">NOT APPLICABLE</option>
+                          </select>
+                        </div>
+                      </div>
+
+                      <div *ngIf="ctrl.get('status')?.value === 'NOT OK'">
+                        <div class="mt-2">
+                          <label class="form-label">Remarks:<span class="text-danger text-bold">*</span></label>
+                          <textarea formControlName="remarks" class="form-control form-control-sm" rows="3"></textarea>
+                        </div>
+                        <div class="mt-2">
+                          <label class="form-label">Attach Photo:</label>
+                          <input type="file" (change)="onFileChange($event, j)" class="form-control form-control-sm" />
+                        </div>
+                      </div>
+                    </div>
+                  </ng-container>
+                </ng-container>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+    <button type="submit" class="btn btn-primary float-end m-2" [disabled]="checkpointForm.invalid">Submit</button>
+  </div>
+</form>

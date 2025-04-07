@@ -1,0 +1,26 @@
+<header class="border-bottom text-black">
+    <div class="container-fluid d-flex justify-content-between align-items-center p-2">
+      <div class="d-flex justify-content-between align-items-center"><!--style="width: 240px;"-->
+          <button class="btn btn-dark me-2" (click)="onToggleSidebar()">
+              <i class="bi bi-list"></i> 
+            </button>
+            <a href="dashboard" class="d-none d-lg-block"><img src="assets/byplLogo.png" width="100px" alt="bses_logo" class="logo" /></a>
+      </div>
+      <h1 class="text-centre m-0 fst-italic">Workplace Inspection Portal</h1>
+      <div class="d-flex justify-content-between align-items-center" >
+        <h6 class="d-none d-lg-block p-1">
+          Welcome, {{username}} !
+        </h6>
+        <div class="dropdown" >
+          <button class="btn btn-dark dropdown-toggle" type="button" id="profileDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+            <i class="bi bi-person-circle"></i> 
+          </button>
+          <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
+            <li><button class="dropdown-item" (click)="openDashboardModal('profile')">Profile</button></li>
+            <li><a class="dropdown-item" (click)="logout()">Logout</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </header>
+  

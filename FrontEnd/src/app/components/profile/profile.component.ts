@@ -1,0 +1,108 @@
+import { CommonModule } from '@angular/common';
+import { Component, EventEmitter, inject, Output } from '@angular/core';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { InchargesService } from '../../services/incharges/incharges.service';
+import { StorageService } from '../../services/storage/storage.service';
+import { PopupService } from '../../services/popup/popup.service';
+import { Router } from '@angular/router';
+
+@Component({
+  selector: 'app-profile',
+  imports: [CommonModule, ReactiveFormsModule],
+  templateUrl: './profile.component.html',
+  styleUrl: './profile.component.css'
+})
+export class ProfileComponent {
+  @Output() formSubmitted = new EventEmitter<void>();
+  router = inject(Router);
+  profileForm: FormGroup;
+  emp_code: string | null = '';
+  circle: string  | null = '';
+  div: string  | null = '';
+  loc: string  | null = '';
+  roleId: string  | null = '';
+
+  constructor(private fb: FormBuilder,private inchargeservice: InchargesService,private storageservice: StorageService,private popupservice: PopupService) {
+    this.profileForm = this.fb.group({
+      emp_code: [{ value: '', disabled: true }],
+      emp_name: ['', Validators.required],
+      email: ['', [Validators.required, Validators.email]],
+      phone: ['', [Validators.required, Validators.pattern(/^\d{10}$/)]],
+      circle: [{ value: '', disabled: true }],
+      division: [{ value: '', disabled: true }],
+      location: [{ value: '', disabled: true }],
+      role: [{ value: '', disabled: true }],
+      status: [{ value: '', disabled: true }],
+    });
+
+  }
+  async ngOnInit() {
+    this.emp_code = await this.storageservice.getUser();
+    this.getdetails();      
+  }
+
+
+  get f() { return this.profileForm.controls as { [key: string]: any }; }
+
+  getdetails(){
+    this.inchargeservice.getIncharge(this.emp_code?this.emp_code:"").subscribe({
+      next: (data) => {
+        console.log(data);
+        this.profileForm.patchValue({
+          emp_code: data[0].EMP_CODE,
+          emp_name: data[0].EMP_NAME,
+          email: data[0].EMAIL_ID,
+          phone: data[0].MOBILE_NO,
+          circle: data[0].CIRCLE,
+          division: data[0].DIVISION,
+          location: data[0].LOCATION,
+          role: data[0].ROLE,
+          status: data[0].STATUS
+        })
+        this.circle = data[0].CIRCLE_CODE;
+        this.div = data[0].DIV_CODE;
+        this.loc = data[0].LOC_CODE;
+        this.roleId = data[0].ROLE_ID;
+        console.log(this.circle);
+      },
+      error: (error) => {
+        console.error('Error fetching data:', error);
+      },
+    });
+  }
+ 
+  resetForm() {
+    this.profileForm.reset();
+  }
+
+  onSubmit() {
+      console.log('Profile Updated:', this.profileForm.getRawValue().emp_code);
+      const body = {
+        emp_code:this.profileForm.getRawValue().emp_code,
+        emp_name:this.profileForm.value.emp_name,
+        email_id:this.profileForm.value.email,
+        mob:this.profileForm.value.phone.toString(),
+        circle:this.circle,
+        div:this.div,
+        loc:this.loc,
+        role:this.roleId,
+        status:this.profileForm.getRawValue().status,
+        updated_by:this.profileForm.getRawValue().emp_code
+      }
+      console.log('Body:', body);
+      this.inchargeservice.updateincharge(body).subscribe({
+        next: (data) => {
+          console.log(data);
+          this.popupservice.showPopup('success', 'Profile updated successfully.');
+          this.formSubmitted.emit();
+        },
+        error: (error) => {
+          console.error('Error fetching data:', error);
+          this.resetForm();
+          this.popupservice.showPopup('error', 'Error in profile update.');
+        },
+      });
+
+   
+  }
+}

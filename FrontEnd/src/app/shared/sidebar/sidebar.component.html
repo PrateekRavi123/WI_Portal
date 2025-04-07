@@ -1,0 +1,51 @@
+<nav class="sidebar text-black" [ngClass]="{'open': isOpen}">
+  <ul class="nav flex-column mt-3">
+    <li class="nav-item">
+      <a class="nav-link align-items-center rounded collapsed d-flex justify-content-between" routerLink="dashboard"
+        routerLinkActive="active">
+        <h5><i class="bi bi-card-text"></i> Dashboard</h5>
+      </a>
+    </li>
+    <li class="nav-item" *ngIf="hasRole(['R1','R2'])">
+      <a class="nav-link align-items-center rounded d-flex justify-content-between" routerLink="checklist"
+        routerLinkActive="active">
+        <h5><i class="bi bi-card-text"></i> My Checklist</h5>
+      </a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link align-items-center rounded d-flex justify-content-between" routerLink="pendchecklist"
+        routerLinkActive="active">
+        <h5><i class="bi bi-card-text"></i> Pending Checklist</h5>
+      </a>
+    </li>
+    <li class="nav-item" *ngIf="hasRole(['R1'])">
+      <a class="nav-link btn btn-toggle align-items-center rounded collapsed d-flex justify-content-between"
+        data-bs-toggle="collapse" href="#collapse2" role="button" aria-expanded="false" aria-controls="collapse2">
+        <h5><i class="bi bi-card-text"></i> Admin Panel</h5>
+        <div class="caret-icon"><i class="bi bi-caret-right"></i></div>
+      </a>
+      <div class="collapse" id="collapse2">
+        <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+          <li class="nav-item">
+            <a class="nav-link align-items-center rounded d-flex justify-content-between" routerLink="incharges"
+              routerLinkActive="active">
+              <h6><i class="bi bi-card-text"></i>Incharges</h6>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link align-items-center rounded d-flex justify-content-between" routerLink="checkpoint"
+              routerLinkActive="active">
+              <h6><i class="bi bi-card-text"></i>Checkpoint</h6>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link align-items-center rounded d-flex justify-content-between" routerLink="location"
+              routerLinkActive="active">
+              <h6><i class="bi bi-card-text"></i>Location</h6>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </li>
+  </ul>
+</nav>

@@ -1,0 +1,25 @@
+<div class="row d-flex justify-content-end mb-3">
+  <input 
+    type="month" 
+    class="form-control w-auto" 
+    value ={{selectedMonth}} 
+    (change)="onMonthChange($event)">
+</div>
+
+<div class="row g-3">
+  <div class="col-12 col-sm-6 col-md-4">
+    <app-dashboard-card label="Total CheckLists" color="pink" count={{checklistcount}} icon = "bi bi-card-checklist float-start"></app-dashboard-card>
+  </div>
+  <div class="col-12 col-sm-6 col-md-4">
+    <app-dashboard-card label="Completed CheckLists" color="green" count={{completetcount}} icon = "bi bi-card-checklist float-start"></app-dashboard-card>
+  </div>
+  <div class="col-12 col-sm-6 col-md-4">
+    <app-dashboard-card label="Total Pending Checkpoint" color="yellow" count={{pendingcount}} icon = "bi bi-card-checklist float-start"></app-dashboard-card>
+  </div>
+  <div class="col-12 col-md-8 p-3 bg-c-blue">
+    <canvas id="graphChart"></canvas>
+  </div>
+  <div class="col-12 col-md-4 bg-c-blue  p-3">
+    <canvas id="pieChart"></canvas>
+  </div>
+</div>

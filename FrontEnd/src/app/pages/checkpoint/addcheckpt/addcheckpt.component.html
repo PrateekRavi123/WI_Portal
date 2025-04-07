@@ -1,0 +1,49 @@
+<div class="container m-2">
+    <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+        <h5 class="mb-0">Add Checkpoint</h5>
+    </div>
+    <div class="card shadow-lg mb-4 p-3">
+        <form [formGroup]="editForm" (ngSubmit)="onSubmit()">
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label class="form-label fw-bold">Type</label>
+                    <select id="type" class="form-select" formControlName="type"
+                    [ngClass]="{ 'is-invalid': f['type'].invalid && f['type'].touched }">
+                    <option value="" disabled>Select a Type</option>
+                    <option *ngFor="let type of typeList" [value]="type.TYPE_ID">
+                        {{ type.TYPE_NAME }}
+                    </option>
+                </select>                    
+                <div *ngIf="f['type'].invalid && f['type'].touched" class="text-danger small">
+                        Type is required.
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-bold">Forward to Role</label>
+                    <select id="fwdrole" class="form-select" formControlName="fwdrole"
+                        [ngClass]="{ 'is-invalid': f['fwdrole'].invalid && f['fwdrole'].touched }">
+                        <option value="" disabled>Select a Role</option>
+                        <option *ngFor="let role of roleList" [value]="role.ROLE_ID">
+                            {{ role.ROLE_NAME }}
+                        </option>
+                    </select>
+                    <div *ngIf="f['fwdrole'].invalid && f['fwdrole'].touched" class="text-danger small">
+                        Forward to role is required.
+                    </div>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-md-12">
+                    <label class="form-label fw-bold">Name</label>
+                    <textarea type="text" class="form-control" formControlName="name"></textarea>
+                    <div *ngIf="f['name'].invalid && f['name'].touched" class="text-danger small">
+                        Name is required.
+                    </div>
+                </div>
+            </div>
+            <div class="text-end">
+                <button type="submit" class="btn btn-primary" [disabled]="editForm.invalid">Submit</button>
+            </div>
+        </form>
+    </div>
+</div>

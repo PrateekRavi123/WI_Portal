@@ -1,0 +1,54 @@
+
+<div class="card shadow-lg border-0 rounded-3">
+
+
+<div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+    <h5 class="mb-0">Pending CheckList</h5>
+    <input type="text" class="form-control w-25" #searchBox placeholder="Search..." (input)="onSearch(searchBox.value)">
+</div>
+
+<div class="table-responsive">
+    <table class="table table-hover">
+        <thead class="table-dark">
+            <tr>
+                <th (click)="sortData('CHECKLIST_ID')" class="sortable">Checklist Id <span *ngIf="sortColumn === 'CHECKLIST_ID'">{{ sortAscending ? '▲' : '▼' }}</span></th>
+                <th (click)="sortData('DIV')" class="sortable">Division <span *ngIf="sortColumn === 'DIV'">{{ sortAscending ? '▲' : '▼' }}</span></th>
+                <th (click)="sortData('LOC')" class="sortable">Location <span *ngIf="sortColumn === 'LOC'">{{ sortAscending ? '▲' : '▼' }}</span></th>
+                <th (click)="sortData('type_name')" class="sortable">Checkpoint Type <span *ngIf="sortColumn === 'type_name'">{{ sortAscending ? '▲' : '▼' }}</span></th>
+                <th (click)="sortData('NAME')" class="sortable">Checkpoint Name <span *ngIf="sortColumn === 'NAME'">{{ sortAscending ? '▲' : '▼' }}</span></th>
+                <th (click)="sortData('role_name')" class="sortable">Forwarded To <span *ngIf="sortColumn === 'role_name'">{{ sortAscending ? '▲' : '▼' }}</span></th>
+                <th (click)="sortData('status')" class="sortable">Status <span *ngIf="sortColumn === 'status'">{{ sortAscending ? '▲' : '▼' }}</span></th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let user of filteredData">
+                <td>{{ user.CHECKLIST_ID }}</td>
+                <td>{{ user.DIV }}</td>
+                <td>{{ user.LOC }}</td>
+                <td>{{ user.type_name }}</td>
+                <td>{{ user.NAME }}</td>
+                <td>{{ user.role_name }}</td>
+                <td>{{ user.status }}</td>
+                <td>
+                    <button class="btn btn-sm btn-primary me-2" (click)="openEditModal(user)">
+                        <i class="bi bi-pencil-square"></i> Edit
+                    </button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<div class="card-footer d-flex justify-content-between align-items-center">
+    <span>Showing {{ (currentPage - 1) * itemsPerPage + 1 }} - {{ min(currentPage * itemsPerPage, data.length) }} of {{ data.length }} entries</span>
+    <ul class="pagination mb-0">
+        <li class="page-item" [class.disabled]="currentPage === 1">
+            <a class="page-link" (click)="changePage(currentPage - 1)">Previous</a>
+        </li>
+        <li class="page-item" [class.disabled]="currentPage === totalPages()">
+            <a class="page-link" (click)="changePage(currentPage + 1)">Next</a>
+        </li>
+    </ul>
+</div>
+</div>
