@@ -6,8 +6,10 @@ import { PopupService } from '../../../services/popup/popup.service';
 import { Subscription } from 'rxjs';
 import { RefreshService } from '../../../services/refresh/refresh.service';
 export interface Incharge {
+  ID: string;
   EMP_CODE: string; 
   EMP_NAME: string;  
+  MOBILE_NO: string;
   CIRCLE:string; 
   DIVISION:string; 
   LOCATION:string; 
@@ -34,16 +36,6 @@ export class QuickviewinchargeComponent {
   onSearch(value: string) {
     this.searchTerm = value;
   }
-  // data = [
-  //   { id: 1, name: 'alice@example.com',  circle:'circle1',div:'div1',loc:'loc1',role:'admin',status:'active' },
-  //   { id: 2, name: 'bob@example.com', circle:'circle1',div:'div1',loc:'loc1',role:'admin',status:'active'  },
-  //   { id: 3,  name: 'charlie@example.com', circle:'circle1',div:'div1',loc:'loc1',role:'admin',status:'active'  },
-  //   { id: 4, name: 'david@example.com', circle:'circle1',div:'div1',loc:'loc1',role:'admin',status:'active'  },
-  //   { id: 5,  name: 'eve@example.com',circle:'circle1',div:'div1',loc:'loc1',role:'admin',status:'active' },
-  //   { id: 6,  name: 'frank@example.com', circle:'circle1',div:'div1',loc:'loc1',role:'admin',status:'active'  },
-  //   { id: 7,  name: 'grace@example.com', circle:'circle1',div:'div1',loc:'loc1',role:'admin',status:'active'  },
-  //   { id: 8,  name: 'hank@example.com', circle:'circle1',div:'div1',loc:'loc1',role:'admin',status:'active'  }
-  // ];
 data : Incharge[] = [];
   
     async ngOnInit() {
@@ -100,7 +92,6 @@ data : Incharge[] = [];
   }
 
   openEditModal(user: any) {
-    console.log(user);
     this.dashboard.setSelectedData(user);
     this.dashboard.openModal('editincharge');
   }
@@ -108,7 +99,7 @@ data : Incharge[] = [];
   // Delete Function
   deleteUser(id: any) {
     if (confirm('Are you sure you want to delete this incharge?')) {
-      this.inchargeservice.deleteincharge({ emp_code: id }).subscribe({
+      this.inchargeservice.deleteincharge({ id: id }).subscribe({
         next: (data) => {
           this.popupservice.showPopup('success', 'Incharge deleted successfully!');
           this.getAllIncharge();

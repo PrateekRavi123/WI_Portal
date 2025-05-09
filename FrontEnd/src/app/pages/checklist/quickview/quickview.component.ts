@@ -132,7 +132,6 @@ export class QuickviewComponent {
 
   // Delete Function
   deleteUser(id: string) {
-    console.log('ID:',id);
     const sid = String(id);
     if (confirm('Are you sure you want to delete this checklist?')) {
       this.checklistservice.deletechecklist({ checklist_id: sid }).subscribe({

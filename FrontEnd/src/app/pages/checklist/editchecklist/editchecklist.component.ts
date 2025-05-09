@@ -58,7 +58,7 @@ export class EditchecklistComponent {
         // Listen to status changes
         grp.get('status')?.valueChanges.subscribe(status => {
           if (status === 'NOT OK') {
-            grp.get('remarks')?.setValidators([this.nonEmptyValidator()]);
+            grp.get('remarks')?.setValidators([Validators.required,Validators.pattern(/^[A-Za-z0-9\s.,'_-]*$/)]);
           } else {
             grp.get('remarks')?.clearValidators();
           }
@@ -71,7 +71,6 @@ export class EditchecklistComponent {
   async ngOnInit() {
     this.route.queryParams.subscribe(params => {
       this.CHECKLIST_ID = params['CHECKLIST_ID'];
-      console.log(params['CHECKLIST_ID']); // Fetch the ID
     });
     this.emp_code = await this.storageservice.getUser();
     this.getdetails();
@@ -87,7 +86,6 @@ export class EditchecklistComponent {
     this.checklistservice.getchecklistcheckpoint(body).subscribe({
       next: (data) => {
         this.checkpt = data;
-        console.log('data', this.checkpt);
         this.checkPointList = this.checkpt.map(e => ({
           id: parseInt(e.id, 10),
           type: e.type_name,
@@ -114,13 +112,11 @@ export class EditchecklistComponent {
       }
       this.groupedCheckpoints[checkpoint.type].push(checkpoint);
     });
-    console.log('grp:', this.groupedCheckpoints);
   }
   getdetails() {
     const body = { checklist_id: String(this.CHECKLIST_ID) }
     this.checklistservice.getchecklist(body).subscribe({
       next: (data) => {
-        console.log('getchecklist', data);
         this.emp_code = data[0].EMP_CODE;
         this.division = data[0].DIV;
         this.division_code = data[0].DIV_CODE;
@@ -141,7 +137,6 @@ export class EditchecklistComponent {
   }
   ngOnChanges(changes: SimpleChanges) {
     if (changes['user'] && this.user) {
-      console.log('User:', this.user);
       // Enable the form fields and set their values when user input is set
       this.editForm.enable();
       this.editForm.patchValue({
@@ -176,7 +171,7 @@ export class EditchecklistComponent {
         // Listen to status changes
         grp.get('status')?.valueChanges.subscribe(status => {
           if (status === 'NOT OK') {
-            grp.get('remarks')?.setValidators([this.nonEmptyValidator()]);
+            grp.get('remarks')?.setValidators([Validators.required,Validators.pattern(/^[A-Za-z0-9\s.,'_-]*$/)]);
           } else {
             grp.get('remarks')?.clearValidators();
           }
@@ -188,8 +183,6 @@ export class EditchecklistComponent {
     });
   }
   onFileChange( filename: string, data:  any) {
-    console.log('filename',filename);
-    console.log('filedata',data);
     const fileData = data;
     const fileName = filename;
     if (!fileData) {
@@ -230,17 +223,14 @@ export class EditchecklistComponent {
   }
 
   onSubmit() {
-    console.log('Profile Updated:', this.editForm.value);
     const body = {
       id: String(this.user.id),
       name: this.editForm.value.name,
       type: this.editForm.value.type,
       fwdrole: this.editForm.value.fwdrole
     }
-    console.log('update body: ', body);
     this.checkpointservice.updatecheckpoint(body).subscribe({
       next: (data) => {
-        console.log(data);
         this.popupservice.showPopup('success', 'Checkpoint updated successfully.');
         this.editForm.reset();
         this.formSubmitted.emit();

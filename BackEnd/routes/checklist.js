@@ -4,14 +4,14 @@ const { sql, getPool } = require('../config/db');
 const { smsRegex, emailRegex, mobileValidation } = require('../config/inputValidation');
 const { verifyToken } = require('../config/tokenValidation');
 const { logWrite } = require('../config/logfile')
-
+const { payloadencrypt } = require('../config/payloadCrypto');
 
 router.post('/getchecklist', verifyToken, async (req, res) => {
     let poolInstance;
     try {
         const { checklist_id } = req.body;
         if (!checklist_id || checklist_id.trim() === "" || !smsRegex.test(checklist_id)) {
-            return res.status(400).json({ message:  'Invalid data.'});
+            return res.status(400).json({ data: payloadencrypt(JSON.stringify({ message:  'Invalid data.'}))});
         }
         poolInstance = await getPool();
         const query = `select cm.CHECKLIST_ID,
@@ -27,10 +27,10 @@ LEFT JOIN LOCATION_MST lm ON cm.LOC_CODE = lm.loc_id WHERE CM.CHECKLIST_ID = @CH
         const request = await poolInstance.request();
         request.input('CHECKLIST_ID', sql.VarChar, checklist_id);
         const result = await request.query(query);
-        res.json(result.recordset);
+        res.json({ data: payloadencrypt(JSON.stringify(result.recordset))});
     } catch (err) {
         logWrite(`Failed to fetch checklist. Error: ${err.message}`);
-        res.status(500).json({ message:  'Failed to fetch checklist.'});
+        res.status(500).json({ data: payloadencrypt(JSON.stringify({ message:  'Failed to fetch checklist.'}))});
     }
 });
 
@@ -39,7 +39,7 @@ router.post('/getchecklistcheckpoint', verifyToken, async (req, res) => {
     try {
         const { checklist_id } = req.body;
         if (!checklist_id || checklist_id.trim() === "" || !smsRegex.test(checklist_id)) {
-            return res.status(400).json({ message:  'Invalid data.'});
+            return res.status(400).json({ data: payloadencrypt(JSON.stringify({ message:  'Invalid data.'}))});
         }
         poolInstance = await getPool();
         const query = `SELECT 
@@ -61,10 +61,35 @@ WHERE CMD.CHECKLIST_ID = @CHECKLIST_ID`;
         const request = await poolInstance.request();
         request.input('CHECKLIST_ID', sql.VarChar, checklist_id);
         const result = await request.query(query);
-        res.json(result.recordset);
+        res.json({ data: payloadencrypt(JSON.stringify(result.recordset))});
     } catch (err) {
         logWrite(`Failed to fetch checklist checkpoint. Error: ${err.message}`);
-        res.status(500).json({ message:  'Failed to fetch checklist checkpoint.'});
+        res.status(500).json({ data: payloadencrypt(JSON.stringify({ message:  'Failed to fetch checklist checkpoint.'}))});
+    }
+});
+
+router.post('/getsinglechecklistcheckpoint', verifyToken, async (req, res) => {
+    let poolInstance;
+    try {
+        const { id } = req.body;
+        if (!id  || !smsRegex.test(id)) {
+            return res.status(400).json({ data: payloadencrypt(JSON.stringify({ message:  'Invalid data.'}))});
+        }
+        poolInstance = await getPool();
+        const query = `SELECT 
+    id, 
+	remarks,
+	FILENAME,
+	FILEDATA
+FROM CHECKLIST_MST_DTLS 
+WHERE id = @id`;
+        const request = await poolInstance.request();
+        request.input('id', sql.VarChar, id);
+        const result = await request.query(query);
+        res.json({ data: payloadencrypt(JSON.stringify(result.recordset))});
+    } catch (err) {
+        logWrite(`Failed to fetch single checklist checkpoint. Error: ${err.message}`);
+        res.status(500).json({ data: payloadencrypt(JSON.stringify({ message:  'Failed to fetch checklist checkpoint details.'}))});
     }
 });
 
@@ -87,10 +112,10 @@ LEFT JOIN DIV_MST dm ON cm.DIV_CODE = dm.id
 LEFT JOIN LOCATION_MST lm ON cm.LOC_CODE = lm.loc_id
 LEFT JOIN CHECKLIST_MST_DTLS cmd ON cm.CHECKLIST_ID = cmd.CHECKLIST_ID
 GROUP BY cm.id, cm.CHECKLIST_ID, cm.EMP_CODE, dm.NAME, lm.LOC_NAME, cm.CREATED_ON;`);
-        res.json(result.recordset);
+        res.json({ data: payloadencrypt(JSON.stringify(result.recordset))});
     } catch (err) {
         logWrite(`Failed to fetch all checklists. Error: ${err.message}`);
-        res.status(500).json({ message:  'Failed to fetch all checklists.'});
+        res.status(500).json({ data: payloadencrypt(JSON.stringify({ message:  'Failed to fetch all checklists.'}))});
     }
 });
 
@@ -99,7 +124,7 @@ router.post('/getmyAllChecklist', verifyToken, async (req, res) => {
     try {
         const { emp_code } = req.body;
         if (!emp_code || emp_code.trim() === "" || !smsRegex.test(emp_code)) {
-            return res.status(400).json({ message:  'Invalid data.'});
+            return res.status(400).json({ data: payloadencrypt(JSON.stringify({ message:  'Invalid data.'}))});
         }
         poolInstance = await getPool();
         const query = `SELECT 
@@ -121,10 +146,10 @@ GROUP BY cm.id, cm.CHECKLIST_ID, cm.EMP_CODE, dm.NAME, lm.LOC_NAME, cm.CREATED_O
 const request = await poolInstance.request();
         request.input('EMP_CODE', sql.VarChar, emp_code);
         const result = await request.query(query);
-        res.json(result.recordset);
+        res.json({ data: payloadencrypt(JSON.stringify(result.recordset))});
     } catch (err) {
         logWrite(`Failed to fetch all checklists. Error: ${err.message}`);
-        res.status(500).json({ message:  'Failed to fetch all checklists.'});
+        res.status(500).json({ data: payloadencrypt(JSON.stringify({ message:  'Failed to fetch all checklists.'}))});
     }
 });
 
@@ -158,10 +183,10 @@ where cmd.STATUS = 'NOT OK'
         const request = await poolInstance.request();
         //request.input('CHECKLIST_ID', sql.VarChar, checklist_id);
         const result = await request.query(query);
-        res.json(result.recordset);
+        res.json({ data: payloadencrypt(JSON.stringify(result.recordset))});
     } catch (err) {
         logWrite(`Failed to fetch pending checklist checkpoint. Error: ${err.message}`);
-        res.status(500).json({ message:  'Failed to fetch pending checklist checkpoint.'});
+        res.status(500).json({ data: payloadencrypt(JSON.stringify({ message:  'Failed to fetch pending checklist checkpoint.'}))});
     }
 });
 
@@ -170,7 +195,7 @@ router.post('/getmypendingchecklistcheckpoint', verifyToken, async (req, res) =>
     try {
         const { emp_code } = req.body;
         if (!emp_code || emp_code.trim() === "" || !smsRegex.test(emp_code)) {
-            return res.status(400).json({ message:  'Invalid data.'});
+            return res.status(400).json({ data: payloadencrypt(JSON.stringify({ message:  'Invalid data.'}))});
         }
         poolInstance = await getPool();
         const query = `		SELECT 
@@ -196,10 +221,10 @@ AND cm.EMP_CODE = @EMP_CODE
         const request = await poolInstance.request();
         request.input('EMP_CODE', sql.VarChar, emp_code);
         const result = await request.query(query);
-        res.json(result.recordset);
+        res.json({ data: payloadencrypt(JSON.stringify(result.recordset))});
     } catch (err) {
         logWrite(`Failed to fetch my pending checklist checkpoint. Error: ${err.message}`);
-        res.status(500).json({ message:  'Failed to fetch my pending checklist checkpoint.'});
+        res.status(500).json({ data: payloadencrypt(JSON.stringify({ message:  'Failed to fetch my pending checklist checkpoint.'}))});
     }
 });
 router.post('/getrolependingchecklistcheckpoint', verifyToken, async (req, res) => {
@@ -207,7 +232,7 @@ router.post('/getrolependingchecklistcheckpoint', verifyToken, async (req, res) 
     try {
         const { roleId } = req.body;
         if (!roleId || roleId.trim() === "" || !smsRegex.test(roleId)) {
-            return res.status(400).json({ message:  'Invalid data.'});
+            return res.status(400).json({ data: payloadencrypt(JSON.stringify({ message:  'Invalid data.'}))});
         }
         poolInstance = await getPool();
         const query = `		SELECT 
@@ -232,10 +257,10 @@ where cmd.STATUS = 'NOT OK' AND r.ROLE_ID = @ROLE_ID
         const request = await poolInstance.request();
         request.input('ROLE_ID', sql.VarChar, roleId);
         const result = await request.query(query);
-        res.json(result.recordset);
+        res.json({ data: payloadencrypt(JSON.stringify(result.recordset))});
     } catch (err) {
         logWrite(`Failed to fetch role pending checklist checkpoint. Error: ${err.message}`);
-        res.status(500).json({ message:  'Failed to fetch role pending checklist checkpoint.'});
+        res.status(500).json({ data: payloadencrypt(JSON.stringify({ message:  'Failed to fetch role pending checklist checkpoint.'}))});
     }
 });
 
@@ -247,6 +272,16 @@ const fs = require('fs');
 // Configure multer for file uploads
 const storage = multer.memoryStorage(); // Stores files in memory as Buffer
 const upload = multer({ storage: storage });
+const allowedMimeTypes = [
+    'image/jpeg',
+    'image/png',
+    'image/jpg',
+    'application/pdf',
+    'application/msword', // .doc
+    'application/vnd.openxmlformats-officedocument.wordprocessingml.document', // .docx
+    'application/vnd.ms-excel', // .xls
+    'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' // .xlsx
+];
 
 router.post('/addchecklist', verifyToken, upload.array('files'), async (req, res) => {
     try {
@@ -256,16 +291,29 @@ router.post('/addchecklist', verifyToken, upload.array('files'), async (req, res
         try {
             parsedCheckpoint = JSON.parse(checkpoint); // Parse checkpoint JSON
         } catch (error) {
-            return res.status(400).json({ message: 'Invalid checkpoint format.' });
+            logWrite(`Failed to add checklist. Error: Parse checkpoint JSON`);
+            return res.status(400).json({ data: payloadencrypt(JSON.stringify({ message: 'Invalid checkpoint format.' }))});
         }
 
         if (!emp_code || !div || !loc || !Array.isArray(parsedCheckpoint) || parsedCheckpoint.length === 0) {
-            return res.status(400).json({ message: 'Invalid data.' });
+            logWrite(`Failed to add checklist. Error: empty field`);
+            return res.status(400).json({ data: payloadencrypt(JSON.stringify({ message: 'Invalid data.' }))});
         }
 
         for (const item of parsedCheckpoint) {
             if (!item.checkpoint_id || !item.status) {
-                return res.status(400).json({ message: 'Invalid checkpoint data.' });
+                logWrite(`Failed to add checklist. Error: Checkpoint validation`);
+                return res.status(400).json({ data: payloadencrypt(JSON.stringify({ message: 'Invalid checkpoint data.' }))});
+            }
+        }
+
+        // File validation
+        for (const file of req.files) {
+            const { fileTypeFromBuffer } = await import('file-type');
+            const fileType = await fileTypeFromBuffer(file.buffer);
+            if (!allowedMimeTypes.includes(fileType.mime) || file.size > 10 * 1024 * 1024) {
+                logWrite(`Failed to add checklist. Error: File validation ${fileType.mime},${file.size}`);
+                return res.status(400).json({ data: payloadencrypt(JSON.stringify({ message: 'Invalid checkpoint data.' })) });
             }
         }
 
@@ -310,17 +358,17 @@ router.post('/addchecklist', verifyToken, upload.array('files'), async (req, res
             }
 
             await transaction.commit();
-            return res.status(200).json({ message: 'Checklist and checkpoints added successfully.' });
+            return res.status(200).json({ data: payloadencrypt(JSON.stringify({ message: 'Checklist and checkpoints added successfully.' }))});
 
         } catch (error) {
             await transaction.rollback();
             logWrite(`Failed to add checklist. Error: ${error.message}`);
-            return res.status(500).json({ message: 'Failed to add checklist and checkpoints.'});
+            return res.status(500).json({ data: payloadencrypt(JSON.stringify({ message: 'Failed to add checklist and checkpoints.'}))});
         }
 
     } catch (error) {
         logWrite(`Failed to add checklist. Error: ${error.message}`);
-        return res.status(500).json({ message: 'Failed to add checklist and checkpoints.' });
+        return res.status(500).json({ data: payloadencrypt(JSON.stringify({ message: 'Failed to add checklist and checkpoints.' }))});
     }
 });
 
@@ -337,7 +385,7 @@ router.patch('/updateincharge', verifyToken, async (req, res) => {
         !smsRegex.test(emp_name) || !emailRegex.test(email_id) || !mobileValidation.test(mob) ||
         !smsRegex.test(circle) || !smsRegex.test(div) || !smsRegex.test(loc) || !smsRegex.test(role) || !smsRegex.test(status) ||
         !smsRegex.test(updated_by)) {
-        return res.status(400).json({ message:  'Invalid data.'});
+        return res.status(400).json({ data: payloadencrypt(JSON.stringify({ message:  'Invalid data.'}))});
     }
     try {
         const pool = await getPool();
@@ -356,15 +404,15 @@ router.patch('/updateincharge', verifyToken, async (req, res) => {
         request.input('EMP_CODE', sql.VarChar, emp_code.toUpperCase());
         const response = await request.query(query);
         if (response.rowsAffected && response.rowsAffected[0] === 1) {
-            return res.status(200).json({ message:  'Incharge updated successfully'});
+            return res.status(200).json({ data: payloadencrypt(JSON.stringify({ message:  'Incharge updated successfully'}))});
         } else {
             logWrite(`Failed to update incharge. Response: ${JSON.stringify(response)}`);
-            return res.status(500).json({  message: 'Failed to update incharge.'});
+            return res.status(500).json({ data: payloadencrypt(JSON.stringify({  message: 'Failed to update incharge.'}))});
         }
     }
     catch (e) {
         logWrite(`Failed to update incharge. Error: ${e.message}`);
-        res.status(500).json({  message: 'Failed to update incharge.'});
+        res.status(500).json({ data: payloadencrypt(JSON.stringify({  message: 'Failed to update incharge.'}))});
     }
 });
 
@@ -372,7 +420,7 @@ router.delete('/deletechecklist', verifyToken, async (req, res) => {
     try {
         const { checklist_id } = req.body;
         if (!checklist_id || checklist_id.trim() === "" || !smsRegex.test(checklist_id)) {
-            return res.status(400).json({ message:  'Invalid data.'});
+            return res.status(400).json({ data: payloadencrypt(JSON.stringify({ message:  'Invalid data.'}))});
         }
 
 
@@ -398,17 +446,17 @@ router.delete('/deletechecklist', verifyToken, async (req, res) => {
                     `);
 
             await transaction.commit();
-            return res.status(200).json({ message: 'Checklist and checkpoints deleted successfully.' });
+            return res.status(200).json({ data: payloadencrypt(JSON.stringify({ message: 'Checklist and checkpoints deleted successfully.' }))});
 
         } catch (error) {
             await transaction.rollback();
             logWrite(`Failed to delete checklist. Error: ${error.message}`);
-            return res.status(500).json({ message: 'Failed to delete checklist and checkpoints.'});
+            return res.status(500).json({ data: payloadencrypt(JSON.stringify({ message: 'Failed to delete checklist and checkpoints.'}))});
         }
 
     } catch (error) {
         logWrite(`Failed to delete checklist. Error: ${error.message}`);
-        return res.status(500).json({ message: 'Failed to delete checklist and checkpoints.' });
+        return res.status(500).json({ data: payloadencrypt(JSON.stringify({ message: 'Failed to delete checklist and checkpoints.' }))});
     }
 });
 

@@ -33,7 +33,13 @@ export class LoginComponent {
   timeLeft: number = 60;
   otpcount: number = 0;
   interval: any;
-  constructor(private router: Router, private smsservice: SmsServiceService, private popupservice: PopupService, private storageService: StorageService) { }
+  constructor(private router: Router, private smsservice: SmsServiceService, private popupservice: PopupService, private storageService: StorageService) { 
+    this.storageService.clearStorage();
+  }
+
+  ngOnInit(){
+  this.storageService.clearStorage();
+}
 
   onKeyUp(event: KeyboardEvent, currentInput: string) {
     const inputOrder = ['first', 'second', 'third', 'fourth', 'fifth', 'sixth'];
@@ -76,10 +82,8 @@ export class LoginComponent {
     if (this.otpcount < 3) {
       if (mobileNumber) {
         const body = { cnt_no: mobileNumber };
-        console.log('Body:', body);
         this.smsservice.sendOTP(body).subscribe({
           next: (data) => {
-            console.log('Send OTP:', data);
             if (data.msg === 'SMS sent successfully') {
               this.startTimer();
               this.otpcount = this.otpcount + 1;
@@ -124,10 +128,8 @@ export class LoginComponent {
       return;
     } else {
       const body = { cnt_no: mobileNumber, val: this.getOtpFromForm() };
-      console.log('Body:', body);
       this.smsservice.validateOtp(body).subscribe({
         next: (data) => {
-          console.log('Validate OTP:', data);
           if (data.msg === 'OTP validated successfully.') {
             this.popupservice.showPopup('success', 'OTP validated successfully!');
             clearInterval(this.interval);
@@ -137,6 +139,7 @@ export class LoginComponent {
             this.storageService.storeToken(data.token);
             this.storageService.storeUser(data.user);
             this.storageService.storeUserRole(data.role);
+            this.storageService.storeUserMob(mobileNumber?mobileNumber:"");
           } else if (data.msg === 'No user found.') {
             this.otpForm.reset();
             this.popupservice.showPopup('error', 'Not a registered user.');

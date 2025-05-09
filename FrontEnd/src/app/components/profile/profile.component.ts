@@ -16,7 +16,8 @@ export class ProfileComponent {
   @Output() formSubmitted = new EventEmitter<void>();
   router = inject(Router);
   profileForm: FormGroup;
-  emp_code: string | null = '';
+  id: string | null = '';
+  cnt: string | null = '';
   circle: string  | null = '';
   div: string  | null = '';
   loc: string  | null = '';
@@ -24,8 +25,9 @@ export class ProfileComponent {
 
   constructor(private fb: FormBuilder,private inchargeservice: InchargesService,private storageservice: StorageService,private popupservice: PopupService) {
     this.profileForm = this.fb.group({
+      id: [{ value: '', disabled: true }],
       emp_code: [{ value: '', disabled: true }],
-      emp_name: ['', Validators.required],
+      emp_name: ['', [Validators.required,Validators.pattern(/^[a-zA-Z0-9\s.,'_-]*$/)]],
       email: ['', [Validators.required, Validators.email]],
       phone: ['', [Validators.required, Validators.pattern(/^\d{10}$/)]],
       circle: [{ value: '', disabled: true }],
@@ -37,7 +39,8 @@ export class ProfileComponent {
 
   }
   async ngOnInit() {
-    this.emp_code = await this.storageservice.getUser();
+    this.id = await this.storageservice.getUser();
+    this.cnt = await this.storageservice.getUserMob();
     this.getdetails();      
   }
 
@@ -45,25 +48,29 @@ export class ProfileComponent {
   get f() { return this.profileForm.controls as { [key: string]: any }; }
 
   getdetails(){
-    this.inchargeservice.getIncharge(this.emp_code?this.emp_code:"").subscribe({
+    this.inchargeservice.getIncharge(this.id?this.id:"",this.cnt?this.cnt:"").subscribe({
       next: (data) => {
-        console.log(data);
-        this.profileForm.patchValue({
-          emp_code: data[0].EMP_CODE,
-          emp_name: data[0].EMP_NAME,
-          email: data[0].EMAIL_ID,
-          phone: data[0].MOBILE_NO,
-          circle: data[0].CIRCLE,
-          division: data[0].DIVISION,
-          location: data[0].LOCATION,
-          role: data[0].ROLE,
-          status: data[0].STATUS
-        })
-        this.circle = data[0].CIRCLE_CODE;
-        this.div = data[0].DIV_CODE;
-        this.loc = data[0].LOC_CODE;
-        this.roleId = data[0].ROLE_ID;
-        console.log(this.circle);
+        if(data[0].ID == this.id){
+          this.profileForm.patchValue({
+            id: data[0].ID,
+            emp_code: data[0].EMP_CODE,
+            emp_name: data[0].EMP_NAME,
+            email: data[0].EMAIL_ID,
+            phone: data[0].MOBILE_NO,
+            circle: data[0].CIRCLE,
+            division: data[0].DIVISION,
+            location: data[0].LOCATION,
+            role: data[0].ROLE,
+            status: data[0].STATUS
+          })
+          this.circle = data[0].CIRCLE_CODE;
+          this.div = data[0].DIV_CODE;
+          this.loc = data[0].LOC_CODE;
+          this.roleId = data[0].ROLE_ID;
+        }else{
+          this.popupservice.showPopup('error', 'Error in fetching profile details.');
+        }
+        
       },
       error: (error) => {
         console.error('Error fetching data:', error);
@@ -76,23 +83,16 @@ export class ProfileComponent {
   }
 
   onSubmit() {
-      console.log('Profile Updated:', this.profileForm.getRawValue().emp_code);
       const body = {
+        id:this.id,
         emp_code:this.profileForm.getRawValue().emp_code,
         emp_name:this.profileForm.value.emp_name,
         email_id:this.profileForm.value.email,
         mob:this.profileForm.value.phone.toString(),
-        circle:this.circle,
-        div:this.div,
-        loc:this.loc,
-        role:this.roleId,
-        status:this.profileForm.getRawValue().status,
-        updated_by:this.profileForm.getRawValue().emp_code
+        updated_by:this.id
       }
-      console.log('Body:', body);
-      this.inchargeservice.updateincharge(body).subscribe({
+      this.inchargeservice.updateprofileincharge(body).subscribe({
         next: (data) => {
-          console.log(data);
           this.popupservice.showPopup('success', 'Profile updated successfully.');
           this.formSubmitted.emit();
         },
@@ -106,3 +106,5 @@ export class ProfileComponent {
    
   }
 }
+
+

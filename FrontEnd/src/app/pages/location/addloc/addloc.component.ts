@@ -14,37 +14,10 @@ import { LocationService } from '../../../services/location/location.service';
 export class AddlocComponent {
 
 editForm: FormGroup;
-  // circleList = [
-  //   {
-  //     id: "CE",
-  //   name: "CENTRAL"
-  //   },
-  //   {
-  //     id: "SE",
-  //     name: "South East"
-  //   },
-  //   {
-  //     id: "NE",
-  //     name: "North East"
-  //   },
-  // ];
-  // divList = [
-  //   {
-  //     id: "CESRD",
-  //   name: "Shankar Road"
-  //   },
-  //   {
-  //     id: "ESKKD",
-  //     name: "Karkardooma"
-  //   },
-  //   {
-  //     id: "EN",
-  //     name: "North East"
-  //   },
-  // ];
+  
   circleList: any = [];
   divList: any = [];
-
+  officetypeList: any = [];
  
   get f() { return this.editForm.controls as { [key: string]: any }; }
 
@@ -54,13 +27,25 @@ editForm: FormGroup;
     this.editForm = this.fb.group({
       circle: ['', Validators.required],
       div: ['', Validators.required],
-      name: ['', Validators.required]
+      name: ['', [Validators.required, Validators.pattern(/^[A-Za-z0-9\s.,'_-]*$/)]],
+      office_type: ['', Validators.required]
     });
   }
 
 
   async ngOnInit() {
     this.getAllCircle();
+    this.getAllOfficeType();
+  }
+  getAllOfficeType() {
+    this.dashboardservice.getAllOfficeType().subscribe({
+      next: (data) => {
+        this.officetypeList = data;
+      },
+      error: (error) => {
+        console.error('Error fetching data:', error);
+      },
+    });
   }
   getAllCircle() {
     this.dashboardservice.getAllCircle().subscribe({
@@ -94,16 +79,14 @@ editForm: FormGroup;
   
 
   onSubmit() {
-    console.log('Profile Updated:', this.editForm.value);
     const body = {
       loc_name: this.editForm.value.name,
       circle: this.editForm.value.circle,
-      div_code: this.editForm.value.div
+      div_code: this.editForm.value.div,
+      office_type: this.editForm.value.office_type
     }
-    console.log('body',body);
     this.locationservice.addlocation(body).subscribe({
       next: (data) => {
-        console.log(data);
         this.popupservice.showPopup('success', 'Location added successfully.');
         this.editForm.reset();
       },

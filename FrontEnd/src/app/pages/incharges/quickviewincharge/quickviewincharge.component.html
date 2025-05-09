@@ -10,6 +10,7 @@
             <tr>
                 <th (click)="sortData('EMP_CODE')" class="sortable">ID <span *ngIf="sortColumn === 'EMP_CODE'">{{ sortAscending ? '▲' : '▼' }}</span></th>
                 <th (click)="sortData('EMP_NAME')" class="sortable">Name <span *ngIf="sortColumn === 'EMP_NAME'">{{ sortAscending ? '▲' : '▼' }}</span></th>
+                <th (click)="sortData('MOBILE_NO')" class="sortable">Mobile No <span *ngIf="sortColumn === 'MOBILE_NO'">{{ sortAscending ? '▲' : '▼' }}</span></th>
                 <th (click)="sortData('ROLE')" class="sortable">Role <span *ngIf="sortColumn === 'ROLE'">{{ sortAscending ? '▲' : '▼' }}</span></th>
                 <th (click)="sortData('LOCATION')" class="sortable">Location <span *ngIf="sortColumn === 'LOCATION'">{{ sortAscending ? '▲' : '▼' }}</span></th>
                 <th (click)="sortData('DIVISION')" class="sortable">Division <span *ngIf="sortColumn === 'DIVISION'">{{ sortAscending ? '▲' : '▼' }}</span></th>
@@ -22,6 +23,7 @@
             <tr *ngFor="let user of filteredData">
                 <td>{{ user.EMP_CODE }}</td>
                 <td>{{ user.EMP_NAME }}</td>
+                <td>{{ user.MOBILE_NO }}</td>
                 <td>{{ user.ROLE }}</td>
                 <td>{{ user.LOCATION }}</td>
                 <td>{{ user.DIVISION }}</td>
@@ -31,7 +33,7 @@
                     <button class="btn btn-sm btn-primary me-2" (click)="openEditModal(user)">
                         <i class="bi bi-pencil-square"></i> Edit
                     </button>
-                    <button class="btn btn-sm btn-danger" (click)="deleteUser(user.EMP_CODE)">
+                    <button class="btn btn-sm btn-danger" (click)="deleteUser(user.ID)">
                         <i class="bi bi-trash"></i> Delete
                     </button>
                 </td>

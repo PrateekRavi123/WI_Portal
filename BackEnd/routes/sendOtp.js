@@ -7,6 +7,7 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const { secretKey } = require('../config/tokenValidation');
 const { logWrite } = require('../config/logfile')
+const { payloadencrypt } = require('../config/payloadCrypto');
 
 const otpRequests = {}; // In-memory storage for tracking OTP attempts
 const OTP_LIMIT = 3;
@@ -26,7 +27,7 @@ router.post('/sendOTP', async (req, res) => {
         } else {
             // Increment count and enforce limit
             if (requestInfo.count >= OTP_LIMIT) {
-                return res.status(200).json({ msg: 'OTP limit reached. Try again later.' });
+                return res.status(200).json({ data: payloadencrypt(JSON.stringify({ msg: 'OTP limit reached. Try again later.' })) });
             }
 
             otpRequests[cnt_no].count++;
@@ -35,7 +36,7 @@ router.post('/sendOTP', async (req, res) => {
     
 
     if (!cnt_no || !mobileValidation.test(cnt_no)) {
-        return res.status(400).json({ msg: 'Invalid data.' });
+        return res.status(400).json({ data: payloadencrypt(JSON.stringify({ msg: 'Invalid data.' })) });
     }
     try {
         //Check mobile no
@@ -65,14 +66,14 @@ router.post('/sendOTP', async (req, res) => {
             );
             await connection.commit();
             connection.close();
-            res.status(200).json({ msg: 'SMS sent successfully'});
+            res.status(200).json({ data: payloadencrypt(JSON.stringify({ msg: 'SMS sent successfully'})) });
         } else {
-            res.status(200).json({ msg: 'No user found.' });
+            res.status(200).json({ data: payloadencrypt(JSON.stringify({ msg: 'No user found.' })) });
         }
     }
     catch (e) {
         logWrite(`Error in sending OTP: , ${e.message}`);
-        res.status(500).json({ msg: 'Failed to send SMS' });
+        res.status(500).json({ data: payloadencrypt(JSON.stringify({ msg: 'Failed to send SMS' })) });
     }
 });
 // Clear in-memory data periodically
@@ -96,13 +97,14 @@ router.post('/validateOTP', async (req, res) => {
         //Validate given mobile & retrieve the emp_code --To be implemented
         let poolInstance;
         poolInstance = await getPool();
-        const query = 'SELECT emp_code,role_id FROM INCHARGES_MST WHERE MOBILE_NO = @MOBILE_NO';
+        const query = 'SELECT id,role_id FROM INCHARGES_MST WHERE MOBILE_NO = @MOBILE_NO';
         const request = await poolInstance.request();
         request.input('MOBILE_NO', sql.VarChar, cnt_no);
         const result = await request.query(query);
         if (result.recordset.length > 0) {
-            const empCode = result.recordset[0].emp_code;
+            const id = result.recordset[0].id;
             const role_id = result.recordset[0].role_id;
+            
             // Validate OTP
             const connection = await getCon();
             const r = await connection.execute(`SELECT MISC_FIELD1 FROM ALLMODULES_SENDSMS 
@@ -123,15 +125,37 @@ router.post('/validateOTP', async (req, res) => {
 
             // Generate JWT token
             const tokenPayload = { cnt_no };
-            const token = jwt.sign(tokenPayload, secretKey, { expiresIn: '5h' });
-            res.status(200).json({ msg: 'OTP validated successfully.', token, user: empCode, role: role_id});
+            const token = jwt.sign(tokenPayload, secretKey, { expiresIn: '1h' });
+
+           
+            // Update session table
+            await poolInstance.request()
+            .input('user_id', sql.VarChar, cnt_no)
+            .input('token', sql.VarChar, token)
+            .query(`
+            IF EXISTS (SELECT 1 FROM USER_SESSIONS WHERE user_id = @user_id)
+                UPDATE USER_SESSIONS SET token = @token, login_time = GETDATE(), status = 'Y' WHERE user_id = @user_id
+            ELSE
+                INSERT INTO USER_SESSIONS (user_id, token, login_time) VALUES (@user_id, @token, GETDATE())
+            `);
+
+            const responseObj = { 
+                msg: 'OTP validated successfully.', 
+                token: token, 
+                user: id, 
+                role: role_id 
+              };
+              
+              const payloadencryptedData = payloadencrypt(JSON.stringify(responseObj));
+              res.status(200).json({ data: payloadencryptedData });
+              
         } else {
-            res.status(200).json({ msg: 'No user found.' });
+            res.status(200).json({ data: payloadencrypt(JSON.stringify({ msg: 'No user found.' })) });
         }
     }
     catch (e) {
         logWrite(`Error in validating OTP: , ${e.message}`);
-        res.status(500).json({ msg: 'Failed to validate OTP' });
+        res.status(500).json({ data: payloadencrypt(JSON.stringify({ msg: 'Failed to validate OTP' })) });
     }
 });
 

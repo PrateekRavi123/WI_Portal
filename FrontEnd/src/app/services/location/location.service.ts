@@ -16,7 +16,12 @@ export class LocationService {
       getLocation(division: string): Observable<any> {
         const body = {div: division};
         return this.http.post<any>(`${this.apiUrl}/getlocation`,body, {}).pipe(
-          map((res) => res),
+          map((res) => {
+            if (res && res.data) {
+              return this.apiService.decryptData(res.data);
+            }
+            return res;
+          }),
           catchError(error => {
             if (error.status === 400) {
               return of(error.status);
@@ -30,7 +35,12 @@ export class LocationService {
 
       getAllLocation(): Observable<any> {
         return this.http.get<any>(`${this.apiUrl}/getalllocations`, {}).pipe(
-          map((res) => res),
+          map((res) => {
+            if (res && res.data) {
+              return this.apiService.decryptData(res.data);
+            }
+            return res;
+          }),
           catchError(error => {
             if (error.status === 400) {
               return of(error.status);
@@ -44,7 +54,12 @@ export class LocationService {
       
       addlocation(body:any): Observable<any> {
         return  this.http.post<any>(`${this.apiUrl}/addlocation`,body, {}).pipe(
-          map((res) => res),
+          map((res) => {
+            if (res && res.data) {
+              return this.apiService.decryptData(res.data);
+            }
+            return res;
+          }),
           catchError(error => {
             if (error.status === 400) {
               return of(error.status);
@@ -58,7 +73,12 @@ export class LocationService {
 
       updatelocation(body:any): Observable<any> {
         return  this.http.patch<any>(`${this.apiUrl}/updatelocation`,body, {}).pipe(
-          map((res) => res),
+          map((res) => {
+            if (res && res.data) {
+              return this.apiService.decryptData(res.data);
+            }
+            return res;
+          }),
           catchError(error => {
             if (error.status === 400) {
               return of(error.status);
@@ -71,12 +91,17 @@ export class LocationService {
       }
 
       deletelocation(body: any): Observable<any> {
-        console.log('body', body);
         return this.http.delete(`${this.apiUrl}/deletelocation`, {
           body: body,
-          responseType: 'text' as 'json'
+          responseType: 'text' as 'json' // important for decryption
         }).pipe(
-          map((res) => res),
+          map((res: any) => {
+            if (res) {
+              const decrypted = this.apiService.decryptData(res);
+              return JSON.parse(decrypted);
+            }
+            return res;
+          }),
           catchError(error => {
             if (error.status === 400) {
               return of(error.status);

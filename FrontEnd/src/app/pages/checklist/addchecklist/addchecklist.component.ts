@@ -6,6 +6,7 @@ import { PopupService } from '../../../services/popup/popup.service';
 import { InchargesService } from '../../../services/incharges/incharges.service';
 import { StorageService } from '../../../services/storage/storage.service';
 import { ChecklistService } from '../../../services/checklist/checklist.service';
+import { Router } from '@angular/router';
 export interface CheckList {
   id: number;
   type: string;
@@ -35,20 +36,9 @@ export interface Checkpoint {
   styleUrl: './addchecklist.component.css'
 })
 export class AddchecklistComponent {
-  // checkPointList: CheckPoint[] = [
-  //   // { id: 1, type: 'CP1', name: 'Check Point 1', status: 'NOT OK', remarks: 'Good', photo: null },
-  //   // { id: 6, type: 'CP2', name: 'Check Point 6', status: 'OK', remarks: 'Good', photo: null },
-  //   // { id: 2, type: 'CP1', name: 'Check Point 2', status: 'OK', remarks: 'Good', photo: null },
-  //   // { id: 3, type: 'CP1', name: 'Check Point 3', status: 'OK', remarks: 'Good', photo: null },
-  //   // { id: 4, type: 'CP2', name: 'Check Point 4', status: 'OK', remarks: 'Good', photo: null },
-  //   // { id: 5, type: 'CP2', name: 'Check Point 5', status: 'OK', remarks: 'Good', photo: null },
-  //   // { id: 7, type: 'CP3', name: 'Check Point 7', status: 'OK', remarks: 'Good', photo: null },
-  //   // { id: 8, type: 'CP3', name: 'Check Point 8', status: 'OK', remarks: 'Good', photo: null },
-  //   // { id: 9, type: 'CP3', name: 'Check Point 9', status: 'OK', remarks: 'Good', photo: null },
-  //   // { id: 10, type: 'CP3', name: 'Check Point 10', status: 'OK', remarks: 'Good', photo: null }
-  // ];
 
   emp_code: string | null = '';
+  cnt: string | null = '';
   division: string | null = '';
   division_code: string | null = '';
   location: string | null = '';
@@ -61,7 +51,7 @@ export class AddchecklistComponent {
   private collapsedTypes: Set<string> = new Set();
 
 
-  constructor(private fb: FormBuilder, private checklistservice: ChecklistService, private checkpointservice: CheckpointService, private popupservice: PopupService,
+  constructor(private router: Router, private fb: FormBuilder, private checklistservice: ChecklistService, private checkpointservice: CheckpointService, private popupservice: PopupService,
     private inchargeservice: InchargesService, private storageservice: StorageService) {
     this.checkpointForm = this.fb.group({
       checklistID: [{ value: this.generateChecklistID(), disabled: true }, Validators.required],
@@ -80,7 +70,7 @@ export class AddchecklistComponent {
         // Listen to status changes
         grp.get('status')?.valueChanges.subscribe(status => {
           if (status === 'NOT OK') {
-            grp.get('remarks')?.setValidators([this.nonEmptyValidator()]);
+            grp.get('remarks')?.setValidators([Validators.required,Validators.pattern(/^[A-Za-z0-9\s.,'_-]*$/)]);
           } else {
             grp.get('remarks')?.clearValidators();
           }
@@ -92,6 +82,7 @@ export class AddchecklistComponent {
   }
   async ngOnInit() {
     this.emp_code = await this.storageservice.getUser();
+    this.cnt = await this.storageservice.getUserMob();
     this.getdetails();
     this.getcheckpoints();
     this.groupCheckpointsByType();
@@ -115,7 +106,7 @@ export class AddchecklistComponent {
         // Listen to status changes
         grp.get('status')?.valueChanges.subscribe(status => {
           if (status === 'NOT OK') {
-            grp.get('remarks')?.setValidators([this.nonEmptyValidator()]);
+            grp.get('remarks')?.setValidators([Validators.required,Validators.pattern(/^[A-Za-z0-9\s.,'_-]*$/)]);
           } else {
             grp.get('remarks')?.clearValidators();
           }
@@ -127,9 +118,8 @@ export class AddchecklistComponent {
     });
   }
   getdetails() {
-    this.inchargeservice.getIncharge(this.emp_code ? this.emp_code : "").subscribe({
+    this.inchargeservice.getIncharge(this.emp_code ? this.emp_code : "",this.cnt ? this.cnt : "").subscribe({
       next: (data) => {
-        console.log(data);
         this.emp_code = data[0].EMP_CODE;
         this.division = data[0].DIVISION;
         this.division_code = data[0].DIV_CODE;
@@ -145,7 +135,6 @@ export class AddchecklistComponent {
     this.checkpointservice.getAllCheckpoint().subscribe({
       next: (data) => {
         this.checkpt = data;
-        console.log('data', this.checkpt);
         this.checkPointList = this.checkpt.map(e => ({
           id: parseInt(e.id, 10),
           type: e.type_name,
@@ -172,7 +161,6 @@ export class AddchecklistComponent {
       }
       this.groupedCheckpoints[checkpoint.type].push(checkpoint);
     });
-    console.log('grp:', this.groupedCheckpoints);
   }
   private generateChecklistID(): string {
     const date = new Date();
@@ -183,29 +171,78 @@ export class AddchecklistComponent {
   get checkpoints2(): FormArray {
     return this.checkpointForm.get('checkpoints') as FormArray;
   }
+  // onFileChange(event: any, index: number) {
+  //   const fileInput = event.target as HTMLInputElement;
+  //   if (fileInput.files && fileInput.files.length > 0) {
+  //     const file = fileInput.files[0];
+
+  //     // Convert file to base64 string (if needed)
+  //     const reader = new FileReader();
+  //     reader.readAsDataURL(file);
+  //     reader.onload = () => {
+  //       const fileData = reader.result as string; // Base64 encoded file data
+
+  //       // Update the form control with file name and data
+  //       const checkpointsArray = this.checkpointForm.get('checkpoints') as FormArray;
+  //       checkpointsArray.at(index).patchValue({
+  //         photo: { name: file.name, data: fileData }  // Store both name and data
+  //       });
+
+  //       console.log('Updated Form:', this.checkpointForm.value);
+  //     };
+  //   }
+
+  // }
+  getCheckpointControl(index: number): FormGroup {
+    return (this.checkpointForm.get('checkpoints') as FormArray).at(index) as FormGroup;
+  }
   onFileChange(event: any, index: number) {
     const fileInput = event.target as HTMLInputElement;
     if (fileInput.files && fileInput.files.length > 0) {
       const file = fileInput.files[0];
-
-      // Convert file to base64 string (if needed)
+  
+      const allowedTypes = [
+        'image/jpeg',
+        'image/png',
+        'image/jpg',
+        'application/pdf',
+        'application/msword',
+        'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+        'application/vnd.ms-excel',
+        'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+      ];
+  
+      const maxSizeInMB = 10;
+  
+      const checkpointsArray = this.checkpointForm.get('checkpoints') as FormArray;
+      const checkpointControl = checkpointsArray.at(index);
+  
+      // Clear previous error
+      checkpointControl.get('photo')?.setErrors(null);
+  
+      if (!allowedTypes.includes(file.type)) {
+        checkpointControl.get('photo')?.setErrors({ invalidType: true });
+        return;
+      }
+  
+      if (file.size > maxSizeInMB * 1024 * 1024) {
+        checkpointControl.get('photo')?.setErrors({ maxSizeExceeded: true });
+        return;
+      }
+  
       const reader = new FileReader();
       reader.readAsDataURL(file);
       reader.onload = () => {
-        const fileData = reader.result as string; // Base64 encoded file data
-
-        // Update the form control with file name and data
-        const checkpointsArray = this.checkpointForm.get('checkpoints') as FormArray;
-        checkpointsArray.at(index).patchValue({
-          photo: { name: file.name, data: fileData }  // Store both name and data
+        const fileData = reader.result as string; // Base64 encoded
+  
+        checkpointControl.patchValue({
+          photo: { name: file.name, data: fileData }
         });
-
-        console.log('Updated Form:', this.checkpointForm.value);
+  
       };
     }
-
   }
-
+  
 
   // onsubmit() {
   //   if (this.checkpointForm.valid) {
@@ -248,7 +285,6 @@ export class AddchecklistComponent {
   // }
   onsubmit() {
     if (this.checkpointForm.valid) {
-      console.log('Updated Checkpoints2:', this.checkpointForm.getRawValue());
 
       const formData = new FormData();
 
@@ -292,14 +328,14 @@ export class AddchecklistComponent {
       // Send FormData
       this.checklistservice.addchecklist(formData).subscribe({
         next: (data) => {
-          console.log(data);
           this.popupservice.showPopup('success', 'Checklist submitted successfully.');
           this.checkpointForm.reset();
         },
         error: (error) => {
           console.error('Error fetching data:', error);
-          this.checkpointForm.reset();
           this.popupservice.showPopup('error', 'Error in submitting checklist.');
+          this.checkpointForm.reset();
+          this.router.navigate(['checklist']);
         },
       });
 

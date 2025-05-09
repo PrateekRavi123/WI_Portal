@@ -29,7 +29,7 @@ export class EditcheckptComponent {
     // Initialize the form with empty values
     this.editForm = this.fb.group({
       type: [{ value: '', disabled: true }, Validators.required],
-      name: [{ value: '', disabled: true }, Validators.required],
+      name: [{ value: '', disabled: true }, [Validators.required, Validators.pattern(/^[A-Za-z0-9\s.,'_-]*$/)]],
       fwdrole: [{ value: '', disabled: true }, Validators.required],
     });
   }
@@ -40,7 +40,6 @@ export class EditcheckptComponent {
   getAllRole() {
     this.roleservice.getAllRole().subscribe({
       next: (data) => {
-        console.log('Role list: ',data);
         this.roleList = data;
       },
       error: (error) => {
@@ -52,7 +51,6 @@ export class EditcheckptComponent {
   getAllType() {
     this.checkpointservice.getallcheckpointtype().subscribe({
       next: (data) => {
-        console.log('Role list: ',data);
         this.typeList = data;
       },
       error: (error) => {
@@ -63,7 +61,6 @@ export class EditcheckptComponent {
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes['user'] && this.user && this.roleList && this.typeList) {
-      console.log('User:', this.user);
       // Enable the form fields and set their values when user input is set
       this.editForm.enable();
       this.editForm.patchValue({
@@ -80,17 +77,14 @@ export class EditcheckptComponent {
 
 
   onSubmit() {
-    console.log('Profile Updated:', this.editForm.value);
       const body = {
         id: String(this.user.id),
         name:this.editForm.value.name,
         type:this.editForm.value.type,
         fwdrole:this.editForm.value.fwdrole
       }
-      console.log('update body: ',body);
       this.checkpointservice.updatecheckpoint(body).subscribe({
         next: (data) => {
-          console.log(data);
           this.popupservice.showPopup('success', 'Checkpoint updated successfully.');
           this.editForm.reset();
           this.formSubmitted.emit();

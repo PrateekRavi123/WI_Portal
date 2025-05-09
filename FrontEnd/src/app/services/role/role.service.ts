@@ -15,7 +15,12 @@ export class RoleService {
 
       getAllRole(): Observable<any> {
         return this.http.get<any>(`${this.apiUrl}/getallrole`, {}).pipe(
-          map((res) => res),
+          map((res) => {
+            if (res && res.data) {
+              return this.apiService.decryptData(res.data);
+            }
+            return res;
+          }),
           catchError(error => {
             if (error.status === 400) {
               return of(error.status);

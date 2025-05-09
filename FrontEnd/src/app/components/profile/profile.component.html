@@ -11,7 +11,7 @@
               <label class="form-label fw-bold">Full Name</label>
               <input type="text" class="form-control" formControlName="emp_name">
               <div *ngIf="f['emp_name'].invalid && f['emp_name'].touched" class="text-danger small">
-                  Name is required.
+                {{ f['emp_name'].errors?.['required'] ? 'Name is required.' : 'Invalid characters entered. Please avoid special characters.' }}
               </div>
           </div>
           <div class="col-md-4">

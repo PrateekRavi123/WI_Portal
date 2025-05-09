@@ -15,7 +15,31 @@ private apiUrl;
 
       getchecklist(body: any): Observable<any> {
         return this.http.post<any>(`${this.apiUrl}/getchecklist`,body, {}).pipe(
-          map((res) => res),
+          map((res) => {
+            if (res && res.data) {
+              return this.apiService.decryptData(res.data);
+            }
+            return res;
+          }),
+          catchError(error => {
+            if (error.status === 400) {
+              return of(error.status);
+            } else {
+              console.error('Error occurred:', error);
+              return throwError(() => error);
+            }
+          })
+        );
+      }
+      
+      getsinglechecklistcheckpoint(body: any): Observable<any> {
+        return this.http.post<any>(`${this.apiUrl}/getsinglechecklistcheckpoint`,body, {}).pipe(
+          map((res) => {
+            if (res && res.data) {
+              return this.apiService.decryptData(res.data);
+            }
+            return res;
+          }),
           catchError(error => {
             if (error.status === 400) {
               return of(error.status);
@@ -29,7 +53,12 @@ private apiUrl;
 
       getchecklistcheckpoint(body: any): Observable<any> {
         return this.http.post<any>(`${this.apiUrl}/getchecklistcheckpoint`,body, {}).pipe(
-          map((res) => res),
+          map((res) => {
+            if (res && res.data) {
+              return this.apiService.decryptData(res.data);
+            }
+            return res;
+          }),
           catchError(error => {
             if (error.status === 400) {
               return of(error.status);
@@ -43,7 +72,12 @@ private apiUrl;
 
       getAllChecklist(): Observable<any> {
         return this.http.get<any>(`${this.apiUrl}/getallchecklists`, {}).pipe(
-          map((res) => res),
+          map((res) => {
+            if (res && res.data) {
+              return this.apiService.decryptData(res.data);
+            }
+            return res;
+          }),
           catchError(error => {
             if (error.status === 400) {
               return of(error.status);
@@ -56,7 +90,12 @@ private apiUrl;
       }
       getmyAllChecklist(body: any): Observable<any> {
         return this.http.post<any>(`${this.apiUrl}/getmyAllChecklist`,body, {}).pipe(
-          map((res) => res),
+          map((res) => {
+            if (res && res.data) {
+              return this.apiService.decryptData(res.data);
+            }
+            return res;
+          }),
           catchError(error => {
             if (error.status === 400) {
               return of(error.status);
@@ -69,7 +108,12 @@ private apiUrl;
       }
       getpendingchecklistcheckpoint(): Observable<any> {
         return this.http.get<any>(`${this.apiUrl}/getpendingchecklistcheckpoint`, {}).pipe(
-          map((res) => res),
+          map((res) => {
+            if (res && res.data) {
+              return this.apiService.decryptData(res.data);
+            }
+            return res;
+          }),
           catchError(error => {
             if (error.status === 400) {
               return of(error.status);
@@ -82,7 +126,12 @@ private apiUrl;
       }
       getmypendingchecklistcheckpoint(body: any): Observable<any> {
         return this.http.post<any>(`${this.apiUrl}/getmypendingchecklistcheckpoint`,body, {}).pipe(
-          map((res) => res),
+          map((res) => {
+            if (res && res.data) {
+              return this.apiService.decryptData(res.data);
+            }
+            return res;
+          }),
           catchError(error => {
             if (error.status === 400) {
               return of(error.status);
@@ -95,7 +144,12 @@ private apiUrl;
       }
       getrolependingchecklistcheckpoint(body: any): Observable<any> {
         return this.http.post<any>(`${this.apiUrl}/getrolependingchecklistcheckpoint`,body, {}).pipe(
-          map((res) => res),
+          map((res) => {
+            if (res && res.data) {
+              return this.apiService.decryptData(res.data);
+            }
+            return res;
+          }),
           catchError(error => {
             if (error.status === 400) {
               return of(error.status);
@@ -109,7 +163,12 @@ private apiUrl;
       
       addchecklist(body:any): Observable<any> {
         return  this.http.post<any>(`${this.apiUrl}/addchecklist`,body, {}).pipe(
-          map((res) => res),
+          map((res) => {
+            if (res && res.data) {
+              return this.apiService.decryptData(res.data);
+            }
+            return res;
+          }),
           catchError(error => {
             if (error.status === 400) {
               return of(error.status);
@@ -123,7 +182,12 @@ private apiUrl;
 
       updatecheckpoint(body:any): Observable<any> {
         return  this.http.patch<any>(`${this.apiUrl}/updatecheckpoint`,body, {}).pipe(
-          map((res) => res),
+          map((res) => {
+            if (res && res.data) {
+              return this.apiService.decryptData(res.data);
+            }
+            return res;
+          }),
           catchError(error => {
             if (error.status === 400) {
               return of(error.status);
@@ -141,7 +205,13 @@ private apiUrl;
           body: body,
           responseType: 'text' as 'json'
         }).pipe(
-          map((res) => res),
+          map((res: any) => {
+            if (res) {
+              const decrypted = this.apiService.decryptData(res);
+              return JSON.parse(decrypted);
+            }
+            return res;
+          }),
           catchError(error => {
             if (error.status === 400) {
               return of(error.status);

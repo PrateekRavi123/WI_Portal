@@ -12,6 +12,7 @@ export interface Location {
   circle: string;
   div_code: string;
   circle_code: string;
+  office_type: string;
 }
 @Component({
   selector: 'app-quickviewloc',

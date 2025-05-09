@@ -20,53 +20,13 @@ export class EditinchargeComponent {
 
   @Input() user: any | null = null;
   editForm: FormGroup;
-  // circleList = [
-  //   {
-  //     id: "CE",
-  //   name: "CENTRAL"
-  //   },
-  //   {
-  //     id: "SE",
-  //     name: "South East"
-  //   },
-  //   {
-  //     id: "NE",
-  //     name: "North East"
-  //   },
-  // ];
-  // divList = [
-  //   {
-  //     id: "CESRD",
-  //   name: "Shankar Road"
-  //   },
-  //   {
-  //     id: "ESKKD",
-  //     name: "Karkardooma"
-  //   },
-  //   {
-  //     id: "EN",
-  //     name: "North East"
-  //   },
-  // ];
-  // locList = [
-  //   {
-  //     id: "CESRD",
-  //   name: "Shankar Road"
-  //   },
-  //   {
-  //     id: "ESKKD",
-  //     name: "Karkardooma"
-  //   },
-  //   {
-  //     id: "EN",
-  //     name: "North East"
-  //   },
-  // ];
+  
   circleList: any = [];
   divList: any = [];
   locList: any = [];
   roleList: any = [];
-  emp_code: string | null = '';
+  tb_id: string | null = '';
+  cnt: string | null = '';
 
   get f() { return this.editForm.controls as { [key: string]: any }; }
 
@@ -74,8 +34,9 @@ export class EditinchargeComponent {
   constructor(private refreshService: RefreshService,private fb: FormBuilder, private dashboardservice: DashboardService,private roleservice: RoleService, private locationservice: LocationService, private storageservice: StorageService, private inchargeservice: InchargesService, private popupservice: PopupService) {
     // Initialize the form with empty values
     this.editForm = this.fb.group({
+      table_id: [''],
       id: ['', [Validators.required, Validators.pattern(/^\d{8}$/)]],
-      name: ['', [Validators.required, Validators.pattern(/^[A-Za-z\/,\-' ]+$/)]],
+      name: ['', [Validators.required, Validators.pattern(/^[A-Za-z0-9\s.,'_-]*$/)]],
       mob: ['', [Validators.required, Validators.pattern(/^\d{10}$/)]],
       email: ['', [Validators.required, Validators.email]],
       circle: ['', Validators.required],
@@ -86,7 +47,8 @@ export class EditinchargeComponent {
     });
   }
   async ngOnInit() {
-    this.emp_code = await this.storageservice.getUser();
+    this.tb_id = await this.storageservice.getUser();
+    this.cnt = await this.storageservice.getUserMob();
     this.getAllCircle();
     this.getAllRole();
   }
@@ -103,7 +65,6 @@ export class EditinchargeComponent {
   getAllRole() {
     this.roleservice.getAllRole().subscribe({
       next: (data) => {
-        console.log('Role list: ',data);
         this.roleList = data;
       },
       error: (error) => {
@@ -113,22 +74,19 @@ export class EditinchargeComponent {
   }
   ngOnChanges(changes: SimpleChanges) {
     if (changes['user'] && this.user) {
-      console.log('User:', this.user);
-      this.inchargeservice.getIncharge(this.user.EMP_CODE).subscribe({
+      this.inchargeservice.getIncharge(this.user.ID.toString(),this.user.MOBILE_NO.toString()).subscribe({
         next: (data) => {
-          console.log('incharge data',data);
           if (this.circleList && data[0].CIRCLE_CODE) {
-            console.log('circle code', data[0].CIRCLE_CODE);
             this.dashboardservice.getAllDivision(data[0].CIRCLE_CODE).subscribe({
               next: (data2) => {
                 this.divList = data2;
                 if (this.divList && data[0].DIV_CODE) {
-                  console.log('DIV code', data[0].DIV_CODE);
                   this.locationservice.getLocation(data[0].DIV_CODE).subscribe({
                     next: (data3) => {
                       this.locList = data3;
                       this.editForm.enable();
                       this.editForm.patchValue({
+                        table_id: this.user.ID,
                         id: this.user.EMP_CODE,
                         name: this.user.EMP_NAME,
                         mob: data[0].MOBILE_NO.toString(),
@@ -201,7 +159,6 @@ export class EditinchargeComponent {
     }
   }
   onSubmit() {
-    console.log('Profile Updated:', this.editForm.value);
     const body = {
       emp_code: this.editForm.value.id,
       emp_name: this.editForm.value.name,
@@ -212,11 +169,11 @@ export class EditinchargeComponent {
       loc: this.editForm.value.loc,
       role: this.editForm.value.role,
       status: this.editForm.value.status,
-      updated_by: this.emp_code,
+      updated_by: this.tb_id,
+      id: this.editForm.value.table_id.toString()
     }
     this.inchargeservice.updateincharge(body).subscribe({
       next: (data) => {
-        console.log(data);
         this.popupservice.showPopup('success', 'Incharge updated successfully.');
         this.editForm.reset();
         this.formSubmitted.emit();

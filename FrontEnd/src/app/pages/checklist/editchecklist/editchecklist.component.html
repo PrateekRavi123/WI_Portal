@@ -66,6 +66,14 @@
                           <div class="mt-2">
                             <label class="form-label">Remarks:<span class="text-danger text-bold">*</span></label>
                             <textarea formControlName="remarks" class="form-control form-control-sm" rows="3"></textarea>
+                            <div
+                            *ngIf="ctrl.get('remarks')?.touched && ctrl.get('remarks')?.invalid"
+                            class="text-danger small">
+                            <span *ngIf="ctrl.get('remarks')?.errors?.['required']">Remarks are
+                              required.</span>
+                            <span *ngIf="ctrl.get('remarks')?.errors?.['pattern']">Invalid
+                              characters entered. Please avoid special characters.</span>
+                          </div>
                           </div>
                           <div class="mt-2">
                             

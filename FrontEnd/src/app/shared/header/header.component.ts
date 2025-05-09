@@ -15,10 +15,12 @@ import { InchargesService } from '../../services/incharges/incharges.service';
 export class HeaderComponent {
   username!: string;
   emp_code: string | null = '';
+  cnt: string | null = '';
   constructor(private router: Router,private storageService: StorageService,private dashboard: DashboardComponent,private inchargeservice:InchargesService,private storageservice: StorageService) { 
   }
   async ngOnInit() {
     this.emp_code = await this.storageservice.getUser();
+    this.cnt = await this.storageservice.getUserMob();
     this.getdetails();      
   }
   logout() {
@@ -32,9 +34,8 @@ export class HeaderComponent {
     this.toggleSidebar.emit();
   }
   getdetails(){
-    this.inchargeservice.getIncharge(this.emp_code?this.emp_code:"").subscribe({
+    this.inchargeservice.getIncharge(this.emp_code?this.emp_code:"",this.cnt?this.cnt:"").subscribe({
       next: (data) => {
-        console.log(data);
         this.username =  data[0].EMP_NAME;
       },
       error: (error) => {

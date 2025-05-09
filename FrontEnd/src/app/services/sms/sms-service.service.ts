@@ -39,7 +39,12 @@ export class SmsServiceService {
   // }
   sendOTP(body: any): Observable<any> {
     return this.http.post<any>(`${this.apiUrl}/sendOTP`, body, {}).pipe(
-      map((res) => res),
+      map((res) => {
+        if (res && res.data) {
+          return this.apiService.decryptData(res.data);
+        }
+        return res;
+      }),
       catchError(error => {
         if (error.status === 400) {
           return of(error.status);
@@ -53,7 +58,12 @@ export class SmsServiceService {
 
   validateOtp(body: any): Observable<any> {
     return this.http.post<any>(`${this.apiUrl}/validateOTP`, body, {}).pipe(
-      map((res) => res),
+      map((res) => {
+        if (res && res.data) {
+          return this.apiService.decryptData(res.data);
+        }
+        return res;
+      }),
       catchError(error => {
         if (error.status === 400) {
           return of(error.status);

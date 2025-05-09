@@ -1,46 +1,72 @@
-<div>
-    <h4 class="mb-3">Update Location</h4>
+<div class="text-start">
+    <h4 class="mb-3">Update Pending Checkpoint</h4>
     <form [formGroup]="editForm" (ngSubmit)="onSubmit()">
       <div class="row mb-3">
-        <div class="col-md-6">
-          <label for="circle" class="form-label fw-bold">Circle</label>
-          <select id="circle" class="form-select" formControlName="circle" (change)="onCircleChange($event)"
-            [ngClass]="{ 'is-invalid': f['circle'].invalid && f['circle'].touched }">
-            <option value="" disabled>Select a Circle</option>
-            <option *ngFor="let circle of circleList" [value]="circle.ID">
-              {{ circle.NAME }}
-            </option>
-          </select>
-          <div *ngIf="f['circle'].invalid && f['circle'].touched" class="text-danger small">
-            Circle is required.
-          </div>
+        <div class="col-md-4">
+          <label for="checklistid" class="col-form-label">Checklist ID:</label>
+            <input type="text" id="checklistid" formControlName="checklistid" class="form-control" />
         </div>
-        <div class="col-md-6">
-          <label for="division" class="form-label fw-bold">Division</label>
-          <select id="division" class="form-select" formControlName="div"
-            [ngClass]="{ 'is-invalid': f['div'].invalid && f['div'].touched }">
-            <option value="" disabled>Select a Division</option>
-            <option *ngFor="let division of divList" [value]="division.ID">
-              {{ division.NAME }}
-            </option>
-          </select>
-          <div *ngIf="f['div'].invalid && f['div'].touched" class="text-danger small">
-            Division is required.
-          </div>
+        <div class="col-md-4">
+          <label for="div" class="col-form-label">Division:</label>
+          <input type="text" id="div" formControlName="div" class="form-control"
+            placeholder="Enter Division" />
+        </div>
+        <div class="col-md-4">
+          <label for="role_name" class="col-form-label">Forwarded To:</label>
+          <input type="text" id="role_name" formControlName="role_name" class="form-control"
+            placeholder="Enter Forwarded To" />
         </div>
       </div>
       <div class="row mb-3">
         <div class="col-md-12">
-          <label class="form-label fw-bold">Location Name</label>
-          <textarea type="text" class="form-control" formControlName="name"></textarea>
-          <div *ngIf="f['name'].touched && f['name'].invalid" class="text-danger small">
-            <span *ngIf="f['name'].errors?.['required']">Location Name is required.</span>
-            <span *ngIf="f['name'].errors?.['pattern']">Enter a valid name.</span>
-          </div>
+          <label for="loc" class="col-form-label">Location:</label>
+          <input type="text" id="loc" formControlName="loc" class="form-control"
+            placeholder="Enter Location" />
         </div>
       </div>
-      <div class="text-end">
-        <button type="submit" class="btn btn-primary" [disabled]="editForm.invalid">Update</button>
+      <div class="row mb-3">
+        <div class="col-md-4">
+          <label for="type_name" class="col-form-label">Checkpoint Type:</label>
+            <input type="text" id="type_name" formControlName="type_name" class="form-control" />
+        </div>
+        <div class="col-md-4">
+          <label for="name" class="col-form-label">Checkpoint Name:</label>
+          <input type="text" id="name" formControlName="name" class="form-control"
+            placeholder="Enter checkpointname" />
+        </div>
+        <div class="col-md-4">
+          <label for="status" class="col-form-label">Status:</label>
+          <input type="text" id="status" formControlName="status" class="form-control"
+            placeholder="Enter status" />
+        </div>
       </div>
+      <div class="row mb-3">
+        <div class="col-md-12">
+          <label for="remarks" class="col-form-label">Remarks:</label>
+          <input type="text" id="remarks" formControlName="remarks" class="form-control"
+            placeholder="Enter remarks" />
+        </div>
+      </div>
+      <div class="row mb-3">
+        <div class="col-md-12">
+                            
+          <label class="form-label" *ngIf="editForm.get('filename')?.value; else noFile">
+            Attached File: 
+            <a 
+              class="text-danger" 
+              style="cursor: pointer;" 
+              (click)="onFileChange(editForm.get('filename')?.value, editForm.get('filedata')?.value)">
+              {{ editForm.get('filename')?.value }}
+            </a>
+          </label>
+          
+          <ng-template #noFile>
+            <label>Attached File: No File Attached</label>
+          </ng-template>
+    </div>        
+      </div>
+      <!-- <div class="text-end">
+        <button type="submit" class="btn btn-primary" [disabled]="editForm.invalid">Update</button>
+      </div> -->
     </form>
   </div>

@@ -12,6 +12,7 @@
                 <th (click)="sortData('loc_name')" class="sortable">Name <span *ngIf="sortColumn === 'loc_name'">{{ sortAscending ? '▲' : '▼' }}</span></th>
                 <th (click)="sortData('div')" class="sortable">Division <span *ngIf="sortColumn === 'div'">{{ sortAscending ? '▲' : '▼' }}</span></th>
                 <th (click)="sortData('circle')" class="sortable">Circle <span *ngIf="sortColumn === 'circle'">{{ sortAscending ? '▲' : '▼' }}</span></th>
+                <th (click)="sortData('office_type')" class="sortable">Office Type <span *ngIf="sortColumn === 'office_type'">{{ sortAscending ? '▲' : '▼' }}</span></th>
                 <th>Actions</th>
             </tr>
         </thead>
@@ -21,6 +22,7 @@
                 <td>{{ user.loc_name }}</td>
                 <td>{{ user.div }}</td>
                 <td>{{ user.circle }}</td>
+                <td>{{ user.office_type }}</td>
                 <td>
                     <button class="btn btn-sm btn-primary me-2" (click)="openEditModal(user)">
                         <i class="bi bi-pencil-square"></i> Edit

@@ -23,7 +23,7 @@ typeList: any = [];
     // Initialize the form with empty values
     this.editForm = this.fb.group({
       type: ['', Validators.required],
-      name: ['', Validators.required],
+      name: ['', [Validators.required,Validators.pattern(/^[A-Za-z0-9\s.,'_-]*$/)]],
       fwdrole: ['', Validators.required],
     });
   }
@@ -34,7 +34,6 @@ typeList: any = [];
   getAllRole() {
     this.roleservice.getAllRole().subscribe({
       next: (data) => {
-        console.log('Role list: ',data);
         this.roleList = data;
       },
       error: (error) => {
@@ -46,7 +45,6 @@ typeList: any = [];
   getAllType() {
     this.checkpointservice.getallcheckpointtype().subscribe({
       next: (data) => {
-        console.log('Role list: ',data);
         this.typeList = data;
       },
       error: (error) => {
@@ -58,7 +56,6 @@ typeList: any = [];
 
 
   onSubmit() {
-    console.log('Profile Updated:', this.editForm.value);
       const body = {
         name:this.editForm.value.name,
         type:this.editForm.value.type,
@@ -66,7 +63,6 @@ typeList: any = [];
       }
       this.checkpointservice.addcheckpoint(body).subscribe({
         next: (data) => {
-          console.log(data);
           this.popupservice.showPopup('success', 'Checkpoint added successfully.');
           this.editForm.reset();
         },

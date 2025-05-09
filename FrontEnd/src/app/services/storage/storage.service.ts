@@ -31,4 +31,10 @@ export class StorageService {
   async getUserRole(): Promise<string | null> {
     return sessionStorage.getItem('role');
   }
+  async storeUserMob(user: string): Promise<void> {
+    sessionStorage.setItem('cnt', user);
+  }
+  async getUserMob(): Promise<string | null> {
+    return sessionStorage.getItem('cnt');
+  }
 }

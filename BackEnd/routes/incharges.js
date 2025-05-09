@@ -4,17 +4,18 @@ const { sql, getPool } = require('../config/db');
 const { smsRegex, emailRegex, mobileValidation } = require('../config/inputValidation');
 const { verifyToken } = require('../config/tokenValidation');
 const { logWrite } = require('../config/logfile')
+const { payloadencrypt } = require('../config/payloadCrypto');
 
 
 router.post('/getincharge', verifyToken, async (req, res) => {
     let poolInstance;
     try {
-        const { emp_code } = req.body;
-        if (!emp_code || emp_code.trim() === "" || !smsRegex.test(emp_code)) {
-            return res.status(400).json({ message: 'Invalid data.'});
+        const { id, cnt_no } = req.body;
+        if (!id || !cnt_no ||  !smsRegex.test(id) || !smsRegex.test(cnt_no)) {
+            return res.status(400).json({ data: payloadencrypt(JSON.stringify({ message: 'Invalid data.'}))});
         }
         poolInstance = await getPool();
-        const query = `SELECT IM.EMP_CODE,IM.EMP_NAME,IM.EMAIL_ID,
+        const query = `SELECT IM.ID,IM.EMP_CODE,IM.EMP_NAME,IM.EMAIL_ID,
     IM.MOBILE_NO,
     LTRIM(RTRIM(IM.CIRCLE)) AS CIRCLE_CODE,  
     LTRIM(RTRIM(IM.DIVISION)) AS DIV_CODE,   
@@ -36,14 +37,15 @@ LEFT JOIN
 LEFT JOIN 
     ROLE_MST RM ON IM.ROLE_ID = RM.ROLE_ID
 WHERE 
-    IM.EMP_CODE = @EMP_CODE`;
+    IM.ID = @ID AND IM.MOBILE_NO = @MOBILE_NO`;
         const request = await poolInstance.request();
-        request.input('EMP_CODE', sql.VarChar, emp_code);
+        request.input('ID', sql.VarChar, id);
+        request.input('MOBILE_NO', sql.VarChar, cnt_no);
         const result = await request.query(query);
-        res.json(result.recordset);
+        res.json({ data: payloadencrypt(JSON.stringify(result.recordset)) });
     } catch (err) {
         logWrite(`Failed to fetch incharge. Error: ${err.message}`);
-        res.status(500).json({ message: 'Failed to fetch incharge.'});
+        res.status(500).json({ data: payloadencrypt(JSON.stringify({ message: 'Failed to fetch incharge.'}))});
     }
 });
 
@@ -52,7 +54,7 @@ router.get('/getallincharges', verifyToken, async (req, res) => {
     try {
         poolInstance = await getPool();
         const result = await poolInstance.request().query(`
-            SELECT IM.EMP_CODE,IM.EMP_NAME,
+            SELECT IM.ID,IM.EMP_CODE,IM.EMP_NAME,IM.MOBILE_NO,
     DM_CIRCLE.NAME AS CIRCLE,
     DM_DIVISION.name AS DIVISION,
     LM.loc_name AS LOCATION,
@@ -68,23 +70,23 @@ LEFT JOIN
     LOCATION_MST LM ON IM.LOCATION = LM.loc_id
 LEFT JOIN 
     ROLE_MST RM ON IM.ROLE_ID = RM.ROLE_ID`);
-        res.json(result.recordset);
+        res.json({ data: payloadencrypt(JSON.stringify(result.recordset)) });
     } catch (err) {
         logWrite(`Failed to fetch all incharges. Error: ${err.message}`);
-        res.status(500).json({ message: 'Failed to fetch all incharges.'});
+        res.status(500).json({ data: payloadencrypt(JSON.stringify({ message: 'Failed to fetch all incharges.'}))});
     }
 });
 
 router.post('/addincharge', verifyToken, async (req, res) => {
     const { emp_code, emp_name, email_id, mob, circle, div, loc, role, status, created_by } = req.body;
 
-    if (!emp_code || !emp_name || !email_id || !mob || !circle || !div || !loc || !role || !status ||
-        !created_by || emp_code.trim() === "" || emp_name.trim() === "" || email_id.trim() === "" ||
+    if ( !emp_name || !email_id || !mob || !circle || !div || !loc || !role || !status ||
+        !created_by ||  emp_name.trim() === "" || email_id.trim() === "" ||
         mob.trim() === "" || circle.trim() === "" || div.trim() === "" || loc.trim() === "" ||
-        role.trim() === "" || status.trim() === "" || created_by.trim() === "" || !smsRegex.test(emp_code) ||
+        role.trim() === "" || status.trim() === "" || created_by.trim() === "" || 
         !smsRegex.test(emp_name) || !emailRegex.test(email_id) || !mobileValidation.test(mob) ||
         !smsRegex.test(circle) || !smsRegex.test(div) || !smsRegex.test(loc) || !smsRegex.test(role) || !smsRegex.test(status) || !smsRegex.test(created_by)) {
-        return res.status(400).json({ message: 'Invalid data.'});
+        return res.status(400).json({ data: payloadencrypt(JSON.stringify({ message: 'Invalid data.'}))});
     }
     try {
         const pool = await getPool();
@@ -102,35 +104,36 @@ router.post('/addincharge', verifyToken, async (req, res) => {
         request.input('CREATED_BY', sql.VarChar, created_by.toUpperCase());
         const response = await request.query(query);
         if (response.rowsAffected && response.rowsAffected[0] === 1) {
-            return res.status(200).json({ message: 'Incharge added successfully' });       
+            return res.status(200).json({ data: payloadencrypt(JSON.stringify({ message: 'Incharge added successfully' }))});       
         } else {
             logWrite(`Failed to add location. Response: ${JSON.stringify(response)}`)
-            return res.status(500).json({ message: 'Failed to add incharge.'});
+            return res.status(500).json({ data: payloadencrypt(JSON.stringify({ message: 'Failed to add incharge.'}))});
         }
     }
     catch (e) {
         logWrite(`Error in adding incharge. Error: ${e.message}`);
-        res.status(500).json({ message: 'Failed to add incharge.'});
+        res.status(500).json({ data: payloadencrypt(JSON.stringify({ message: 'Failed to add incharge.'}))});
     }
 });
 
 router.patch('/updateincharge', verifyToken, async (req, res) => {
-    const { emp_code, emp_name, email_id, mob, circle, div, loc, role, status, updated_by } = req.body;
+    const { id, emp_code, emp_name, email_id, mob, circle, div, loc, role, status, updated_by } = req.body;
 
-    if (!emp_code || !emp_name || !email_id || !mob || !circle || !div || !loc || !role || !status ||
-        !updated_by || emp_code.trim() === "" || emp_name.trim() === "" || email_id.trim() === "" ||
+    if (!id || !emp_code || !emp_name || !email_id || !mob || !circle || !div || !loc || !role || !status ||
+        !updated_by  || emp_code.trim() === "" || emp_name.trim() === "" || email_id.trim() === "" ||
         mob.trim() === "" || circle.trim() === "" || div.trim() === "" || loc.trim() === "" ||
-        role.trim() === "" || status.trim() === "" || updated_by.trim() === "" || !smsRegex.test(emp_code) ||
+        role.trim() === "" || status.trim() === "" || updated_by.trim() === "" || !smsRegex.test(id) || !smsRegex.test(emp_code) ||
         !smsRegex.test(emp_name) || !emailRegex.test(email_id) || !mobileValidation.test(mob) ||
         !smsRegex.test(circle) || !smsRegex.test(div) || !smsRegex.test(loc) || !smsRegex.test(role) || !smsRegex.test(status) ||
         !smsRegex.test(updated_by)) {
-        return res.status(400).json({ message: 'Invalid data.'});
+        return res.status(400).json({ data: payloadencrypt(JSON.stringify({ message: 'Invalid data.'}))});
     }
     try {
         const pool = await getPool();
 
-        const query = `UPDATE INCHARGES_MST SET EMP_NAME = @EMP_NAME, EMAIL_ID = @EMAIL_ID, MOBILE_NO = @MOBILE_NO, CIRCLE = @CIRCLE, DIVISION = @DIVISION, LOCATION = @LOCATION, ROLE_ID = @ROLE_ID,STATUS = @STATUS, UPDATED_BY = @UPDATED_BY, UPDATED_ON = GETDATE() WHERE EMP_CODE = @EMP_CODE`;
+        const query = `UPDATE INCHARGES_MST SET EMP_CODE = @EMP_CODE, EMP_NAME = @EMP_NAME, EMAIL_ID = @EMAIL_ID, MOBILE_NO = @MOBILE_NO, CIRCLE = @CIRCLE, DIVISION = @DIVISION, LOCATION = @LOCATION, ROLE_ID = @ROLE_ID,STATUS = @STATUS, UPDATED_BY = @UPDATED_BY, UPDATED_ON = GETDATE() WHERE ID = @ID`;
         const request = await pool.request();
+        request.input('EMP_CODE', sql.VarChar, emp_code.toUpperCase());
         request.input('EMP_NAME', sql.VarChar, emp_name.toUpperCase());
         request.input('EMAIL_ID', sql.VarChar, email_id.toUpperCase());
         request.input('MOBILE_NO', sql.VarChar, mob.toUpperCase());
@@ -140,42 +143,78 @@ router.patch('/updateincharge', verifyToken, async (req, res) => {
         request.input('ROLE_ID', sql.VarChar, role.toUpperCase());
         request.input('STATUS', sql.VarChar, status.toUpperCase());
         request.input('UPDATED_BY', sql.VarChar, updated_by.toUpperCase());
-        request.input('EMP_CODE', sql.VarChar, emp_code.toUpperCase());
+        request.input('ID', sql.VarChar, id);
         const response = await request.query(query);
         if (response.rowsAffected && response.rowsAffected[0] === 1) {
-            return res.status(200).json({ message: 'Incharge updated successfully'});
+            return res.status(200).json({ data: payloadencrypt(JSON.stringify({ message: 'Incharge updated successfully'}))});
         } else {
             logWrite(`Failed to update incharge. Response: ${JSON.stringify(response)}`);
-            return res.status(500).json({ message: 'Failed to update incharge.'});
+            return res.status(500).json({ data: payloadencrypt(JSON.stringify({ message: 'Failed to update incharge.'}))});
         }
     }
     catch (e) {
         logWrite(`Failed to update incharge. Error: ${e.message}`);
-        res.status(500).json({ message: 'Failed to update incharge.'});
+        res.status(500).json({ data: payloadencrypt(JSON.stringify({ message: 'Failed to update incharge.'}))});
     }
 });
 
-router.delete('/deleteincharge', verifyToken, async (req, res) => {
-    const { emp_code } = req.body;
-    if (!emp_code || emp_code.trim() === "" || !smsRegex.test(emp_code)) {
-        return res.status(400).json({ message: 'Invalid data.'});
+router.patch('/updateprofileincharge', verifyToken, async (req, res) => {
+    const { id, emp_code, emp_name, email_id, mob,  updated_by } = req.body;
+
+    if (!id || !emp_code || !emp_name || !email_id || !mob ||
+        !updated_by  || emp_code.trim() === "" || emp_name.trim() === "" || email_id.trim() === "" ||
+        mob.trim() === ""  || updated_by.trim() === "" || !smsRegex.test(id) || !smsRegex.test(emp_code) ||
+        !smsRegex.test(emp_name) || !emailRegex.test(email_id) || !mobileValidation.test(mob) ||
+        !smsRegex.test(updated_by)) {
+        return res.status(400).json({ data: payloadencrypt(JSON.stringify({ message: 'Invalid data.'}))});
     }
     try {
         const pool = await getPool();
-        const query = `DELETE FROM INCHARGES_MST WHERE EMP_CODE = @EMP_CODE`;
+
+        const query = `UPDATE INCHARGES_MST SET EMP_CODE = @EMP_CODE, EMP_NAME = @EMP_NAME, EMAIL_ID = @EMAIL_ID, MOBILE_NO = @MOBILE_NO, UPDATED_BY = @UPDATED_BY, UPDATED_ON = GETDATE() WHERE ID = @ID`;
         const request = await pool.request();
-        request.input('EMP_CODE', sql.VarChar, emp_code);
+        request.input('EMP_CODE', sql.VarChar, emp_code.toUpperCase());
+        request.input('EMP_NAME', sql.VarChar, emp_name.toUpperCase());
+        request.input('EMAIL_ID', sql.VarChar, email_id.toUpperCase());
+        request.input('MOBILE_NO', sql.VarChar, mob.toUpperCase());
+        request.input('UPDATED_BY', sql.VarChar, updated_by.toUpperCase());
+        request.input('ID', sql.VarChar, id);
         const response = await request.query(query);
         if (response.rowsAffected && response.rowsAffected[0] === 1) {
-            return res.status(200).json({ message: 'Incharge deleted successfully'});
+            return res.status(200).json({ data: payloadencrypt(JSON.stringify({ message: 'Incharge updated successfully'}))});
+        } else {
+            logWrite(`Failed to update incharge. Response: ${JSON.stringify(response)}`);
+            return res.status(500).json({ data: payloadencrypt(JSON.stringify({ message: 'Failed to update incharge.'}))});
+        }
+    }
+    catch (e) {
+        logWrite(`Failed to update incharge. Error: ${e.message}`);
+        res.status(500).json({ data: payloadencrypt(JSON.stringify({ message: 'Failed to update incharge.'}))});
+    }
+});
+
+
+router.delete('/deleteincharge', verifyToken, async (req, res) => {
+    const { id } = req.body;
+    if (!id ||  !smsRegex.test(id)) {
+        return res.status(400).json({ data: payloadencrypt(JSON.stringify({ message: 'Invalid data.'}))});
+    }
+    try {
+        const pool = await getPool();
+        const query = `DELETE FROM INCHARGES_MST WHERE ID = @ID`;
+        const request = await pool.request();
+        request.input('ID', sql.VarChar, id);
+        const response = await request.query(query);
+        if (response.rowsAffected && response.rowsAffected[0] === 1) {
+            return res.status(200).json({ data: payloadencrypt(JSON.stringify({ message: 'Incharge deleted successfully'}))});
         } else {
             logWrite(`Failed to delete incharge. Response: ${JSON.stringify(response)}`);
-            return res.status(500).json({ message: 'Failed to delete incharge.'});
+            return res.status(500).json({ data: payloadencrypt(JSON.stringify({ message: 'Failed to delete incharge.'}))});
         }
     }
     catch (e) {
         logWrite(`Failed to delete incharge. Error: ${e.message}`);
-        res.status(500).json({ message: 'Failed to delete incharge.'});
+        res.status(500).json({ data: payloadencrypt(JSON.stringify({ message: 'Failed to delete incharge.'}))});
     }
 });
 

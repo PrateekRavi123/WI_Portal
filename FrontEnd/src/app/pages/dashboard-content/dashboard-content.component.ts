@@ -49,7 +49,6 @@ export class DashboardContentComponent {
     }
   }
   fetchDashboardData(month: string) {
-    console.log('Month',month);
     this.getCount(month);
     this.getchecklistcirclecount(month);
     this.getchecklistdivcount(month);
@@ -57,7 +56,6 @@ export class DashboardContentComponent {
   getCount(month: string){
     this.dashboardservice.getAllCount(month).subscribe({
       next: (data) => {
-        console.log('data',data);
         this.checklistcount = data[0].checklist_Count;
         this.completetcount = data[0].completed_Count;
         this.pendingcount = data[0].pending_Count;
@@ -71,7 +69,6 @@ export class DashboardContentComponent {
   getchecklistcirclecount(month: string){
     this.dashboardservice.getchecklistcirclecount(month).subscribe({
       next: (data) => {
-        console.log(data);
         this.checklistCircleData = data;
         this.createPieChart();
       },
@@ -84,7 +81,6 @@ export class DashboardContentComponent {
   getchecklistdivcount(month: string){
     this.dashboardservice.getchecklistdivcount(month).subscribe({
       next: (data) => {
-        console.log(data);
         this.checklistDivData = data;
         this.createGraphChart();
       },

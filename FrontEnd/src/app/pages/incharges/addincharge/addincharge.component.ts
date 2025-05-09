@@ -16,48 +16,7 @@ import { RoleService } from '../../../services/role/role.service';
 })
 export class AddinchargeComponent {
   editForm: FormGroup;
-  // circleList = [
-  //   {
-  //     id: "CE",
-  //   name: "CENTRAL"
-  //   },
-  //   {
-  //     id: "SE",
-  //     name: "South East"
-  //   },
-  //   {
-  //     id: "NE",
-  //     name: "North East"
-  //   },
-  // ];
-  // divList = [
-  //   {
-  //     id: "CESRD",
-  //   name: "Shankar Road"
-  //   },
-  //   {
-  //     id: "ESKKD",
-  //     name: "Karkardooma"
-  //   },
-  //   {
-  //     id: "EN",
-  //     name: "North East"
-  //   },
-  // ];
-  // locList = [
-  //   {
-  //     id: "CESRD",
-  //   name: "Shankar Road"
-  //   },
-  //   {
-  //     id: "ESKKD",
-  //     name: "Karkardooma"
-  //   },
-  //   {
-  //     id: "EN",
-  //     name: "North East"
-  //   },
-  // ];
+  
   circleList: any = [];
   divList: any = [];
   locList: any = [];
@@ -67,8 +26,8 @@ export class AddinchargeComponent {
   get f() { return this.editForm.controls as { [key: string]: any }; }
   constructor(private roleservice: RoleService,private fb: FormBuilder, private dashboardservice: DashboardService, private locationservice: LocationService, private storageservice: StorageService, private inchargeservice: InchargesService, private popupservice: PopupService) {
     this.editForm = this.fb.group({
-      id: ['', [Validators.required, Validators.pattern(/^\d{8}$/)]],
-      name: ['', [Validators.required, Validators.pattern(/^[A-Za-z\/,\-' ]+$/)]],
+      id: ['', [ Validators.pattern(/^\d{8}$/)]],
+      name: ['', [Validators.required,Validators.pattern(/^[A-Za-z0-9\s.,'_-]*$/)]],
       mob: ['', [Validators.required, Validators.pattern(/^\d{10}$/)]],
       email: ['', [Validators.required, Validators.email]],
       circle: ['', Validators.required],
@@ -132,7 +91,6 @@ export class AddinchargeComponent {
   getAllRole() {
     this.roleservice.getAllRole().subscribe({
       next: (data) => {
-        console.log('Role list: ',data);
         this.roleList = data;
       },
       error: (error) => {
@@ -141,7 +99,6 @@ export class AddinchargeComponent {
     });
   }
   onSubmit() {
-    console.log('Profile Updated:', this.editForm.value);
     const body = {
       emp_code: this.editForm.value.id,
       emp_name: this.editForm.value.name,
@@ -156,7 +113,6 @@ export class AddinchargeComponent {
     }
     this.inchargeservice.addincharge(body).subscribe({
       next: (data) => {
-        console.log(data);
         this.popupservice.showPopup('success', 'Incharge added successfully.');
         this.editForm.reset();
       },

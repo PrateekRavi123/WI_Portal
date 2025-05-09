@@ -14,7 +14,12 @@ private apiUrl;
 
       getAllCheckpoint(): Observable<any> {
         return this.http.get<any>(`${this.apiUrl}/getallcheckpoint`, {}).pipe(
-          map((res) => res),
+          map((res) => {
+            if (res && res.data) {
+              return this.apiService.decryptData(res.data);
+            }
+            return res;
+          }),
           catchError(error => {
             if (error.status === 400) {
               return of(error.status);
@@ -28,7 +33,12 @@ private apiUrl;
       
       getallcheckpointtype(): Observable<any> {
         return this.http.get<any>(`${this.apiUrl}/getallcheckpointtype`, {}).pipe(
-          map((res) => res),
+          map((res) => {
+            if (res && res.data) {
+              return this.apiService.decryptData(res.data);
+            }
+            return res;
+          }),
           catchError(error => {
             if (error.status === 400) {
               return of(error.status);
@@ -43,7 +53,12 @@ private apiUrl;
 
       addcheckpoint(body:any): Observable<any> {
         return  this.http.post<any>(`${this.apiUrl}/addcheckpoint`,body, {}).pipe(
-          map((res) => res),
+          map((res) => {
+            if (res && res.data) {
+              return this.apiService.decryptData(res.data);
+            }
+            return res;
+          }),
           catchError(error => {
             if (error.status === 400) {
               return of(error.status);
@@ -57,7 +72,12 @@ private apiUrl;
 
       updatecheckpoint(body:any): Observable<any> {
         return  this.http.patch<any>(`${this.apiUrl}/updatecheckpoint`,body, {}).pipe(
-          map((res) => res),
+          map((res) => {
+            if (res && res.data) {
+              return this.apiService.decryptData(res.data);
+            }
+            return res;
+          }),
           catchError(error => {
             if (error.status === 400) {
               return of(error.status);
@@ -70,12 +90,17 @@ private apiUrl;
       }
 
       deletecheckpoint(body: any): Observable<any> {
-        console.log('body', body);
         return this.http.delete(`${this.apiUrl}/deletecheckpoint`, {
           body: body,
           responseType: 'text' as 'json'
         }).pipe(
-          map((res) => res),
+          map((res: any) => {
+            if (res) {
+              const decrypted = this.apiService.decryptData(res);
+              return JSON.parse(decrypted);
+            }
+            return res;
+          }),
           catchError(error => {
             if (error.status === 400) {
               return of(error.status);

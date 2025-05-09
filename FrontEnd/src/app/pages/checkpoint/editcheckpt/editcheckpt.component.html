@@ -32,9 +32,14 @@
             <div class="col-md-12">
                 <label class="form-label fw-bold">Name</label>
                 <textarea type="text" class="form-control" formControlName="name"></textarea>
-                <div *ngIf="f['name'].invalid && f['name'].touched" class="text-danger small">
-                    Name is required.
-                </div>
+                <div
+                            *ngIf="f['name']?.touched && f['name']?.invalid"
+                            class="text-danger small">
+                            <span *ngIf="f['name']?.errors?.['required']">Name is
+                              required.</span>
+                            <span *ngIf="f['name']?.errors?.['pattern']">Invalid
+                              characters entered. Please avoid special characters.</span>
+                          </div>
             </div>
         </div>
         <div class="text-end">

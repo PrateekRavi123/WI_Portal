@@ -4,6 +4,7 @@ const { sql, getPool } = require('../config/db');
 const { smsRegex, emailRegex } = require('../config/inputValidation');
 const { verifyToken } = require('../config/tokenValidation');
 const { logWrite } = require('../config/logfile')
+const { payloadencrypt } = require('../config/payloadCrypto');
 
 
 router.get('/getcircle', verifyToken, async (req, res) => {
@@ -11,10 +12,10 @@ router.get('/getcircle', verifyToken, async (req, res) => {
     try {
         poolInstance = await getPool();
         const result = await poolInstance.request().query('SELECT ID, NAME FROM DIV_MST WHERE CIRCLE IS NULL');
-        res.json(result.recordset);
+        res.json({ data: payloadencrypt(JSON.stringify(result.recordset)) });
     } catch (err) {
         logWrite(`Failed to fetch circles. Error: ${err.message}`);
-        res.status(500).json({ message: 'Failed to fetch circles.' });
+        res.status(500).json({ data: payloadencrypt(JSON.stringify({ message: 'Failed to fetch circles.' }))});
     }
 });
 
@@ -23,17 +24,17 @@ router.post('/getdivision', verifyToken, async (req, res) => {
     try {
         const { circle } = req.body;
         if (!circle || circle.trim() === "" || !smsRegex.test(circle)) {
-            return res.json({ message: 'Invalid data.' });
+            return res.json({ data: payloadencrypt(JSON.stringify({ message: 'Invalid data.' }))});
         }
         poolInstance = await getPool();
         const query = 'SELECT ID, NAME FROM DIV_MST WHERE CIRCLE = @CIRCLE';
         const request = await poolInstance.request();
         request.input('CIRCLE', sql.VarChar, circle.toUpperCase());
         const response = await request.query(query);
-        res.json(response.recordset);
+        res.json({ data: payloadencrypt(JSON.stringify(response.recordset))});
     } catch (err) {
         logWrite(`Failed to fetch divisions. Error: ${err.message}`);
-        res.status(500).json({ message: 'Failed to fetch divisions.' });
+        res.status(500).json({ data: payloadencrypt(JSON.stringify({ message: 'Failed to fetch divisions.' }))});
     }
 });
 
@@ -42,7 +43,7 @@ router.post('/getcount', verifyToken, async (req, res) => {
     try {
         const { month } = req.body;
         if (!month || month.trim() === "" || !smsRegex.test(month)) {
-            return res.json({ message: 'Invalid data.' });
+            return res.json({ data: payloadencrypt(JSON.stringify({ message: 'Invalid data.' }))});
         }
         poolInstance = await getPool();
         const query = `SELECT 
@@ -52,10 +53,10 @@ router.post('/getcount', verifyToken, async (req, res) => {
         const request = await poolInstance.request();
         request.input('Month', sql.VarChar, month.toUpperCase());
         const response = await request.query(query);
-        res.json(response.recordset);
+        res.json({ data: payloadencrypt(JSON.stringify(response.recordset))});
     } catch (err) {
         logWrite(`Failed to fetch count. Error: ${err.message}`);
-        res.status(500).json({ message: 'Failed to fetch count.' });
+        res.status(500).json({ data: payloadencrypt(JSON.stringify({ message: 'Failed to fetch count.' }))});
     }
 });
 
@@ -68,7 +69,7 @@ router.post('/getchecklistdivcount', verifyToken, async (req, res) => {
     try {
         const { month } = req.body;
         if (!month || month.trim() === "" || !smsRegex.test(month)) {
-            return res.json({ message: 'Invalid data.' });
+            return res.json({ data: payloadencrypt(JSON.stringify({ message: 'Invalid data.' }))});
         }
         poolInstance = await getPool();
         const query = `SELECT 
@@ -88,10 +89,10 @@ GROUP BY d.id, d.name;
         const request = await poolInstance.request();
         request.input('Month', sql.VarChar, month.toUpperCase());
         const response = await request.query(query);
-        res.json(response.recordset);
+        res.json({ data: payloadencrypt(JSON.stringify(response.recordset))});
     } catch (err) {
         logWrite(`Failed to fetch checklist by divisions. Error: ${err.message}`);
-        res.status(500).json({ message: 'Failed to fetch checklist by divisions.' });
+        res.status(500).json({ data: payloadencrypt(JSON.stringify({ message: 'Failed to fetch checklist by divisions.' }))});
     }
 });
 
@@ -101,7 +102,7 @@ router.post('/getchecklistcirclecount', verifyToken, async (req, res) => {
     try {
         const { month } = req.body;
         if (!month || month.trim() === "" || !smsRegex.test(month)) {
-            return res.json({ message: 'Invalid data.' });
+            return res.json({ data: payloadencrypt(JSON.stringify({ message: 'Invalid data.' }))});
         }
         poolInstance = await getPool();
         const query = `SELECT 
@@ -114,10 +115,10 @@ GROUP BY d.circle;`;
         const request = await poolInstance.request();
         request.input('Month', sql.VarChar, month.toUpperCase());
         const response = await request.query(query);
-        res.json(response.recordset);
+        res.json({ data: payloadencrypt(JSON.stringify(response.recordset))});
     } catch (err) {
         logWrite(`Failed to fetch checklist by circle. Error: ${err.message}`);
-        res.status(500).json({ message: 'Failed to fetch checklist by circle.' });
+        res.status(500).json({ data: payloadencrypt(JSON.stringify({ message: 'Failed to fetch checklist by circle.' }))});
     }
 });
 

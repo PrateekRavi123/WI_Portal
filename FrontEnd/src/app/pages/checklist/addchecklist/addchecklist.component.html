@@ -5,12 +5,12 @@
       <div class="mb-3 row">
         <div class="col-md-4">
           <label for="checklistID" class="col-form-label">Checklist ID:</label>
-            <input type="text" id="checklistID" formControlName="checklistID" class="form-control" />
+          <input type="text" id="checklistID" formControlName="checklistID" class="form-control" />
         </div>
         <div class="col-md-4">
           <label for="empCode" class="col-form-label">Employee ID:</label>
-            <input type="text" id="empCode" formControlName="empCode" class="form-control"
-              placeholder="Enter Employee Code" />
+          <input type="text" id="empCode" formControlName="empCode" class="form-control"
+            placeholder="Enter Employee Code" />
         </div>
         <div class="col-md-4">
           <label for="division" class="col-form-label">Division:</label>
@@ -61,11 +61,27 @@
                         <div class="mt-2">
                           <label class="form-label">Remarks:<span class="text-danger text-bold">*</span></label>
                           <textarea formControlName="remarks" class="form-control form-control-sm" rows="3"></textarea>
+                          <div
+                            *ngIf="ctrl.get('remarks')?.touched && ctrl.get('remarks')?.invalid"
+                            class="text-danger small">
+                            <span *ngIf="ctrl.get('remarks')?.errors?.['required']">Remarks are
+                              required.</span>
+                            <span *ngIf="ctrl.get('remarks')?.errors?.['pattern']">Invalid
+                              characters entered. Please avoid special characters.</span>
+                          </div>
                         </div>
                         <div class="mt-2">
                           <label class="form-label">Attach Photo:</label>
                           <input type="file" (change)="onFileChange($event, j)" class="form-control form-control-sm" />
-                        </div>
+                          <div
+                            *ngIf="ctrl.get('photo')?.touched && ctrl.get('photo')?.invalid"
+                            class="text-danger small">
+                            <span *ngIf="ctrl.get('photo')?.errors?.['invalidType']">Invalid file
+                              type. Allowed: Images, PDF, Word, Excel.</span>
+                            <span *ngIf="ctrl.get('photo')?.errors?.['maxSizeExceeded']">File size
+                              should not exceed 10MB.</span>
+                          </div>
+                        </div> 
                       </div>
                     </div>
                   </ng-container>

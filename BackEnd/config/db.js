@@ -1,16 +1,6 @@
 const sql = require('mssql');
 const {logWrite} = require('./logfile')
-//Test Server
-//  const dbConfig = {
-//   user: 'newcon',
-//   password: 'n@123456',
-//   server: '10.125.75.217', // SQL Server IP address or hostname
-//   database: 'WCP_TEST', // Name of the database you want to connect to
-//   options: {
-//   encrypt: false, // Use encryption if required (for Azure SQL Database, set this to true)
-//   enableArithAbort: true, // To prevent arithmetic errors
-//   },
-// };
+
 const dbConfig = {
   user: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
@@ -24,17 +14,6 @@ const dbConfig = {
 };
 
 
-//Live server
-// const dbConfig = {
-//   user: 'netmetering',
-//   password: 'netmetering123',
-//   server: '10.125.75.219', // SQL Server IP address or hostname
-//   database: 'visitor', // Name of the database you want to connect to
-//   options: {
-//     encrypt: false, // Use encryption if required (for Azure SQL Database, set this to true)
-//     enableArithAbort: true, // To prevent arithmetic errors
-//   },
-// };
 
 let pool;
 

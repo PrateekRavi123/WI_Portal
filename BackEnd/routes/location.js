@@ -4,16 +4,17 @@ const { sql, getPool } = require('../config/db');
 const { smsRegex, emailRegex } = require('../config/inputValidation');
 const { verifyToken } = require('../config/tokenValidation');
 const { logWrite } = require('../config/logfile')
+const { payloadencrypt } = require('../config/payloadCrypto');
 
 
 router.post('/getlocation', verifyToken, async (req, res) => {
     let poolInstance;
     try {
         poolInstance = await getPool();
-        let query = ' SELECT LOC_ID,LOC_NAME,DIV_CODE,CIRCLE FROM LOCATION_MST ';
+        let query = ' SELECT LOC_ID,LOC_NAME,DIV_CODE,CIRCLE,OFFICE_TYPE FROM LOCATION_MST ';
         const {  div } = req.body;
         if ( !div ||  div.trim() === "" || !smsRegex.test(div) ) {
-            return res.status(400).json({ message: 'Invalid data.'});
+            return res.status(400).json({ data: payloadencrypt(JSON.stringify({ message: 'Invalid data.'}))});
         }
         const request = await poolInstance.request();
             if (div != 'All') {
@@ -21,10 +22,10 @@ router.post('/getlocation', verifyToken, async (req, res) => {
                 request.input('DIV_CODE', sql.VarChar, div.toUpperCase());
             } 
         const result = await request.query(query);
-        res.json(result.recordset);
+        res.json({ data: payloadencrypt(JSON.stringify(result.recordset))});
     } catch (err) {
         logWrite(`Failed to retrieve the location. Error: ${err.message}`);
-        res.status(500).json({ message: 'Failed to retrieve the location'});
+        res.status(500).json({ data: payloadencrypt(JSON.stringify({ message: 'Failed to retrieve the location'}))});
     }
 });
 
@@ -32,19 +33,19 @@ router.get('/getalllocations', verifyToken, async (req, res) => {
     let poolInstance;
     try {
         poolInstance = await getPool();
-        const result = await poolInstance.request().query('SELECT loc.loc_id, loc.loc_name,loc.div_code as div_code, div1.name AS div,loc.circle as circle_code, div2.name AS circle FROM LOCATION_MST loc LEFT JOIN div_mst div1 ON div1.id = loc.div_code LEFT JOIN div_mst div2 ON div2.id = loc.circle;');
-        res.json(result.recordset);
+        const result = await poolInstance.request().query('SELECT loc.loc_id, loc.loc_name,loc.div_code as div_code, div1.name AS div,loc.circle as circle_code, div2.name AS circle, loc.office_type AS office_type_id, otm.name AS office_type FROM LOCATION_MST loc LEFT JOIN div_mst div1 ON div1.id = loc.div_code LEFT JOIN div_mst div2 ON div2.id = loc.circle LEFT JOIN OFFICE_TYPE_MST otm ON otm.id = loc.office_type;');
+        res.json({ data: payloadencrypt(JSON.stringify(result.recordset))});
     } catch (err) {
         logWrite(`Failed to fetch all locations. Error: ${err.message}`);
-        res.status(500).json({ message: "Failed to fetch all locations."});
+        res.status(500).json({ data: payloadencrypt(JSON.stringify({ message: "Failed to fetch all locations."}))});
     }
 });
 
 router.post('/addlocation', verifyToken, async (req, res) => {
-    const { loc_name, div_code, circle } = req.body;
+    const { loc_name, div_code, circle, office_type } = req.body;
     let loc_id;
-    if (!loc_name || !div_code || !circle || circle.trim() === "" || div_code.trim() === "" || loc_name.trim() === ""  ||!smsRegex.test(loc_name) || !smsRegex.test(div_code) || !smsRegex.test(circle)) {
-        return res.status(400).json({ message: 'Invalid data.'});
+    if (!loc_name || !div_code || !circle || !office_type || office_type.trim() === "" || circle.trim() === "" || div_code.trim() === "" || loc_name.trim() === ""  ||!smsRegex.test(loc_name) || !smsRegex.test(div_code) || !smsRegex.test(circle) || !smsRegex.test(office_type)) {
+        return res.status(400).json({ data: payloadencrypt(JSON.stringify({ message: 'Invalid data.'}))});
     }
     try {
         const pool = await getPool();
@@ -61,65 +62,67 @@ router.post('/addlocation', verifyToken, async (req, res) => {
                 loc_id = `${prefix}${number.toString().padStart(3, '0')}`;
             } else {
                 logWrite(`Error in adding location: db loc_id is not in valid format: ${prevloc_id}`);
-                return res.status(500).json({ message: 'Failed to add location.'});
+                return res.status(500).json({ data: payloadencrypt(JSON.stringify({ message: 'Failed to add location.'}))});
             }
         } else {
             logWrite('Error in adding location: no loc_id found from db');
-            return res.status(500).json({ message: 'Failed to add location.'});
+            return res.status(500).json({ data: payloadencrypt(JSON.stringify({ message: 'Failed to add location.'}))});
         }
         logWrite(`prev location:  ${loc_id}`);
-        const query = `INSERT INTO LOCATION_MST(LOC_ID,LOC_NAME,DIV_CODE,CIRCLE) VALUES (@LOC_ID, @LOC_NAME, @DIV_CODE, @CIRCLE)`;
+        const query = `INSERT INTO LOCATION_MST(LOC_ID,LOC_NAME,DIV_CODE,CIRCLE,OFFICE_TYPE) VALUES (@LOC_ID, @LOC_NAME, @DIV_CODE, @CIRCLE, @OFFICE_TYPE)`;
         const request = await pool.request();
         request.input('LOC_ID', sql.VarChar, loc_id.toUpperCase());
         request.input('LOC_NAME', sql.VarChar, loc_name.toUpperCase());
         request.input('DIV_CODE', sql.VarChar, div_code.toUpperCase());
         request.input('CIRCLE', sql.VarChar, circle.toUpperCase());
+        request.input('OFFICE_TYPE', sql.VarChar, office_type.toUpperCase());
         const response = await request.query(query);
         if (response.rowsAffected && response.rowsAffected[0] === 1) {
-            return res.status(200).json({ message: 'Location added successfully'});
+            return res.status(200).json({ data: payloadencrypt(JSON.stringify({ message: 'Location added successfully'}))});
         } else {
             logWrite(`Failed to add location. Response: ${JSON.stringify(response)}`)
-            return res.status(500).json({ message: 'Failed to add location.'});
+            return res.status(500).json({ data: payloadencrypt(JSON.stringify({ message: 'Failed to add location.'}))});
         }
         
     }
     catch (e) {
         logWrite(`Error in adding location. Error: ${e.message}`);
-        res.status(500).json({ message: 'Failed to add location.'});
+        res.status(500).json({ data: payloadencrypt(JSON.stringify({ message: 'Failed to add location.'}))});
     }
 });
 
 router.patch('/updatelocation', verifyToken, async (req, res) => {
-    const { loc_id, loc_name, div_code, circle } = req.body;
-    if (!loc_id || !loc_name || !div_code || !circle || circle.trim() === "" || div_code.trim() === "" || loc_name.trim() === ""  || loc_id.trim() === ""  || !smsRegex.test(loc_id) || !smsRegex.test(loc_name) || !smsRegex.test(div_code) || !smsRegex.test(circle)) {
-        return res.status(400).json({ message: 'Invalid data.'});
+    const { loc_id, loc_name, div_code, circle, OFFICE_TYPE } = req.body;
+    if (!loc_id || !loc_name || !div_code || !circle || !OFFICE_TYPE || OFFICE_TYPE.trim() === "" || circle.trim() === "" || div_code.trim() === "" || loc_name.trim() === ""  || loc_id.trim() === ""  || !smsRegex.test(loc_id) || !smsRegex.test(loc_name) || !smsRegex.test(div_code) || !smsRegex.test(circle) || !smsRegex.test(OFFICE_TYPE)) {
+        return res.status(400).json({ data: payloadencrypt(JSON.stringify({ message: 'Invalid data.'}))});
     }
     try {
         const pool = await getPool();
-        const query = `UPDATE LOCATION_MST SET LOC_NAME = @LOC_NAME, DIV_CODE = @DIV_CODE, CIRCLE = @CIRCLE WHERE LOC_ID = @LOC_ID`;
+        const query = `UPDATE LOCATION_MST SET LOC_NAME = @LOC_NAME, DIV_CODE = @DIV_CODE, CIRCLE = @CIRCLE, OFFICE_TYPE = @OFFICE_TYPE WHERE LOC_ID = @LOC_ID`;
         const request = await pool.request();
         request.input('LOC_NAME', sql.VarChar, loc_name.toUpperCase());
         request.input('DIV_CODE', sql.VarChar, div_code.toUpperCase());
         request.input('CIRCLE', sql.VarChar, circle.toUpperCase());
+        request.input('OFFICE_TYPE', sql.VarChar, OFFICE_TYPE.toUpperCase());
         request.input('LOC_ID', sql.VarChar, loc_id.toUpperCase());
         const response = await request.query(query);
         if (response.rowsAffected && response.rowsAffected[0] === 1) {
-            return res.status(200).json({ message: 'Location updated successfully'});
+            return res.status(200).json({ data: payloadencrypt(JSON.stringify({ message: 'Location updated successfully'}))});
         } else {
             logWrite(`Failed to update location. Response: ${JSON.stringify(response)}`);
-            return res.status(500).json({ message: 'Failed to update location.'});
+            return res.status(500).json({ data: payloadencrypt(JSON.stringify({ message: 'Failed to update location.'}))});
         }
     }
     catch (e) {
         logWrite(`Failed to update location. Error: ${e.message}`)
-        res.status(500).json({ message: 'Failed to update location.'});
+        res.status(500).json({ data: payloadencrypt(JSON.stringify({ message: 'Failed to update location.'}))});
     }
 });
 
 router.delete('/deletelocation', verifyToken, async (req, res) => {
     const { loc_id } = req.body;
     if (!loc_id || loc_id.trim() === ""  || !smsRegex.test(loc_id)) {
-        return res.status(400).json({ message: 'Invalid data.'});
+        return res.status(400).json({ data: payloadencrypt(JSON.stringify({ message: 'Invalid data.'}))});
     }
     try {
         const pool = await getPool();
@@ -128,15 +131,15 @@ router.delete('/deletelocation', verifyToken, async (req, res) => {
         request.input('LOC_ID', sql.VarChar, loc_id.toUpperCase());
         const response = await request.query(query);
         if (response.rowsAffected && response.rowsAffected[0] === 1) {
-            return res.status(200).json({ message: 'Location deleted successfully'});
+            return res.status(200).json({ data: payloadencrypt(JSON.stringify({ message: 'Location deleted successfully'}))});
         } else {
             logWrite(`Failed to delete location. Response: ${JSON.stringify(response)}`);
-            return res.status(500).json({ message: 'Failed to delete location.'});
+            return res.status(500).json({ data: payloadencrypt(JSON.stringify({ message: 'Failed to delete location.'}))});
         }
     }
     catch (e) {
         logWrite(`Failed to delete location. Error: ${e.message}`);
-        res.status(500).json({ message: 'Failed to delete location.'});
+        res.status(500).json({ data: payloadencrypt(JSON.stringify({ message: 'Failed to delete location.'}))});
     }
 });
 

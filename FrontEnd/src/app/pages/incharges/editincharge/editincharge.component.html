@@ -13,11 +13,14 @@
       <div class="col-md-4">
         <label class="form-label fw-bold">Name</label>
         <input type="text" class="form-control" formControlName="name" maxlength="50">
-        <div *ngIf="f['name'].touched && f['name'].invalid" class="text-danger small">
-          <span *ngIf="f['name'].errors?.['required']">Name is required.</span>
-          <span *ngIf="f['name'].errors?.['pattern']">Enter a valid name (only letters, spaces, hyphens,
-            or apostrophes).</span>
-        </div>
+        <div
+                            *ngIf="f['name']?.touched && f['name']?.invalid"
+                            class="text-danger small">
+                            <span *ngIf="f['name']?.errors?.['required']">Name is
+                              required.</span>
+                            <span *ngIf="f['name']?.errors?.['pattern']">Invalid
+                              characters entered. Please avoid special characters.</span>
+                          </div>
       </div>
       <div class="col-md-4">
         <label class="form-label fw-bold">Mobile No.</label>

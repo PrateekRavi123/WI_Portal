@@ -17,6 +17,7 @@ import { AddlocComponent } from './pages/location/addloc/addloc.component';
 import { EditchecklistComponent } from './pages/checklist/editchecklist/editchecklist.component';
 import { authGuard } from './guard/auth.guard';
 import { PendingchecklistComponent } from './pages/pendingchecklist/pendingchecklist.component';
+import { roleGuard } from './guard/role.guard';
 
 export const routes: Routes = [
     { path: "", redirectTo: "/login", pathMatch: 'full' },
@@ -24,11 +25,13 @@ export const routes: Routes = [
     {
         path: "",
         component: DashboardComponent,
-        //canActivate: [authGuard],
+        canActivate: [authGuard],
         children: [
             { path: "dashboard", component: DashboardContentComponent },
             { path: "admin", component: DashboardContentComponent },
             { path: "checklist", component: ChecklistComponent,
+                canActivate: [roleGuard],
+                data: { roles: ['R1','R2'] },
                 children: [
                     { path: '', redirectTo: 'quick-view', pathMatch: 'full' },
                     {path: "quick-view", component: QuickviewComponent},
@@ -37,6 +40,8 @@ export const routes: Routes = [
                 ]
              },
              { path: "incharges", component: InchargesComponent,
+                canActivate: [roleGuard],
+                data: { roles: ['R1'] },
                 children: [
                     { path: '', redirectTo: 'quick-view', pathMatch: 'full' },
                     {path: "quick-view", component: QuickviewinchargeComponent},
@@ -44,6 +49,8 @@ export const routes: Routes = [
                 ]
              },
              { path: "checkpoint", component: CheckpointComponent,
+                canActivate: [roleGuard],
+                data: { roles: ['R1'] },
                 children: [
                     { path: '', redirectTo: 'quick-view', pathMatch: 'full' },
                     {path: "quick-view", component: QuickviewcheckptComponent},
@@ -51,6 +58,8 @@ export const routes: Routes = [
                 ]
              },
              { path: "location", component: LocationComponent,
+                canActivate: [roleGuard],
+                data: { roles: ['R1'] },
                 children: [
                     { path: '', redirectTo: 'quick-view', pathMatch: 'full' },
                     {path: "quick-view", component: QuickviewlocComponent},

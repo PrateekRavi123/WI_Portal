@@ -6,7 +6,7 @@
     <form [formGroup]="editForm" (ngSubmit)="onSubmit()">
       <!-- Row 1 -->
       <div class="row mb-3">
-        <div class="col-md-6">
+        <div class="col-md-4">
           <label for="circle" class="form-label fw-bold">Circle</label>
           <select id="circle" class="form-select" formControlName="circle" (change)="onCircleChange($event)"
             [ngClass]="{ 'is-invalid': f['circle'].invalid && f['circle'].touched }">
@@ -19,7 +19,7 @@
             Circle is required.
           </div>
         </div>
-        <div class="col-md-6">
+        <div class="col-md-4">
           <label for="division" class="form-label fw-bold">Division</label>
           <select id="division" class="form-select" formControlName="div"
             [ngClass]="{ 'is-invalid': f['div'].invalid && f['div'].touched }">
@@ -30,6 +30,19 @@
           </select>
           <div *ngIf="f['div'].invalid && f['div'].touched" class="text-danger small">
             Division is required.
+          </div>
+        </div>
+        <div class="col-md-4">
+          <label for="office_type" class="form-label fw-bold">Office Type</label>
+          <select id="office_type" class="form-select" formControlName="office_type"
+            [ngClass]="{ 'is-invalid': f['office_type'].invalid && f['office_type'].touched }">
+            <option value="" disabled>Select a Office Type</option>
+            <option *ngFor="let officetype of officetypeList" [value]="officetype.ID">
+              {{ officetype.NAME }}
+            </option>
+          </select>
+          <div *ngIf="f['office_type'].invalid && f['office_type'].touched" class="text-danger small">
+            Office Type is required.
           </div>
         </div>
       </div>
