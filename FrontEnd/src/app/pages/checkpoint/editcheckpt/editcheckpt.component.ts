@@ -29,8 +29,10 @@ export class EditcheckptComponent {
     // Initialize the form with empty values
     this.editForm = this.fb.group({
       type: [{ value: '', disabled: true }, Validators.required],
-      name: [{ value: '', disabled: true }, [Validators.required, Validators.pattern(/^[A-Za-z0-9\s.,'_-]*$/)]],
+      label: [{ value: '', disabled: true }, Validators.required],
+      name: [{ value: '', disabled: true }, [Validators.required, Validators.pattern(/^[A-Za-z0-9\s.,'_&\/-]*$/)]],
       fwdrole: [{ value: '', disabled: true }, Validators.required],
+      status: ['', Validators.required],
     });
   }
   async ngOnInit() {
@@ -64,9 +66,11 @@ export class EditcheckptComponent {
       // Enable the form fields and set their values when user input is set
       this.editForm.enable();
       this.editForm.patchValue({
-        type: this.user.type_id,
+        type: this.user.TYPE_ID,
+        label: this.user.LABEL,
         name: this.user.NAME,
         fwdrole: this.user.ROLE_ID,
+        status: this.user.STATUS
       });
     } else {
       // If user is null, disable the form fields
@@ -78,10 +82,12 @@ export class EditcheckptComponent {
 
   onSubmit() {
       const body = {
-        id: String(this.user.id),
+        id: String(this.user.ID),
         name:this.editForm.value.name,
         type:this.editForm.value.type,
-        fwdrole:this.editForm.value.fwdrole
+        label:this.editForm.value.label,
+        fwdrole:this.editForm.value.fwdrole,
+        status:this.editForm.value.status
       }
       this.checkpointservice.updatecheckpoint(body).subscribe({
         next: (data) => {

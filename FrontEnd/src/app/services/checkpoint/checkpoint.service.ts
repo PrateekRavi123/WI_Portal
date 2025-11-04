@@ -12,103 +12,103 @@ private apiUrl;
         this.apiUrl = this.apiService.getCheckpointEndpoint();
       }
 
-      getAllCheckpoint(): Observable<any> {
-        return this.http.get<any>(`${this.apiUrl}/getallcheckpoint`, {}).pipe(
-          map((res) => {
-            if (res && res.data) {
-              return this.apiService.decryptData(res.data);
-            }
-            return res;
-          }),
-          catchError(error => {
-            if (error.status === 400) {
-              return of(error.status);
-            } else {
-              console.error('Error occurred:', error);
-              return throwError(() => error);
-            }
-          })
-        );
+      // getAllCheckpoint(): Observable<any> {
+      //   return this.http.get<any>(`${this.apiUrl}/getallcheckpoint`, {}).pipe(
+      //     map((res) => {
+      //       if (res && res.data) {
+      //         return this.apiService.decryptData(res.data);
+      //       }
+      //       return res;
+      //     }),
+      //     catchError(error => {
+      //       if (error.status === 400) {
+      //         return of(error.status);
+      //       } else {
+      //         console.error('Error occurred:', error);
+      //         return throwError(() => error);
+      //       }
+      //     })
+      //   );
+      // }
+      getallcheckpoint(): Observable<any> {
+        return this.http.get<any>(`${this.apiUrl}/getallcheckpoint`);
       }
-      
+
       getallcheckpointtype(): Observable<any> {
-        return this.http.get<any>(`${this.apiUrl}/getallcheckpointtype`, {}).pipe(
-          map((res) => {
-            if (res && res.data) {
-              return this.apiService.decryptData(res.data);
-            }
-            return res;
-          }),
-          catchError(error => {
-            if (error.status === 400) {
-              return of(error.status);
-            } else {
-              console.error('Error occurred:', error);
-              return throwError(() => error);
-            }
-          })
-        );
+        return this.http.get<any>(`${this.apiUrl}/getallcheckpointtype`);
+      }
+
+      getallactivecheckpoint(): Observable<any> {
+        return this.http.get<any>(`${this.apiUrl}/getallactivecheckpoint`);
       }
       
-
+      // addcheckpoint(body:any): Observable<any> {
+      //   return  this.http.post<any>(`${this.apiUrl}/addcheckpoint`,body, {}).pipe(
+      //     map((res) => {
+      //       if (res && res.data) {
+      //         return this.apiService.decryptData(res.data);
+      //       }
+      //       return res;
+      //     }),
+      //     catchError(error => {
+      //       if (error.status === 400) {
+      //         return of(error.status);
+      //       } else {
+      //         console.error('Error occurred:', error);
+      //         return throwError(() => error);
+      //       }
+      //     })
+      //   );
+      // }
       addcheckpoint(body:any): Observable<any> {
-        return  this.http.post<any>(`${this.apiUrl}/addcheckpoint`,body, {}).pipe(
-          map((res) => {
-            if (res && res.data) {
-              return this.apiService.decryptData(res.data);
-            }
-            return res;
-          }),
-          catchError(error => {
-            if (error.status === 400) {
-              return of(error.status);
-            } else {
-              console.error('Error occurred:', error);
-              return throwError(() => error);
-            }
-          })
-        );
+        return  this.http.post<any>(`${this.apiUrl}/addcheckpoint`,body);
       }
 
+      // updatecheckpoint(body:any): Observable<any> {
+      //   return  this.http.patch<any>(`${this.apiUrl}/updatecheckpoint`,body, {}).pipe(
+      //     map((res) => {
+      //       if (res && res.data) {
+      //         return this.apiService.decryptData(res.data);
+      //       }
+      //       return res;
+      //     }),
+      //     catchError(error => {
+      //       if (error.status === 400) {
+      //         return of(error.status);
+      //       } else {
+      //         console.error('Error occurred:', error);
+      //         return throwError(() => error);
+      //       }
+      //     })
+      //   );
+      // }
       updatecheckpoint(body:any): Observable<any> {
-        return  this.http.patch<any>(`${this.apiUrl}/updatecheckpoint`,body, {}).pipe(
-          map((res) => {
-            if (res && res.data) {
-              return this.apiService.decryptData(res.data);
-            }
-            return res;
-          }),
-          catchError(error => {
-            if (error.status === 400) {
-              return of(error.status);
-            } else {
-              console.error('Error occurred:', error);
-              return throwError(() => error);
-            }
-          })
-        );
+        return  this.http.patch<any>(`${this.apiUrl}/updatecheckpoint`,body);
       }
 
+      // deletecheckpoint(body: any): Observable<any> {
+      //   return this.http.delete(`${this.apiUrl}/deletecheckpoint`, {
+      //     body: body,
+      //     responseType: 'text' as 'json'
+      //   }).pipe(
+      //     map((res: any) => {
+      //       if (res) {
+      //         const decrypted = this.apiService.decryptData(res);
+      //         return JSON.parse(decrypted);
+      //       }
+      //       return res;
+      //     }),
+      //     catchError(error => {
+      //       if (error.status === 400) {
+      //         return of(error.status);
+      //       } else {
+      //         console.error('Error occurred:', error);
+      //         return throwError(() => error);
+      //       }
+      //     })
+      //   );
+      // }
       deletecheckpoint(body: any): Observable<any> {
-        return this.http.delete(`${this.apiUrl}/deletecheckpoint`, {
-          body: body,
-          responseType: 'text' as 'json'
-        }).pipe(
-          map((res: any) => {
-            if (res) {
-              const decrypted = this.apiService.decryptData(res);
-              return JSON.parse(decrypted);
-            }
-            return res;
-          }),
-          catchError(error => {
-            if (error.status === 400) {
-              return of(error.status);
-            } else {
-              console.error('Error occurred:', error);
-              return throwError(() => error);
-            }
-          })
-        );
+        return this.http.delete(`${this.apiUrl}/deletecheckpoint`, body);
       }
 }

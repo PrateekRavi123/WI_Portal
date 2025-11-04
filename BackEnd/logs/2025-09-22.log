@@ -1,0 +1,66 @@
+[22/9/2025, 10:55:29 am] Connected to WPINSP Oracle Database
+[22/9/2025, 10:58:23 am] Connected to WPINSP Oracle Database
+[22/9/2025, 10:59:04 am] Connected to WPINSP Oracle Database
+[22/9/2025, 11:01:00 am] Session token mismatch. req token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjbnRfbm8iOiI4NzY2MzA0ODA2IiwiaWF0IjoxNzU4NTE2Mjg1LCJleHAiOjE3NTg1MTk4ODV9.acGjLiqPa2XFOLuaPvScsjmY8m1BUoGkKo7y7P70VWE
+[22/9/2025, 11:01:00 am] Session token mismatch. DB token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjbnRfbm8iOiI4NzY2MzA0ODA2IiwiaWF0IjoxNzU4NTE4NzMyLCJleHAiOjE3NTg1MjIzMzJ9.-3Z6rR2cujXiQD67YVjubXa0ibhFPsnMgxWpSI-CEag
+[22/9/2025, 11:03:12 am] Session token mismatch. DB token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjbnRfbm8iOiI4NzY2MzA0ODA2IiwiaWF0IjoxNzU4NTE5MDY2LCJleHAiOjE3NTg1MjI2NjZ9.q_aJu2YQm5vteqvf1hgAOE2CsjeCAKhMcD3V8KXz-Sk
+[22/9/2025, 11:03:12 am] Session token mismatch. req token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjbnRfbm8iOiI4NzY2MzA0ODA2IiwiaWF0IjoxNzU4NTE4NzMyLCJleHAiOjE3NTg1MjIzMzJ9.-3Z6rR2cujXiQD67YVjubXa0ibhFPsnMgxWpSI-CEag
+[22/9/2025, 11:03:12 am] Session token mismatch. req token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjbnRfbm8iOiI4NzY2MzA0ODA2IiwiaWF0IjoxNzU4NTE4NzMyLCJleHAiOjE3NTg1MjIzMzJ9.-3Z6rR2cujXiQD67YVjubXa0ibhFPsnMgxWpSI-CEag
+[22/9/2025, 11:03:12 am] Session token mismatch. DB token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjbnRfbm8iOiI4NzY2MzA0ODA2IiwiaWF0IjoxNzU4NTE5MDY2LCJleHAiOjE3NTg1MjI2NjZ9.q_aJu2YQm5vteqvf1hgAOE2CsjeCAKhMcD3V8KXz-Sk
+[22/9/2025, 11:42:54 am] Failed to fetch getnotsubmittedchecklist. Error: ORA-00904: "IM"."LOCATION": invalid identifier
+Help: https://docs.oracle.com/error-help/db/ora-00904/
+[22/9/2025, 12:06:13 pm] Connected to WPINSP Oracle Database
+[22/9/2025, 2:29:58 pm] Connected to WPINSP Oracle Database
+[22/9/2025, 2:30:36 pm] Decryption error: The first argument must be of type string or an instance of Buffer, ArrayBuffer, or Array or an Array-like Object. Received undefined
+[22/9/2025, 2:30:57 pm] Decryption error: The first argument must be of type string or an instance of Buffer, ArrayBuffer, or Array or an Array-like Object. Received undefined
+[22/9/2025, 2:47:18 pm] Connected to WPINSP Oracle Database
+[22/9/2025, 4:35:56 pm] Connected to WPINSP Oracle Database
+[22/9/2025, 4:42:29 pm] Connected to WPINSP Oracle Database
+[22/9/2025, 4:43:01 pm] Connected to WPINSP Oracle Database
+[22/9/2025, 4:43:01 pm] Failed to retrieve active location. Error: Cannot access 'binds' before initialization
+[22/9/2025, 4:43:07 pm] Failed to retrieve active location. Error: Cannot access 'binds' before initialization
+[22/9/2025, 4:43:14 pm] Failed to retrieve active location. Error: Cannot access 'binds' before initialization
+[22/9/2025, 4:43:53 pm] Connected to WPINSP Oracle Database
+[22/9/2025, 4:55:52 pm] Error in adding incharge. Error: ORA-00001: unique constraint (WPINSP.UQ_MOBILE_NO) violated
+Help: https://docs.oracle.com/error-help/db/ora-00001/
+[22/9/2025, 4:57:27 pm] Failed to update incharge. Error: ORA-00936: missing expression
+Help: https://docs.oracle.com/error-help/db/ora-00936/
+[22/9/2025, 4:57:34 pm] Failed to update incharge. Error: ORA-00936: missing expression
+Help: https://docs.oracle.com/error-help/db/ora-00936/
+[22/9/2025, 4:57:48 pm] Failed to update incharge. Error: ORA-00936: missing expression
+Help: https://docs.oracle.com/error-help/db/ora-00936/
+[22/9/2025, 4:58:12 pm] Failed to update incharge. Error: ORA-00936: missing expression
+Help: https://docs.oracle.com/error-help/db/ora-00936/
+[22/9/2025, 4:58:24 pm] Failed to update incharge. Error: ORA-00936: missing expression
+Help: https://docs.oracle.com/error-help/db/ora-00936/
+[22/9/2025, 5:00:11 pm] Failed to update incharge. Error: ORA-00936: missing expression
+Help: https://docs.oracle.com/error-help/db/ora-00936/
+[22/9/2025, 5:00:23 pm] Failed to update incharge. Error: ORA-00936: missing expression
+Help: https://docs.oracle.com/error-help/db/ora-00936/
+[22/9/2025, 5:03:29 pm] Connected to WPINSP Oracle Database
+[22/9/2025, 5:04:49 pm] Failed to retrieve active location. Error: id.toUpperCase is not a function
+[22/9/2025, 5:04:50 pm] Failed to retrieve active location. Error: id.toUpperCase is not a function
+[22/9/2025, 5:04:52 pm] Failed to retrieve active location. Error: id.toUpperCase is not a function
+[22/9/2025, 5:04:54 pm] Failed to retrieve active location. Error: id.toUpperCase is not a function
+[22/9/2025, 5:04:59 pm] Failed to retrieve active location. Error: id.toUpperCase is not a function
+[22/9/2025, 5:05:01 pm] Failed to retrieve active location. Error: id.toUpperCase is not a function
+[22/9/2025, 5:05:03 pm] Failed to retrieve active location. Error: id.toUpperCase is not a function
+[22/9/2025, 5:05:06 pm] Failed to retrieve active location. Error: id.toUpperCase is not a function
+[22/9/2025, 5:05:10 pm] Failed to retrieve active location. Error: id.toUpperCase is not a function
+[22/9/2025, 5:05:12 pm] Failed to retrieve active location. Error: id.toUpperCase is not a function
+[22/9/2025, 5:05:14 pm] Failed to retrieve active location. Error: id.toUpperCase is not a function
+[22/9/2025, 5:05:16 pm] Failed to retrieve active location. Error: id.toUpperCase is not a function
+[22/9/2025, 5:05:17 pm] Failed to retrieve active location. Error: id.toUpperCase is not a function
+[22/9/2025, 5:05:57 pm] Failed to retrieve active location. Error: id.toUpperCase is not a function
+[22/9/2025, 5:06:51 pm] Failed to retrieve active location. Error: id.toUpperCase is not a function
+[22/9/2025, 5:06:54 pm] Failed to retrieve active location. Error: id.toUpperCase is not a function
+[22/9/2025, 5:06:55 pm] Failed to retrieve active location. Error: id.toUpperCase is not a function
+[22/9/2025, 5:06:59 pm] Failed to retrieve active location. Error: id.toUpperCase is not a function
+[22/9/2025, 5:07:01 pm] Failed to retrieve active location. Error: id.toUpperCase is not a function
+[22/9/2025, 5:07:03 pm] Failed to retrieve active location. Error: id.toUpperCase is not a function
+[22/9/2025, 5:07:04 pm] Failed to retrieve active location. Error: id.toUpperCase is not a function
+[22/9/2025, 5:07:09 pm] Failed to retrieve active location. Error: id.toUpperCase is not a function
+[22/9/2025, 5:07:46 pm] Failed to retrieve active location. Error: id.toUpperCase is not a function
+[22/9/2025, 5:07:47 pm] Failed to retrieve active location. Error: id.toUpperCase is not a function
+[22/9/2025, 5:07:48 pm] Failed to retrieve active location. Error: id.toUpperCase is not a function
+[22/9/2025, 5:08:34 pm] Connected to WPINSP Oracle Database

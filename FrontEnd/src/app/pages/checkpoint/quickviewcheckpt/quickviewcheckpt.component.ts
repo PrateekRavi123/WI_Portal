@@ -5,18 +5,22 @@ import { CheckpointService } from '../../../services/checkpoint/checkpoint.servi
 import { PopupService } from '../../../services/popup/popup.service';
 import { Subscription } from 'rxjs';
 import { RefreshService } from '../../../services/refresh/refresh.service';
-import { Router } from '@angular/router';
+import * as XLSX from 'xlsx';
+import { saveAs } from 'file-saver';
+import { FormsModule } from '@angular/forms';
 export interface Checkpoint {
-  id: string;
-  type_id: string;
-  type_name: string;
+  ID: string;
+  TYPE_ID: string;
+  TYPE_NAME: string;
+  LABEL: string;
   NAME: string;
   ROLE_ID: string;
-  role_name: string;
+  ROLE_NAME: string;
+  STATUS: string;
 }
 @Component({
   selector: 'app-quickviewcheckpt',
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './quickviewcheckpt.component.html',
   styleUrl: './quickviewcheckpt.component.css'
 })
@@ -29,6 +33,8 @@ export class QuickviewcheckptComponent {
   itemsPerPage: number = 10;
   sortColumn: string = '';
   sortAscending: boolean = true;
+    selectedRows: Set<number> = new Set(); 
+  selectAll: boolean = false;
   min(a: number, b: number): number {
     return Math.min(a, b);
   }
@@ -46,7 +52,7 @@ export class QuickviewcheckptComponent {
     }
   
     allcheckpoint(){
-      this.checkpointservice.getAllCheckpoint().subscribe({
+      this.checkpointservice.getallcheckpoint().subscribe({
         next: (data) => {
           this.data = data;
         },
@@ -56,25 +62,30 @@ export class QuickviewcheckptComponent {
       });
     }
 
-
-  get filteredData() {
-    return this.data
-      .filter(item =>
-        Object.values(item).some(val =>
-          String(val).toLowerCase().includes(this.searchTerm.toLowerCase())
-        )
+get fullFilteredData() {
+  return this.data
+    .filter(item =>
+      Object.values(item).some(val =>
+        String(val).toLowerCase().includes(this.searchTerm.toLowerCase())
       )
-      .sort((a, b) => {
-        if (!this.sortColumn) return 0;
-        const valueA = a[this.sortColumn as keyof typeof a];
-        const valueB = b[this.sortColumn as keyof typeof b];
+    )
+    .sort((a, b) => {
+      if (!this.sortColumn) return 0;
+      const valueA = a[this.sortColumn as keyof typeof a];
+      const valueB = b[this.sortColumn as keyof typeof b];
+      return this.sortAscending
+        ? valueA > valueB ? 1 : -1
+        : valueA < valueB ? 1 : -1;
+    });
+}
 
-        return this.sortAscending
-          ? valueA > valueB ? 1 : -1
-          : valueA < valueB ? 1 : -1;
-      })
-      .slice((this.currentPage - 1) * this.itemsPerPage, this.currentPage * this.itemsPerPage);
-  }
+get filteredData() {
+  return this.fullFilteredData.slice(
+    (this.currentPage - 1) * this.itemsPerPage,
+    this.currentPage * this.itemsPerPage
+  );
+}
+
 
   totalPages() {
     return Math.ceil(this.data.length / this.itemsPerPage);
@@ -92,7 +103,46 @@ export class QuickviewcheckptComponent {
       this.sortAscending = true;
     }
   }
+toggleRowSelection(index: number) {
+    if (this.selectedRows.has(index)) {
+      this.selectedRows.delete(index);
+    } else {
+      this.selectedRows.add(index);
+    }
+  }
 
+  toggleSelectAll() {
+    if (this.selectAll) {
+      this.selectedRows.clear(); // Clear previous selection
+      this.fullFilteredData.forEach((_, index) => {
+        this.selectedRows.add(index);
+      });
+    } else {
+      this.selectedRows.clear();
+    }
+  }
+  downloadSelectedData() {
+    if (this.selectedRows.size === 0) {
+      this.popupservice.showPopup('error','Please select at least one row to download.');
+      return;
+    }
+
+    
+    const selectedData = Array.from(this.selectedRows).map((index, i) => {
+      const { ID, ...rest } = this.data[index]; // Remove the original ID
+      return {
+        ID: (i + 1).toString(), // Assign new ID starting from "1"
+        ...rest
+      };
+    });
+    const worksheet = XLSX.utils.json_to_sheet(selectedData);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'Data');
+
+    const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+    const blob = new Blob([excelBuffer], { type: 'application/octet-stream' });
+    saveAs(blob, 'Checkpoint.xlsx');
+  }
   
   // Delete Function
   deleteUser(id: any) {

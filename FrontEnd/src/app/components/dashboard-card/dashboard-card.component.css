@@ -23,6 +23,18 @@
 .bg-c-pink {
     background: linear-gradient(45deg,#FF5370,#ff869a);
 }
+.bg-c-red {
+    background: linear-gradient(45deg, #FF3D00, #FF6E40);
+}
+.bg-c-gray {
+    background: linear-gradient(45deg, #90A4AE, #CFD8DC);
+}
+.bg-c-brown {
+    background: linear-gradient(45deg, #8D6E63, #BCAAA4);
+}
+.bg-c-purple {
+    background: linear-gradient(45deg, #AA00FF, #D05EFF);
+}
 .card .card-block {
     padding: 25px;
 }

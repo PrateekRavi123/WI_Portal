@@ -1,28 +1,39 @@
 <form [formGroup]="checkpointForm" (ngSubmit)="onsubmit()">
   <div class="container m-2">
-    <h5>Checklist Details</h5>
+    <div class="d-flex justify-content-between align-items-center">
+      <h5 class="mb-0">Checklist Details</h5>
+      <div class="d-flex align-items-center ms-3">
+        <label for="location" class="me-2">Location</label>
+        <select id="location" class="form-select form-select-sm" (change)="onLocationChange($event)">
+          <option *ngFor="let loc of loclist" [value]="loc.loc_id">
+            {{ loc.loc_name }}
+          </option>
+          <option *ngIf="loclist.length === 0">No Location Assigned</option>
+        </select>
+      </div>
+    </div>
     <div class="card shadow-lg mb-4 p-3">
       <div class="mb-3 row">
         <div class="col-md-4">
           <label for="checklistID" class="col-form-label">Checklist ID:</label>
-          <input type="text" id="checklistID" formControlName="checklistID" class="form-control" />
+          <input type="text" id="checklistID" formControlName="checklistID" class="form-control" readonly />
         </div>
         <div class="col-md-4">
           <label for="empCode" class="col-form-label">Employee ID:</label>
           <input type="text" id="empCode" formControlName="empCode" class="form-control"
-            placeholder="Enter Employee Code" />
+            placeholder="Enter Employee Code" readonly />
         </div>
         <div class="col-md-4">
           <label for="division" class="col-form-label">Division:</label>
-          <input type="text" id="division" formControlName="division" class="form-control"
-            placeholder="Enter Division" />
+          <input type="text" id="division" formControlName="division" class="form-control" placeholder="Enter Division"
+            readonly />
         </div>
       </div>
       <div class="mb-3 row">
         <div class="col">
           <label for="location" class="col-form-label">Location:</label>
-          <input type="text" id="location" formControlName="location" class="form-control"
-            placeholder="Enter Location" />
+          <input type="text" id="location" formControlName="location" class="form-control" placeholder="Enter Location"
+            readonly />
         </div>
       </div>
     </div>
@@ -42,11 +53,11 @@
               <li class="list-group-item" *ngFor="let checkpoint of groupedCheckpoints[type]; let i = index">
                 <!-- Find the corresponding FormGroup index -->
                 <ng-container *ngFor="let ctrl of checkpoints2.controls; let j = index">
-                  <ng-container *ngIf="ctrl.value.id === checkpoint.id">
+                  <ng-container *ngIf="ctrl.value.id === checkpoint.ID">
                     <div [formGroupName]="j">
                       <div class="row justify-content-between">
                         <div class="col-12 col-md-6">
-                          <span>{{ checkpoint.name }}</span>
+                          <span>{{ checkpoint.NAME }}</span>
                         </div>
                         <div class="col-12 col-md-2">
                           <select formControlName="status" class="form-select form-select-sm">
@@ -61,8 +72,7 @@
                         <div class="mt-2">
                           <label class="form-label">Remarks:<span class="text-danger text-bold">*</span></label>
                           <textarea formControlName="remarks" class="form-control form-control-sm" rows="3"></textarea>
-                          <div
-                            *ngIf="ctrl.get('remarks')?.touched && ctrl.get('remarks')?.invalid"
+                          <div *ngIf="ctrl.get('remarks')?.touched && ctrl.get('remarks')?.invalid"
                             class="text-danger small">
                             <span *ngIf="ctrl.get('remarks')?.errors?.['required']">Remarks are
                               required.</span>
@@ -70,18 +80,21 @@
                               characters entered. Please avoid special characters.</span>
                           </div>
                         </div>
-                        <div class="mt-2">
-                          <label class="form-label">Attach Photo:</label>
-                          <input type="file" (change)="onFileChange($event, j)" class="form-control form-control-sm" />
-                          <div
-                            *ngIf="ctrl.get('photo')?.touched && ctrl.get('photo')?.invalid"
-                            class="text-danger small">
-                            <span *ngIf="ctrl.get('photo')?.errors?.['invalidType']">Invalid file
-                              type. Allowed: Images, PDF, Word, Excel.</span>
-                            <span *ngIf="ctrl.get('photo')?.errors?.['maxSizeExceeded']">File size
-                              should not exceed 10MB.</span>
+                        <div class="mt-2 d-flex gap-2">
+                          <div *ngFor="let fileCtrl of ['photo', 'photo2', 'photo3']; let j = index" class="flex-fill">
+                            <label class="form-label">Attach File {{ j + 1 }}:</label>
+                            <input type="file" (change)="onFileChange($event, i, j+1)" class="form-control form-control-sm" />
+
+                            <div *ngIf="ctrl.get(fileCtrl)?.touched && ctrl.get(fileCtrl)?.invalid" class="text-danger small">
+                              <span *ngIf="ctrl.get(fileCtrl)?.errors?.['invalidType']">
+                                Invalid file type. Allowed: Images, PDF, Word, Excel.
+                              </span>
+                              <span *ngIf="ctrl.get(fileCtrl)?.errors?.['maxSizeExceeded']">
+                                File size should not exceed 10MB.
+                              </span>
+                            </div>
                           </div>
-                        </div> 
+                        </div>
                       </div>
                     </div>
                   </ng-container>

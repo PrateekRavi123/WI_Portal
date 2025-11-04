@@ -15,87 +15,50 @@ export class SmsServiceService {
     this.apiUrl = this.apiService.getSMSEndpoint();
   }
 
-  // sendOTP(SMS: string, mob_no: string): Promise<number> {
-  //   const body = { SMS: SMS, cnt_no: mob_no };
-  //   return this.http.post<any>(this.apiUrl + '/sendOTP', body, { observe: 'response' })
-  //     .toPromise()
-  //     .then(res => {
-  //       if (res && res.status) {
-  //         console.log('Response status:', res.status);
-  //         console.log('Body:', res.body);
-  //         return res.status;
-  //       } else {
-  //         throw new Error('Response is undefined or does not contain status');
+ 
+  // sendOTP(body: any): Observable<any> {
+  //   return this.http.post<any>(`${this.apiUrl}/sendOTP`, body, {}).pipe(
+  //     map((res) => {
+  //       if (res && res.data) {
+  //         return this.apiService.decryptData(res.data);
   //       }
-  //     })
-  //     .catch(error => {
+  //       return res;
+  //     }),
+  //     catchError(error => {
   //       if (error.status === 400) {
-  //         return error.status;
+  //         return of(error.status);
   //       } else {
   //         console.error('Error occurred:', error);
-  //         throw error;
+  //         return throwError(() => error);
   //       }
-  //     });
+  //     })
+  //   );
   // }
   sendOTP(body: any): Observable<any> {
-    return this.http.post<any>(`${this.apiUrl}/sendOTP`, body, {}).pipe(
-      map((res) => {
-        if (res && res.data) {
-          return this.apiService.decryptData(res.data);
-        }
-        return res;
-      }),
-      catchError(error => {
-        if (error.status === 400) {
-          return of(error.status);
-        } else {
-          console.error('Error occurred:', error);
-          return throwError(() => error);
-        }
-      })
-    );
+    return this.http.post<any>(`${this.apiUrl}/sendOTP`, body);
   }
 
-  validateOtp(body: any): Observable<any> {
-    return this.http.post<any>(`${this.apiUrl}/validateOTP`, body, {}).pipe(
-      map((res) => {
-        if (res && res.data) {
-          return this.apiService.decryptData(res.data);
-        }
-        return res;
-      }),
-      catchError(error => {
-        if (error.status === 400) {
-          return of(error.status);
-        } else {
-          console.error('Error occurred:', error);
-          return throwError(() => error);
-        }
-      })
-    );
-  }
-
-
-  // validateOtp(cnt_no: string, val: string): Promise<any> {
-  //   const body = { cnt_no: cnt_no, val: val };
-  //   return this.http.post<any>(this.apiUrl + '/validateOTP', body, { observe: 'response' })
-  //     .toPromise()
-  //     .then(res => {
-  //       if (res && res.status) {
-  //         console.log('Response status:', res.status);
-  //         console.log('Body:', res.body);
-  //         return res;
-  //       } else {
-  //         throw new Error('Response is undefined or does not contain status');
+  // validateOtp(body: any): Observable<any> {
+  //   return this.http.post<any>(`${this.apiUrl}/validateOTP`, body, {}).pipe(
+  //     map((res) => {
+  //       if (res && res.data) {
+  //         return this.apiService.decryptData(res.data);
   //       }
-  //     })
-  //     .catch(error => {
+  //       return res;
+  //     }),
+  //     catchError(error => {
   //       if (error.status === 400) {
-  //         return error.status;
+  //         return of(error.status);
   //       } else {
   //         console.error('Error occurred:', error);
-  //         throw error;
+  //         return throwError(() => error);
   //       }
-  //     });
+  //     })
+  //   );
   // }
+  validateOtp(body: any): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/validateOTP`, body);
+  }
+
+
 }

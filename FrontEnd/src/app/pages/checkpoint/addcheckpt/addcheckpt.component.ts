@@ -23,8 +23,10 @@ typeList: any = [];
     // Initialize the form with empty values
     this.editForm = this.fb.group({
       type: ['', Validators.required],
-      name: ['', [Validators.required,Validators.pattern(/^[A-Za-z0-9\s.,'_-]*$/)]],
+      label: ['', Validators.required],
+      name: ['', [Validators.required,Validators.pattern(/^[A-Za-z0-9\s.,'_&\/-]*$/)]],
       fwdrole: ['', Validators.required],
+      status:['', Validators.required],
     });
   }
   async ngOnInit() {
@@ -49,6 +51,7 @@ typeList: any = [];
       },
       error: (error) => {
         console.error('Error fetching data:', error);
+        this.popupservice.showPopup('error', 'Error in adding checkpoint.');
       },
     });
   }
@@ -59,7 +62,9 @@ typeList: any = [];
       const body = {
         name:this.editForm.value.name,
         type:this.editForm.value.type,
-        fwdrole:this.editForm.value.fwdrole
+        label:this.editForm.value.label,
+        fwdrole:this.editForm.value.fwdrole,
+        staus:this.editForm.value.status
       }
       this.checkpointservice.addcheckpoint(body).subscribe({
         next: (data) => {

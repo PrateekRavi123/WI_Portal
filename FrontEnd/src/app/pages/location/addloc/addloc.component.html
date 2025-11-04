@@ -6,7 +6,7 @@
     <form [formGroup]="editForm" (ngSubmit)="onSubmit()">
       <!-- Row 1 -->
       <div class="row mb-3">
-        <div class="col-md-4">
+        <div class="col-md-6">
           <label for="circle" class="form-label fw-bold">Circle</label>
           <select id="circle" class="form-select" formControlName="circle" (change)="onCircleChange($event)"
             [ngClass]="{ 'is-invalid': f['circle'].invalid && f['circle'].touched }">
@@ -19,7 +19,7 @@
             Circle is required.
           </div>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-6">
           <label for="division" class="form-label fw-bold">Division</label>
           <select id="division" class="form-select" formControlName="div"
             [ngClass]="{ 'is-invalid': f['div'].invalid && f['div'].touched }">
@@ -32,7 +32,9 @@
             Division is required.
           </div>
         </div>
-        <div class="col-md-4">
+        </div>
+        <div class="row mb-3">
+        <div class="col-md-6">
           <label for="office_type" class="form-label fw-bold">Office Type</label>
           <select id="office_type" class="form-select" formControlName="office_type"
             [ngClass]="{ 'is-invalid': f['office_type'].invalid && f['office_type'].touched }">
@@ -45,6 +47,18 @@
             Office Type is required.
           </div>
         </div>
+        <div class="col-md-6">
+                    <label class="form-label fw-bold">Status</label>
+                    <select id="status" class="form-select" formControlName="status"
+                        [ngClass]="{ 'is-invalid': f['status'].invalid && f['status'].touched }">
+                        <option value="" disable>Select a Status</option>
+                        <option value="Y">Active</option>
+                        <option value="N">Not Active</option>
+                    </select>
+                    <div *ngIf="f['status'].invalid && f['status'].touched" class="text-danger small">
+                        Status is required.
+                    </div>
+                </div>
       </div>
       <div class="row mb-3">
         <div class="col-md-12">

@@ -1,4 +1,4 @@
-<div>
+<!-- <div>
   <h4 class="mb-3">Update Incharge</h4>
   <form [formGroup]="editForm" (ngSubmit)="onSubmit()">
     <div class="row mb-3">
@@ -50,7 +50,7 @@
         <select id="division" class="form-select" formControlName="div" (change)="onDivChange($event)"
           [ngClass]="{ 'is-invalid': f['div'].invalid && f['div'].touched }">
           <option value="" disabled>Select a Division</option>
-          <option *ngFor="let division of divList" [value]="division.ID">
+          <option *ngFor="let division of divList" [value]="division.id">
             {{ division.NAME }}
           </option>
         </select>
@@ -59,14 +59,13 @@
         </div>
       </div>
       <div class="col-md-4">
-        <label for="location" class="form-label fw-bold">Location</label>
-        <select id="location" class="form-select" formControlName="loc"
-          [ngClass]="{ 'is-invalid': f['loc'].invalid && f['loc'].touched }">
-          <option value="" disabled>Select a Location</option>
-          <option *ngFor="let location of locList" [value]="location.LOC_ID">
-            {{ location.LOC_NAME }}
-          </option>
-        </select>
+        <label for="locations" class="form-label fw-bold">Location</label>
+        <div formArrayName="locations" class="border p-2 rounded" style="max-height: 150px; overflow-y: auto;">
+    <div *ngFor="let locCtrl of locationControls.controls; let i = index" [formGroupName]="i" class="form-check">
+      <input type="checkbox" class="form-check-input" formControlName="selected" id="loc{{i}}">
+      <label class="form-check-label" [for]="'loc' + i">{{ locCtrl.value.loc_name }}</label>
+    </div>
+  </div>
         <div *ngIf="f['loc'].invalid && f['loc'].touched" class="text-danger small">
           Location is required.
         </div>
@@ -84,13 +83,13 @@
       <div class="col-md-4">
         <label class="form-label fw-bold">Role</label>
         <select id="role" class="form-select" formControlName="role"
-          [ngClass]="{ 'is-invalid': f['role'].invalid && f['role'].touched }">
+          [ngClass]="{ 'is-invalid': f['role']?.invalid && f['role']?.touched }">
           <option value="" disabled>Select a Role</option>
           <option *ngFor="let role of roleList" [value]="role.ROLE_ID">
             {{ role.ROLE_NAME }}
           </option>
         </select>
-        <div *ngIf="f['role'].invalid && f['role'].touched" class="text-danger small">
+        <div *ngIf="f['role']?.invalid && f['role']?.touched" class="text-danger small">
           Role is required.
         </div>
       </div>
@@ -111,4 +110,133 @@
       <button type="submit" class="btn btn-primary" [disabled]="editForm.invalid">Update</button>
     </div>
   </form>
+</div> -->
+
+<div>
+  <h4 class="mb-3">Update Incharge</h4>
+  <form [formGroup]="editForm" (ngSubmit)="onSubmit()">
+    <!-- Row 1: Employee ID, Name, Mobile -->
+    <div class="row mb-3">
+      <div class="col-md-4">
+        <label class="form-label fw-bold">Employee Id</label>
+        <input type="text" class="form-control" formControlName="id" maxlength="8">
+        <div *ngIf="f['id'].touched && f['id'].invalid" class="text-danger small">
+          <span *ngIf="f['id'].errors?.['required']">Employee ID is required.</span>
+          <span *ngIf="f['id'].errors?.['pattern']">Employee ID must be exactly 8 digits.</span>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <label class="form-label fw-bold">Name</label>
+        <input type="text" class="form-control" formControlName="name" maxlength="50">
+        <div *ngIf="f['name'].touched && f['name'].invalid" class="text-danger small">
+          <span *ngIf="f['name'].errors?.['required']">Name is required.</span>
+          <span *ngIf="f['name'].errors?.['pattern']">Invalid characters entered. Please avoid special characters.</span>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <label class="form-label fw-bold">Mobile No.</label>
+        <input type="text" class="form-control" formControlName="mob" maxlength="10">
+        <div *ngIf="f['mob'].touched && f['mob'].invalid" class="text-danger small">
+          <span *ngIf="f['mob'].errors?.['required']">Mobile number is required.</span>
+          <span *ngIf="f['mob'].errors?.['pattern']">Enter a valid 10-digit mobile number.</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Row 2: Circle, Division, Locations -->
+    <div class="row mb-3">
+      <div class="col-md-4">
+        <label class="form-label fw-bold">Circle</label>
+        <select class="form-select" formControlName="circle" (change)="onCircleChange($event)"
+          [ngClass]="{'is-invalid': f['circle'].touched && f['circle'].invalid}">
+          <option value="" disabled>Select a Circle</option>
+          <option *ngFor="let circle of circleList" [value]="circle.ID">{{ circle.NAME }}</option>
+        </select>
+        <div *ngIf="f['circle'].touched && f['circle'].invalid" class="text-danger small">
+          Circle is required.
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <label class="form-label fw-bold">Division</label>
+        <select class="form-select" formControlName="div" (change)="onDivChange($event)"
+          [ngClass]="{'is-invalid': f['div'].touched && f['div'].invalid}">
+          <option value="" disabled>Select a Division</option>
+          <option *ngFor="let division of divList" [value]="division.ID">{{ division.NAME }}</option>
+        </select>
+        <div *ngIf="f['div'].touched && f['div'].invalid" class="text-danger small">
+          Division is required.
+        </div>
+      </div>
+
+      
+    </div>
+    <div class="row mb-3">
+
+<div class="col-md-12">
+  <label class="form-label fw-bold">Locations</label>
+  <div formArrayName="locations" 
+       class="border p-2 rounded" 
+       style="max-height: 200px; overflow-y: auto;">
+    <div class="row">
+      <div *ngFor="let locCtrl of locationControls.controls; let i = index"
+           [formGroupName]="i" class="col-md-6 mb-2">
+        <div class="form-check border-bottom pb-1">
+          <input type="checkbox" class="form-check-input" formControlName="selected" id="loc{{i}}" (change)="onLocationCheckboxChange()">
+          <label class="form-check-label ms-2" [for]="'loc' + i">
+            {{ locCtrl.value.loc_name }}
+          </label>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
+
+
+      </div>
+    <!-- Row 3: Email, Role, Status -->
+    <div class="row mb-3">
+      <div class="col-md-4">
+        <label class="form-label fw-bold">Email ID</label>
+        <input type="text" class="form-control" formControlName="email">
+        <div *ngIf="f['email'].touched && f['email'].invalid" class="text-danger small">
+          <span *ngIf="f['email'].errors?.['required']">Email is required.</span>
+          <span *ngIf="f['email'].errors?.['email']">Enter a valid email address.</span>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <label class="form-label fw-bold">Role</label>
+        <select class="form-select" formControlName="role"
+          [ngClass]="{'is-invalid': f['role'].touched && f['role'].invalid}">
+          <option value="" disabled>Select a Role</option>
+          <option *ngFor="let role of roleList" [value]="role.ROLE_ID">{{ role.ROLE_NAME }}</option>
+        </select>
+        <div *ngIf="f['role'].touched && f['role'].invalid" class="text-danger small">
+          Role is required.
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <label class="form-label fw-bold">Status</label>
+        <select class="form-select" formControlName="status"
+          [ngClass]="{'is-invalid': f['status'].touched && f['status'].invalid}">
+          <option value="" disabled>Select a Status</option>
+          <option value="Y">Active</option>
+          <option value="N">Not Active</option>
+        </select>
+        <div *ngIf="f['status'].touched && f['status'].invalid" class="text-danger small">
+          Status is required.
+        </div>
+      </div>
+    </div>
+
+    <!-- Submit button -->
+    <div class="text-end">
+      <button type="submit" class="btn btn-primary" [disabled]="editForm.invalid">Update</button>
+    </div>
+  </form>
+</div>
+

@@ -18,6 +18,7 @@ import { EditchecklistComponent } from './pages/checklist/editchecklist/editchec
 import { authGuard } from './guard/auth.guard';
 import { PendingchecklistComponent } from './pages/pendingchecklist/pendingchecklist.component';
 import { roleGuard } from './guard/role.guard';
+import { ReportsComponent } from './pages/reports/reports.component';
 
 export const routes: Routes = [
     { path: "", redirectTo: "/login", pathMatch: 'full' },
@@ -67,6 +68,10 @@ export const routes: Routes = [
                 ]
              },
              { path: "pendchecklist", component: PendingchecklistComponent},
+             { path: "reports", component: ReportsComponent,
+                canActivate: [roleGuard],
+                data: { roles: ['R1'] }
+            },
         ]
     }
 ];

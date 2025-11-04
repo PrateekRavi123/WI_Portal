@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, inject, Output } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { InchargesService } from '../../services/incharges/incharges.service';
 import { StorageService } from '../../services/storage/storage.service';
 import { PopupService } from '../../services/popup/popup.service';
@@ -27,12 +27,12 @@ export class ProfileComponent {
     this.profileForm = this.fb.group({
       id: [{ value: '', disabled: true }],
       emp_code: [{ value: '', disabled: true }],
-      emp_name: ['', [Validators.required,Validators.pattern(/^[a-zA-Z0-9\s.,'_-]*$/)]],
+      emp_name: ['', [Validators.required,Validators.pattern(/^[A-Za-z0-9\s.,'_&\/-]*$/)]],
       email: ['', [Validators.required, Validators.email]],
       phone: ['', [Validators.required, Validators.pattern(/^\d{10}$/)]],
       circle: [{ value: '', disabled: true }],
       division: [{ value: '', disabled: true }],
-      location: [{ value: '', disabled: true }],
+      locations: this.fb.array([]),
       role: [{ value: '', disabled: true }],
       status: [{ value: '', disabled: true }],
     });
@@ -48,25 +48,31 @@ export class ProfileComponent {
   get f() { return this.profileForm.controls as { [key: string]: any }; }
 
   getdetails(){
+    console.log('this.id',this.id);
     this.inchargeservice.getIncharge(this.id?this.id:"",this.cnt?this.cnt:"").subscribe({
       next: (data) => {
-        if(data[0].ID == this.id){
+        if(data.id == this.id){
           this.profileForm.patchValue({
-            id: data[0].ID,
-            emp_code: data[0].EMP_CODE,
-            emp_name: data[0].EMP_NAME,
-            email: data[0].EMAIL_ID,
-            phone: data[0].MOBILE_NO,
-            circle: data[0].CIRCLE,
-            division: data[0].DIVISION,
-            location: data[0].LOCATION,
-            role: data[0].ROLE,
-            status: data[0].STATUS
+            id: data.id,
+            emp_code: data.emp_code,
+            emp_name: data.emp_name,
+            email: data.email_id,
+            phone: data.mobile_no,
+            circle: data.circle,
+            division: data.division,
+            role: data.role,
+            status: data.status
           })
-          this.circle = data[0].CIRCLE_CODE;
-          this.div = data[0].DIV_CODE;
-          this.loc = data[0].LOC_CODE;
-          this.roleId = data[0].ROLE_ID;
+          const locationsArray = this.profileForm.get('locations') as FormArray;
+          locationsArray.clear();
+          if (data.locations && data.locations.length > 0) {
+            data.locations.forEach((loc: any) => {
+              locationsArray.push(this.fb.control(loc.loc_name));
+            });
+          }
+          this.circle = data.circle_code;
+          this.div = data.div_code;
+          this.roleId = data.role_id;
         }else{
           this.popupservice.showPopup('error', 'Error in fetching profile details.');
         }
@@ -94,6 +100,7 @@ export class ProfileComponent {
       this.inchargeservice.updateprofileincharge(body).subscribe({
         next: (data) => {
           this.popupservice.showPopup('success', 'Profile updated successfully.');
+          this.storageservice.storeUserMob(this.profileForm.value.phone.toString());
           this.formSubmitted.emit();
         },
         error: (error) => {

@@ -5,18 +5,22 @@ import { LocationService } from '../../../services/location/location.service';
 import { PopupService } from '../../../services/popup/popup.service';
 import { RefreshService } from '../../../services/refresh/refresh.service';
 import { Subscription } from 'rxjs';
+import * as XLSX from 'xlsx';
+import { saveAs } from 'file-saver';
+import { FormsModule } from '@angular/forms';
 export interface Location {
-  loc_id: string;
-  loc_name: string;
-  div: string;
-  circle: string;
-  div_code: string;
-  circle_code: string;
-  office_type: string;
+  LOC_ID: string;
+  LOC_NAME: string;
+  DIV: string;
+  CIRCLE: string;
+  DIV_CODE: string;
+  CIRCLE_CODE: string;
+  OFFICE_TYPE: string;
+  STATUS: string;
 }
 @Component({
   selector: 'app-quickviewloc',
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './quickviewloc.component.html',
   styleUrl: './quickviewloc.component.css'
 })
@@ -27,6 +31,8 @@ export class QuickviewlocComponent {
   itemsPerPage: number = 10;
   sortColumn: string = '';
   sortAscending: boolean = true;
+  selectedRows: Set<number> = new Set(); 
+  selectAll: boolean = false;
   min(a: number, b: number): number {
     return Math.min(a, b);
   }
@@ -53,26 +59,29 @@ alllocation(){
       },
     });
   }
-
-  get filteredData() {
-    return this.data
-      .filter(item =>
-        Object.values(item).some(val =>
-          String(val).toLowerCase().includes(this.searchTerm.toLowerCase())
-        )
+get fullFilteredData() {
+  return this.data
+    .filter(item =>
+      Object.values(item).some(val =>
+        String(val).toLowerCase().includes(this.searchTerm.toLowerCase())
       )
-      .sort((a, b) => {
-        if (!this.sortColumn) return 0;
-        const valueA = a[this.sortColumn as keyof typeof a];
-        const valueB = b[this.sortColumn as keyof typeof b];
+    )
+    .sort((a, b) => {
+      if (!this.sortColumn) return 0;
+      const valueA = a[this.sortColumn as keyof typeof a];
+      const valueB = b[this.sortColumn as keyof typeof b];
+      return this.sortAscending
+        ? valueA > valueB ? 1 : -1
+        : valueA < valueB ? 1 : -1;
+    });
+}
 
-        return this.sortAscending
-          ? valueA > valueB ? 1 : -1
-          : valueA < valueB ? 1 : -1;
-      })
-      .slice((this.currentPage - 1) * this.itemsPerPage, this.currentPage * this.itemsPerPage);
-  }
-
+get filteredData() {
+  return this.fullFilteredData.slice(
+    (this.currentPage - 1) * this.itemsPerPage,
+    this.currentPage * this.itemsPerPage
+  );
+}
   totalPages() {
     return Math.ceil(this.data.length / this.itemsPerPage);
   }
@@ -89,6 +98,39 @@ alllocation(){
       this.sortAscending = true;
     }
   }
+  toggleRowSelection(index: number) {
+    if (this.selectedRows.has(index)) {
+      this.selectedRows.delete(index);
+    } else {
+      this.selectedRows.add(index);
+    }
+  }
+
+  toggleSelectAll() {
+    if (this.selectAll) {
+      this.selectedRows.clear(); // Clear previous selection
+      this.fullFilteredData.forEach((_, index) => {
+        this.selectedRows.add(index);
+      });
+    } else {
+      this.selectedRows.clear();
+    }
+  }
+  downloadSelectedData() {
+      if (this.selectedRows.size === 0) {
+        this.popupservice.showPopup('error','Please select at least one row to download.');
+        return;
+      }
+  
+      const selectedData = Array.from(this.selectedRows).map(index => this.data[index]);
+      const worksheet = XLSX.utils.json_to_sheet(selectedData);
+      const workbook = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(workbook, worksheet, 'Data');
+  
+      const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+      const blob = new Blob([excelBuffer], { type: 'application/octet-stream' });
+      saveAs(blob, 'Locations.xlsx');
+    }
 
   openEditModal(user: any) {
     this.dashboard.setSelectedData(user);
@@ -98,7 +140,10 @@ alllocation(){
   // Delete Function
   deleteUser(id: any) {
     if (confirm('Are you sure you want to delete this location?')) {
-      this.locService.deletelocation({ loc_id: id }).subscribe({
+      const body = {
+        loc_id:id
+      }
+      this.locService.deletelocation(body).subscribe({
         next: (data) => {
           this.popupservice.showPopup('success', 'Location deleted successfully!');
           this.alllocation();

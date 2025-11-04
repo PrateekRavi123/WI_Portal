@@ -11,5 +11,16 @@ function payloadencrypt(text) {
     return iv.toString('hex') + ':' + encrypted.toString('hex');
 }
 
+function payloaddecrypt(text) {
+    const textParts = text.split(':');
+    const iv = Buffer.from(textParts[0], 'hex');
+    const encryptedText = Buffer.from(textParts[1], 'hex');
 
-module.exports = {  payloadencrypt };
+    const decipher = crypto.createDecipheriv(algorithm, Buffer.from(secretKey), iv);
+    let decrypted = decipher.update(encryptedText);
+    decrypted = Buffer.concat([decrypted, decipher.final()]);
+
+    return decrypted.toString();
+}
+
+module.exports = {  payloadencrypt , payloaddecrypt};

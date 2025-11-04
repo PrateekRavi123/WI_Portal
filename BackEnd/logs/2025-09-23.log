@@ -1,0 +1,96 @@
+[23/9/2025, 10:04:15 am] Failed to fetch getnotsubmittedchecklist. Error: ORA-00904: "IM"."LOCATION": invalid identifier
+Help: https://docs.oracle.com/error-help/db/ora-00904/
+[23/9/2025, 10:33:13 am] Failed to add checklist. Error: empty field
+[23/9/2025, 10:42:39 am] Failed to add checklist. Error: ORA-00001: unique constraint (WPINSP.PK_CHECKLIST_MST) violated
+Help: https://docs.oracle.com/error-help/db/ora-00001/
+[23/9/2025, 11:05:56 am] Connected to WPINSP Oracle Database
+[23/9/2025, 11:14:26 am] Connected to WPINSP Oracle Database
+[23/9/2025, 11:17:14 am] Connected to WPINSP Oracle Database
+[23/9/2025, 11:17:57 am] Failed to add checklist. Error: ORA-00001: unique constraint (WPINSP.PK_CHECKLIST_MST) violated
+Help: https://docs.oracle.com/error-help/db/ora-00001/
+[23/9/2025, 11:25:41 am] Failed to add checklist. Error: ORA-00001: unique constraint (WPINSP.PK_CHECKLIST_MST) violated
+Help: https://docs.oracle.com/error-help/db/ora-00001/
+[23/9/2025, 11:45:54 am] Connected to WPINSP Oracle Database
+[23/9/2025, 11:46:06 am] Failed to add checklist. Error: item.checkpoint_id.toUpperCase is not a function
+[23/9/2025, 11:46:43 am] Connected to WPINSP Oracle Database
+[23/9/2025, 11:46:45 am] Failed to add checklist. Error: item.checkpoint_id.toUpperCase is not a function
+[23/9/2025, 11:47:32 am] Connected to WPINSP Oracle Database
+[23/9/2025, 11:49:01 am] Failed to fetch single checklist checkpoint. Error: Converting circular structure to JSON
+    --> starting at object with constructor 'ConnectDescription'
+    |     property 'cOpts' -> object with constructor 'Array'
+    |     index 0 -> object with constructor 'ConnOption'
+    --- property 'desc' closes the circle
+[23/9/2025, 11:50:42 am] Failed to fetch single checklist checkpoint. Error: Converting circular structure to JSON
+    --> starting at object with constructor 'ConnectDescription'
+    |     property 'cOpts' -> object with constructor 'Array'
+    |     index 0 -> object with constructor 'ConnOption'
+    --- property 'desc' closes the circle
+[23/9/2025, 11:50:54 am] Failed to fetch single checklist checkpoint. Error: Converting circular structure to JSON
+    --> starting at object with constructor 'ConnectDescription'
+    |     property 'cOpts' -> object with constructor 'Array'
+    |     index 0 -> object with constructor 'ConnOption'
+    --- property 'desc' closes the circle
+[23/9/2025, 11:52:58 am] Connected to WPINSP Oracle Database
+[23/9/2025, 11:58:42 am] Connected to WPINSP Oracle Database
+[23/9/2025, 11:58:42 am] Failed to fetch checklist checkpoint. Error: Converting circular structure to JSON
+    --> starting at object with constructor 'ConnectDescription'
+    |     property 'cOpts' -> object with constructor 'Array'
+    |     index 0 -> object with constructor 'ConnOption'
+    --- property 'desc' closes the circle
+[23/9/2025, 11:58:46 am] Failed to fetch checklist checkpoint. Error: Converting circular structure to JSON
+    --> starting at object with constructor 'ConnectDescription'
+    |     property 'cOpts' -> object with constructor 'Array'
+    |     index 0 -> object with constructor 'ConnOption'
+    --- property 'desc' closes the circle
+[23/9/2025, 11:59:05 am] Failed to fetch checklist checkpoint. Error: Converting circular structure to JSON
+    --> starting at object with constructor 'ConnectDescription'
+    |     property 'cOpts' -> object with constructor 'Array'
+    |     index 0 -> object with constructor 'ConnOption'
+    --- property 'desc' closes the circle
+[23/9/2025, 12:00:20 pm] Connected to WPINSP Oracle Database
+[23/9/2025, 2:07:02 pm] Failed to fetch getnotsubmittedchecklist. Error: ORA-00904: "IM"."LOCATION": invalid identifier
+Help: https://docs.oracle.com/error-help/db/ora-00904/
+[23/9/2025, 2:07:18 pm] Failed to fetch getnotsubmittedchecklist. Error: ORA-00904: "IM"."LOCATION": invalid identifier
+Help: https://docs.oracle.com/error-help/db/ora-00904/
+[23/9/2025, 2:40:23 pm] Failed to fetch getnotsubmittedchecklist. Error: ORA-00904: "IM"."LOCATION": invalid identifier
+Help: https://docs.oracle.com/error-help/db/ora-00904/
+[23/9/2025, 2:58:51 pm] Connected to WPINSP Oracle Database
+[23/9/2025, 2:58:52 pm] Failed to fetch getnotsubmittedchecklist. Error: ORA-00904: "IM"."LOCATION": invalid identifier
+Help: https://docs.oracle.com/error-help/db/ora-00904/
+[23/9/2025, 2:58:55 pm] Failed to fetch getnotsubmittedchecklist. Error: ORA-00904: "IM"."LOCATION": invalid identifier
+Help: https://docs.oracle.com/error-help/db/ora-00904/
+[23/9/2025, 2:59:48 pm] Connected to WPINSP Oracle Database
+[23/9/2025, 2:59:50 pm] Failed to fetch getnotsubmittedchecklist. Error: ORA-00904: "IM"."LOCATION": invalid identifier
+Help: https://docs.oracle.com/error-help/db/ora-00904/
+[23/9/2025, 3:01:45 pm] Connected to WPINSP Oracle Database
+[23/9/2025, 3:01:45 pm] Failed to fetch getnotsubmittedchecklist. Error: ORA-00904: "IM"."LOCATION": invalid identifier
+Help: https://docs.oracle.com/error-help/db/ora-00904/
+[23/9/2025, 3:23:41 pm] Connected to WPINSP Oracle Database
+[23/9/2025, 3:24:08 pm] Failed to update checkpoint. Response: {"id":"2","name":"WATER COOLER CONDITION & INSPECTION CHECKLIST DISPLAYED","type":"T1","label":"WATER COLLER","fwdrole":"R6","status":"Y"}
+[23/9/2025, 3:24:08 pm] Failed to update checkpoint. Error: ORA-00933: SQL command not properly ended
+Help: https://docs.oracle.com/error-help/db/ora-00933/
+[23/9/2025, 3:26:00 pm] Connected to WPINSP Oracle Database
+[23/9/2025, 3:28:23 pm] Connected to WPINSP Oracle Database
+[23/9/2025, 3:28:30 pm] Failed to update checkpoint. Response: {"id":"2","name":"WATER COOLER CONDITION & INSPECTION CHECKLIST DISPLAYED","type":"T1","label":"WATER COLLER","fwdrole":"R6","status":"N"}
+[23/9/2025, 3:28:35 pm] Failed to update checkpoint. Response: {"id":"2","name":"WATER COOLER CONDITION & INSPECTION CHECKLIST DISPLAYED","type":"T1","label":"WATER COLLER","fwdrole":"R6","status":"Y"}
+[23/9/2025, 3:54:40 pm] Failed to update checkpoint. Response: {"id":"21","name":"CONDITION OF WATER BOTTLES & PRINTING OF REFILL DATES","type":"T1","label":"Water Bottles","fwdrole":"R6","status":"N"}
+[23/9/2025, 3:54:59 pm] Failed to update checkpoint. Response: {"id":"21","name":"CONDITION OF WATER BOTTLES & PRINTING OF REFILL DATES","type":"T1","label":"WATER BOTTLES","fwdrole":"R6","status":"Y"}
+[23/9/2025, 3:55:06 pm] Failed to fetch getnotsubmittedchecklist. Error: ORA-00904: "IM"."LOCATION": invalid identifier
+Help: https://docs.oracle.com/error-help/db/ora-00904/
+[23/9/2025, 3:56:01 pm] Failed to fetch getnotsubmittedchecklist. Error: ORA-00904: "IM"."LOCATION": invalid identifier
+Help: https://docs.oracle.com/error-help/db/ora-00904/
+[23/9/2025, 3:56:41 pm] Failed to fetch getnotsubmittedchecklist. Error: ORA-00904: "IM"."LOCATION": invalid identifier
+Help: https://docs.oracle.com/error-help/db/ora-00904/
+[23/9/2025, 3:56:53 pm] Failed to fetch getnotsubmittedchecklist. Error: ORA-00904: "IM"."LOCATION": invalid identifier
+Help: https://docs.oracle.com/error-help/db/ora-00904/
+[23/9/2025, 3:57:03 pm] Failed to fetch getnotsubmittedchecklist. Error: ORA-00904: "IM"."LOCATION": invalid identifier
+Help: https://docs.oracle.com/error-help/db/ora-00904/
+[23/9/2025, 3:57:38 pm] Failed to fetch getnotsubmittedchecklist. Error: ORA-00904: "IM"."LOCATION": invalid identifier
+Help: https://docs.oracle.com/error-help/db/ora-00904/
+[23/9/2025, 3:58:19 pm] Failed to fetch getnotsubmittedchecklist. Error: ORA-00904: "IM"."LOCATION": invalid identifier
+Help: https://docs.oracle.com/error-help/db/ora-00904/
+[23/9/2025, 4:07:08 pm] Connected to WPINSP Oracle Database
+[23/9/2025, 4:07:09 pm] Failed to fetch getnotsubmittedchecklist. Error: ORA-00904: "IM"."LOCATION": invalid identifier
+Help: https://docs.oracle.com/error-help/db/ora-00904/
+[23/9/2025, 4:11:32 pm] Connected to WPINSP Oracle Database
+[23/9/2025, 5:02:07 pm] Connected to WPINSP Oracle Database

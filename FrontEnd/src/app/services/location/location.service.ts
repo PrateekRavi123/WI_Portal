@@ -10,108 +10,123 @@ import { catchError, map, Observable, of, tap, throwError } from 'rxjs';
 export class LocationService {
   private apiUrl;
   constructor(private http: HttpClient, private router: Router, private apiService: ApiServiceService) {
-        this.apiUrl = this.apiService.getLocationEndpoint();
-      }
+    this.apiUrl = this.apiService.getLocationEndpoint();
+  }
 
-      getLocation(division: string): Observable<any> {
-        const body = {div: division};
-        return this.http.post<any>(`${this.apiUrl}/getlocation`,body, {}).pipe(
-          map((res) => {
-            if (res && res.data) {
-              return this.apiService.decryptData(res.data);
-            }
-            return res;
-          }),
-          catchError(error => {
-            if (error.status === 400) {
-              return of(error.status);
-            } else {
-              console.error('Error occurred:', error);
-              return throwError(() => error);
-            }
-          })
-        );
-      }
+  // getActiveLocation(id:string,division: string): Observable<any> {
+  //   const body = {id:id,div: division};
+  //   return this.http.post<any>(`${this.apiUrl}/getactivelocation`,body, {}).pipe(
+  //     map((res) => {
+  //       if (res && res.data) {
+  //         return this.apiService.decryptData(res.data);
+  //       }
+  //       return res;
+  //     }),
+  //     catchError(error => {
+  //       if (error.status === 400) {
+  //         return of(error.status);
+  //       } else {
+  //         console.error('Error occurred:', error);
+  //         return throwError(() => error);
+  //       }
+  //     })
+  //   );
+  // }
+  getActiveLocation(id: string, division: string): Observable<any> {
+    const body = { id: id, div: division };
+    return this.http.post<any>(`${this.apiUrl}/getactivelocation`, body);
+  }
 
-      getAllLocation(): Observable<any> {
-        return this.http.get<any>(`${this.apiUrl}/getalllocations`, {}).pipe(
-          map((res) => {
-            if (res && res.data) {
-              return this.apiService.decryptData(res.data);
-            }
-            return res;
-          }),
-          catchError(error => {
-            if (error.status === 400) {
-              return of(error.status);
-            } else {
-              console.error('Error occurred:', error);
-              return throwError(() => error);
-            }
-          })
-        );
-      }
-      
-      addlocation(body:any): Observable<any> {
-        return  this.http.post<any>(`${this.apiUrl}/addlocation`,body, {}).pipe(
-          map((res) => {
-            if (res && res.data) {
-              return this.apiService.decryptData(res.data);
-            }
-            return res;
-          }),
-          catchError(error => {
-            if (error.status === 400) {
-              return of(error.status);
-            } else {
-              console.error('Error occurred:', error);
-              return throwError(() => error);
-            }
-          })
-        );
-      }
+  // getAllLocation(): Observable<any> {
+  //   return this.http.get<any>(`${this.apiUrl}/getalllocations`, {}).pipe(
+  //     map((res) => {
+  //       if (res && res.data) {
+  //         return this.apiService.decryptData(res.data);
+  //       }
+  //       return res;
+  //     }),
+  //     catchError(error => {
+  //       if (error.status === 400) {
+  //         return of(error.status);
+  //       } else {
+  //         console.error('Error occurred:', error);
+  //         return throwError(() => error);
+  //       }
+  //     })
+  //   );
+  // }
+  getAllLocation(): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/getalllocations`);
+  }
 
-      updatelocation(body:any): Observable<any> {
-        return  this.http.patch<any>(`${this.apiUrl}/updatelocation`,body, {}).pipe(
-          map((res) => {
-            if (res && res.data) {
-              return this.apiService.decryptData(res.data);
-            }
-            return res;
-          }),
-          catchError(error => {
-            if (error.status === 400) {
-              return of(error.status);
-            } else {
-              console.error('Error occurred:', error);
-              return throwError(() => error);
-            }
-          })
-        );
-      }
+  // addlocation(body:any): Observable<any> {
+  //   return  this.http.post<any>(`${this.apiUrl}/addlocation`,body, {}).pipe(
+  //     map((res) => {
+  //       if (res && res.data) {
+  //         return this.apiService.decryptData(res.data);
+  //       }
+  //       return res;
+  //     }),
+  //     catchError(error => {
+  //       if (error.status === 400) {
+  //         return of(error.status);
+  //       } else {
+  //         console.error('Error occurred:', error);
+  //         return throwError(() => error);
+  //       }
+  //     })
+  //   );
+  // }
+  addlocation(body: any): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/addlocation`, body);
+  }
 
-      deletelocation(body: any): Observable<any> {
-        return this.http.delete(`${this.apiUrl}/deletelocation`, {
-          body: body,
-          responseType: 'text' as 'json' // important for decryption
-        }).pipe(
-          map((res: any) => {
-            if (res) {
-              const decrypted = this.apiService.decryptData(res);
-              return JSON.parse(decrypted);
-            }
-            return res;
-          }),
-          catchError(error => {
-            if (error.status === 400) {
-              return of(error.status);
-            } else {
-              console.error('Error occurred:', error);
-              return throwError(() => error);
-            }
-          })
-        );
-      }
-      
-    
+  // updatelocation(body:any): Observable<any> {
+  //   return  this.http.patch<any>(`${this.apiUrl}/updatelocation`,body, {}).pipe(
+  //     map((res) => {
+  //       if (res && res.data) {
+  //         return this.apiService.decryptData(res.data);
+  //       }
+  //       return res;
+  //     }),
+  //     catchError(error => {
+  //       if (error.status === 400) {
+  //         return of(error.status);
+  //       } else {
+  //         console.error('Error occurred:', error);
+  //         return throwError(() => error);
+  //       }
+  //     })
+  //   );
+  // }
+  updatelocation(body: any): Observable<any> {
+    return this.http.patch<any>(`${this.apiUrl}/updatelocation`, body);
+  }
+
+  // deletelocation(body: any): Observable<any> {
+  //   return this.http.delete(`${this.apiUrl}/deletelocation`, {
+  //     body: body,
+  //     responseType: 'text' as 'json' // important for decryption
+  //   }).pipe(
+  //     map((res: any) => {
+  //       if (res) {
+  //         const decrypted = this.apiService.decryptData(res);
+  //         return JSON.parse(decrypted);
+  //       }
+  //       return res;
+  //     }),
+  //     catchError(error => {
+  //       if (error.status === 400) {
+  //         return of(error.status);
+  //       } else {
+  //         console.error('Error occurred:', error);
+  //         return throwError(() => error);
+  //       }
+  //     })
+  //   );
+  // }
+
+  deletelocation(body: any): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/deletelocation`, body);
+  }
 }

@@ -1,72 +1,84 @@
 <div class="text-start">
-    <h4 class="mb-3">Update Pending Checkpoint</h4>
-    <form [formGroup]="editForm" (ngSubmit)="onSubmit()">
-      <div class="row mb-3">
-        <div class="col-md-4">
-          <label for="checklistid" class="col-form-label">Checklist ID:</label>
-            <input type="text" id="checklistid" formControlName="checklistid" class="form-control" />
-        </div>
-        <div class="col-md-4">
-          <label for="div" class="col-form-label">Division:</label>
-          <input type="text" id="div" formControlName="div" class="form-control"
-            placeholder="Enter Division" />
-        </div>
-        <div class="col-md-4">
-          <label for="role_name" class="col-form-label">Forwarded To:</label>
-          <input type="text" id="role_name" formControlName="role_name" class="form-control"
-            placeholder="Enter Forwarded To" />
-        </div>
+  <h4 class="mb-3">Update Pending Checkpoint</h4>
+  <form [formGroup]="editForm" (ngSubmit)="onSubmit()">
+    <div class="row mb-3">
+      <div class="col-md-4">
+        <label for="checklistid" class="col-form-label">Checklist ID:</label>
+        <input type="text" id="checklistid" formControlName="checklistid" class="form-control" />
       </div>
-      <div class="row mb-3">
-        <div class="col-md-12">
-          <label for="loc" class="col-form-label">Location:</label>
-          <input type="text" id="loc" formControlName="loc" class="form-control"
-            placeholder="Enter Location" />
-        </div>
+      <div class="col-md-4">
+        <label for="div" class="col-form-label">Division:</label>
+        <input type="text" id="div" formControlName="div" class="form-control" placeholder="Enter Division" />
       </div>
-      <div class="row mb-3">
-        <div class="col-md-4">
-          <label for="type_name" class="col-form-label">Checkpoint Type:</label>
-            <input type="text" id="type_name" formControlName="type_name" class="form-control" />
-        </div>
-        <div class="col-md-4">
-          <label for="name" class="col-form-label">Checkpoint Name:</label>
-          <input type="text" id="name" formControlName="name" class="form-control"
-            placeholder="Enter checkpointname" />
-        </div>
-        <div class="col-md-4">
-          <label for="status" class="col-form-label">Status:</label>
-          <input type="text" id="status" formControlName="status" class="form-control"
-            placeholder="Enter status" />
-        </div>
+      <div class="col-md-4">
+        <label for="role_name" class="col-form-label">Forwarded To:</label>
+        <input type="text" id="role_name" formControlName="role_name" class="form-control"
+          placeholder="Enter Forwarded To" />
       </div>
-      <div class="row mb-3">
-        <div class="col-md-12">
-          <label for="remarks" class="col-form-label">Remarks:</label>
-          <input type="text" id="remarks" formControlName="remarks" class="form-control"
-            placeholder="Enter remarks" />
-        </div>
+    </div>
+    <div class="row mb-3">
+      <div class="col-md-12">
+        <label for="loc" class="col-form-label">Location:</label>
+        <input type="text" id="loc" formControlName="loc" class="form-control" placeholder="Enter Location" />
       </div>
-      <div class="row mb-3">
-        <div class="col-md-12">
-                            
-          <label class="form-label" *ngIf="editForm.get('filename')?.value; else noFile">
-            Attached File: 
-            <a 
-              class="text-danger" 
-              style="cursor: pointer;" 
+    </div>
+    <div class="row mb-3">
+      <div class="col-md-4">
+        <label for="type_name" class="col-form-label">Checkpoint Type:</label>
+        <input type="text" id="type_name" formControlName="type_name" class="form-control" />
+      </div>
+      <div class="col-md-4">
+        <label for="name" class="col-form-label">Checkpoint Name:</label>
+        <input type="text" id="name" formControlName="name" class="form-control" placeholder="Enter checkpointname" />
+      </div>
+      <div class="col-md-4">
+        <label for="status" class="col-form-label">Status:</label>
+        <input type="text" id="status" formControlName="status" class="form-control" placeholder="Enter status" />
+      </div>
+    </div>
+    <div class="row mb-3">
+      <div class="col-md-12">
+        <label for="remarks" class="col-form-label">Remarks:</label>
+        <input type="text" id="remarks" formControlName="remarks" class="form-control" placeholder="Enter remarks" />
+      </div>
+    </div>
+    <div class="row mb-3">
+      <div class="col-md-12">
+        <label>Attached Files:</label>
+        <div
+          *ngIf="editForm.get('filename')?.value || editForm.get('filename2')?.value || editForm.get('filename3')?.value; else noFiles">
+
+          <ng-container *ngIf="editForm.get('filename')?.value">
+            <a class="text-danger" style="cursor: pointer;"
               (click)="onFileChange(editForm.get('filename')?.value, editForm.get('filedata')?.value)">
               {{ editForm.get('filename')?.value }}
             </a>
-          </label>
-          
-          <ng-template #noFile>
-            <label>Attached File: No File Attached</label>
-          </ng-template>
-    </div>        
+          </ng-container>
+
+          <ng-container *ngIf="editForm.get('filename2')?.value">
+            <a class="text-danger ms-2" style="cursor: pointer;"
+              (click)="onFileChange(editForm.get('filename2')?.value, editForm.get('filedata2')?.value)">
+              {{ editForm.get('filename2')?.value }}
+            </a>
+          </ng-container>
+
+          <ng-container *ngIf="editForm.get('filename3')?.value">
+            <a class="text-danger ms-2" style="cursor: pointer;"
+              (click)="onFileChange(editForm.get('filename3')?.value, editForm.get('filedata3')?.value)">
+              {{ editForm.get('filename3')?.value }}
+            </a>
+          </ng-container>
+
+        </div>
+
+        <ng-template #noFiles>
+          <span>No Files Attached</span>
+        </ng-template>
       </div>
-      <!-- <div class="text-end">
+
+    </div>
+    <!-- <div class="text-end">
         <button type="submit" class="btn btn-primary" [disabled]="editForm.invalid">Update</button>
       </div> -->
-    </form>
-  </div>
+  </form>
+</div>

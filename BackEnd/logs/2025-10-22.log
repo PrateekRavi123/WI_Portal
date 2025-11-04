@@ -1,0 +1,91 @@
+[22/10/2025, 10:44:26 am] Connected to WPINSP Oracle Database
+[22/10/2025, 10:44:26 am] Connected to IMS Oracle Database
+[22/10/2025, 10:44:30 am] Connected to IMS Oracle Database
+[22/10/2025, 10:44:31 am] Connected to IMS Oracle Database
+[22/10/2025, 10:44:34 am] Connected to IMS Oracle Database
+[22/10/2025, 10:44:46 am] Connected to IMS Oracle Database
+[22/10/2025, 10:48:32 am] Failed to add checklist. Error: ORA-00001: unique constraint (WPINSP.PK_CHECKLIST_MST) violated
+Help: https://docs.oracle.com/error-help/db/ora-00001/
+[22/10/2025, 11:39:47 am] Connected to WPINSP Oracle Database
+[22/10/2025, 11:39:49 am] Failed to fetch observationsummary. Error: ORA-00933: SQL command not properly ended
+Help: https://docs.oracle.com/error-help/db/ora-00933/
+[22/10/2025, 11:41:13 am] Connected to WPINSP Oracle Database
+[22/10/2025, 2:13:43 pm] Connected to IMS Oracle Database
+[22/10/2025, 2:14:01 pm] Connected to IMS Oracle Database
+[22/10/2025, 2:29:05 pm] Connected to WPINSP Oracle Database
+[22/10/2025, 2:29:05 pm] Session token mismatch. req token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjbnRfbm8iOiI4NzY2MzA0ODA2IiwiaWF0IjoxNzYxMTIyNjQxLCJleHAiOjE3NjExMjYyNDF9.YrW7gj0GrkC4qg11B-FTsNsv22WbUmrHiu7lZrEVS3Y
+[22/10/2025, 2:29:05 pm] Session token mismatch. DB token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjbnRfbm8iOiI4NzY2MzA0ODA2IiwiaWF0IjoxNzYwNjEzODk5LCJleHAiOjE3NjA2MTc0OTl9.ovBf6HrhyJnzv4l5JqcwBCjj3a4I7MJiTmmOfJD7_4w
+[22/10/2025, 2:29:05 pm] Session token mismatch. req token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjbnRfbm8iOiI4NzY2MzA0ODA2IiwiaWF0IjoxNzYxMTIyNjQxLCJleHAiOjE3NjExMjYyNDF9.YrW7gj0GrkC4qg11B-FTsNsv22WbUmrHiu7lZrEVS3Y
+[22/10/2025, 2:29:05 pm] Session token mismatch. DB token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjbnRfbm8iOiI4NzY2MzA0ODA2IiwiaWF0IjoxNzYwNjEzODk5LCJleHAiOjE3NjA2MTc0OTl9.ovBf6HrhyJnzv4l5JqcwBCjj3a4I7MJiTmmOfJD7_4w
+[22/10/2025, 2:29:09 pm] Connected to IMS Oracle Database
+[22/10/2025, 2:29:28 pm] Connected to IMS Oracle Database
+[22/10/2025, 2:29:29 pm] Failed to fetch incharge. Error: ORA-00942: table or view does not exist
+Help: https://docs.oracle.com/error-help/db/ora-00942/
+[22/10/2025, 2:29:35 pm] Failed to fetch getnotsubmittedchecklist. Error: ORA-00942: table or view does not exist
+Help: https://docs.oracle.com/error-help/db/ora-00942/
+[22/10/2025, 2:31:43 pm] Failed to fetch getnotsubmittedchecklist. Error: ORA-00942: table or view does not exist
+Help: https://docs.oracle.com/error-help/db/ora-00942/
+[22/10/2025, 2:31:43 pm] Failed to fetch incharge. Error: ORA-00942: table or view does not exist
+Help: https://docs.oracle.com/error-help/db/ora-00942/
+[22/10/2025, 2:36:12 pm] Failed to fetch getnotsubmittedchecklist. Error: ORA-00942: table or view does not exist
+Help: https://docs.oracle.com/error-help/db/ora-00942/
+[22/10/2025, 2:36:12 pm] Failed to fetch incharge. Error: ORA-00942: table or view does not exist
+Help: https://docs.oracle.com/error-help/db/ora-00942/
+[22/10/2025, 2:38:41 pm] Failed to fetch all incharges. Error: ORA-00942: table or view does not exist
+Help: https://docs.oracle.com/error-help/db/ora-00942/
+[22/10/2025, 2:38:46 pm] Failed to fetch incharge. Error: ORA-00942: table or view does not exist
+Help: https://docs.oracle.com/error-help/db/ora-00942/
+[22/10/2025, 2:38:46 pm] Failed to fetch all incharges. Error: ORA-00942: table or view does not exist
+Help: https://docs.oracle.com/error-help/db/ora-00942/
+[22/10/2025, 2:38:50 pm] Failed to fetch all checkpoint. Error: ORA-00904: "ICM"."STATUS": invalid identifier
+Help: https://docs.oracle.com/error-help/db/ora-00904/
+[22/10/2025, 2:39:05 pm] Failed to fetch incharge. Error: ORA-00942: table or view does not exist
+Help: https://docs.oracle.com/error-help/db/ora-00942/
+[22/10/2025, 2:39:05 pm] Failed to fetch all checkpoint. Error: ORA-00904: "ICM"."STATUS": invalid identifier
+Help: https://docs.oracle.com/error-help/db/ora-00904/
+[22/10/2025, 2:40:05 pm] Connected to WPINSP Oracle Database
+[22/10/2025, 2:40:05 pm] Session token mismatch. DB token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjbnRfbm8iOiI4NzY2MzA0ODA2IiwiaWF0IjoxNzYxMTIyNjQxLCJleHAiOjE3NjExMjYyNDF9.YrW7gj0GrkC4qg11B-FTsNsv22WbUmrHiu7lZrEVS3Y
+[22/10/2025, 2:40:05 pm] Session token mismatch. req token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjbnRfbm8iOiI4NzY2MzA0ODA2IiwiaWF0IjoxNzYxMTIzNTY5LCJleHAiOjE3NjExMjcxNjl9.yl1WonX-gkxiRRxtDyC8tVB5klzgXzcHRwjbf-4PnQA
+[22/10/2025, 2:40:05 pm] Session token mismatch. req token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjbnRfbm8iOiI4NzY2MzA0ODA2IiwiaWF0IjoxNzYxMTIzNTY5LCJleHAiOjE3NjExMjcxNjl9.yl1WonX-gkxiRRxtDyC8tVB5klzgXzcHRwjbf-4PnQA
+[22/10/2025, 2:40:05 pm] Session token mismatch. DB token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjbnRfbm8iOiI4NzY2MzA0ODA2IiwiaWF0IjoxNzYxMTIyNjQxLCJleHAiOjE3NjExMjYyNDF9.YrW7gj0GrkC4qg11B-FTsNsv22WbUmrHiu7lZrEVS3Y
+[22/10/2025, 2:40:10 pm] Connected to IMS Oracle Database
+[22/10/2025, 2:40:22 pm] Connected to IMS Oracle Database
+[22/10/2025, 3:03:35 pm] Connected to WPINSP Oracle Database
+[22/10/2025, 3:03:35 pm] Session token mismatch. DB token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjbnRfbm8iOiI4NzY2MzA0ODA2IiwiaWF0IjoxNzYxMTIzNTY5LCJleHAiOjE3NjExMjcxNjl9.yl1WonX-gkxiRRxtDyC8tVB5klzgXzcHRwjbf-4PnQA
+[22/10/2025, 3:03:35 pm] Session token mismatch. req token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjbnRfbm8iOiI4NzY2MzA0ODA2IiwiaWF0IjoxNzYxMTI0MjIzLCJleHAiOjE3NjExMjc4MjN9.5CYlSrfv_qDSVtc9Y9-v-tLpr15sgt_cIrVI_6DSldc
+[22/10/2025, 3:03:35 pm] Session token mismatch. DB token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjbnRfbm8iOiI4NzY2MzA0ODA2IiwiaWF0IjoxNzYxMTIzNTY5LCJleHAiOjE3NjExMjcxNjl9.yl1WonX-gkxiRRxtDyC8tVB5klzgXzcHRwjbf-4PnQA
+[22/10/2025, 3:03:35 pm] Session token mismatch. req token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjbnRfbm8iOiI4NzY2MzA0ODA2IiwiaWF0IjoxNzYxMTI0MjIzLCJleHAiOjE3NjExMjc4MjN9.5CYlSrfv_qDSVtc9Y9-v-tLpr15sgt_cIrVI_6DSldc
+[22/10/2025, 3:03:39 pm] Connected to IMS Oracle Database
+[22/10/2025, 3:03:53 pm] Connected to IMS Oracle Database
+[22/10/2025, 3:03:53 pm] Failed to fetch incharge. Error: ORA-00942: table or view does not exist
+Help: https://docs.oracle.com/error-help/db/ora-00942/
+[22/10/2025, 3:03:55 pm] Failed to fetch getnotsubmittedchecklist. Error: ORA-00942: table or view does not exist
+Help: https://docs.oracle.com/error-help/db/ora-00942/
+[22/10/2025, 3:05:18 pm] Failed to fetch getnotsubmittedchecklist. Error: ORA-00942: table or view does not exist
+Help: https://docs.oracle.com/error-help/db/ora-00942/
+[22/10/2025, 3:05:18 pm] Failed to fetch incharge. Error: ORA-00942: table or view does not exist
+Help: https://docs.oracle.com/error-help/db/ora-00942/
+[22/10/2025, 3:17:05 pm] Failed to fetch getnotsubmittedchecklist. Error: ORA-00942: table or view does not exist
+Help: https://docs.oracle.com/error-help/db/ora-00942/
+[22/10/2025, 3:17:05 pm] Failed to fetch incharge. Error: ORA-00942: table or view does not exist
+Help: https://docs.oracle.com/error-help/db/ora-00942/
+[22/10/2025, 3:19:58 pm] Failed to fetch getnotsubmittedchecklist. Error: ORA-00942: table or view does not exist
+Help: https://docs.oracle.com/error-help/db/ora-00942/
+[22/10/2025, 3:19:58 pm] Failed to fetch incharge. Error: ORA-00942: table or view does not exist
+Help: https://docs.oracle.com/error-help/db/ora-00942/
+[22/10/2025, 3:20:42 pm] Failed to fetch incharge. Error: ORA-00942: table or view does not exist
+Help: https://docs.oracle.com/error-help/db/ora-00942/
+[22/10/2025, 3:20:42 pm] Failed to fetch getnotsubmittedchecklist. Error: ORA-00942: table or view does not exist
+Help: https://docs.oracle.com/error-help/db/ora-00942/
+[22/10/2025, 3:21:28 pm] Failed to fetch incharge. Error: ORA-00942: table or view does not exist
+Help: https://docs.oracle.com/error-help/db/ora-00942/
+[22/10/2025, 3:21:28 pm] Failed to fetch getnotsubmittedchecklist. Error: ORA-00942: table or view does not exist
+Help: https://docs.oracle.com/error-help/db/ora-00942/
+[22/10/2025, 3:22:33 pm] Connected to WPINSP Oracle Database
+[22/10/2025, 3:22:33 pm] Session token mismatch. req token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjbnRfbm8iOiI4NzY2MzA0ODA2IiwiaWF0IjoxNzYxMTI1NjMzLCJleHAiOjE3NjExMjkyMzN9.4oWXj27-TvOfHovs7WReoxxLeJtV1YU5MmxKCwmR_zs
+[22/10/2025, 3:22:33 pm] Session token mismatch. DB token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjbnRfbm8iOiI4NzY2MzA0ODA2IiwiaWF0IjoxNzYxMTI0MjIzLCJleHAiOjE3NjExMjc4MjN9.5CYlSrfv_qDSVtc9Y9-v-tLpr15sgt_cIrVI_6DSldc
+[22/10/2025, 3:22:33 pm] Session token mismatch. req token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjbnRfbm8iOiI4NzY2MzA0ODA2IiwiaWF0IjoxNzYxMTI1NjMzLCJleHAiOjE3NjExMjkyMzN9.4oWXj27-TvOfHovs7WReoxxLeJtV1YU5MmxKCwmR_zs
+[22/10/2025, 3:22:33 pm] Session token mismatch. DB token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjbnRfbm8iOiI4NzY2MzA0ODA2IiwiaWF0IjoxNzYxMTI0MjIzLCJleHAiOjE3NjExMjc4MjN9.5CYlSrfv_qDSVtc9Y9-v-tLpr15sgt_cIrVI_6DSldc
+[22/10/2025, 3:22:38 pm] Connected to IMS Oracle Database
+[22/10/2025, 3:27:09 pm] Connected to IMS Oracle Database
+[22/10/2025, 3:27:25 pm] Connected to IMS Oracle Database

@@ -1,7 +1,6 @@
 import { bootstrapApplication } from '@angular/platform-browser';
 import { appConfig } from './app/app.config';
 import { AppComponent } from './app/app.component';
-import { ConfigService } from './app/services/config/config.service';
 import { provideRouter } from '@angular/router';
 import { routes } from './app/app.routes';
 import { provideHttpClient, withFetch, withInterceptors } from '@angular/common/http';
@@ -16,15 +15,7 @@ bootstrapApplication(AppComponent, {
       withInterceptors([authInterceptor])
     ),
     provideRouter(routes),
-    {
-      provide: APP_INITIALIZER,
-      useFactory: (configService: ConfigService) => {
-        return () => configService.loadConfig();
-      },
-      deps: [ConfigService],
-      multi: true
-    },
-    ConfigService
+    
   ]
 })
 .catch(err => console.error(err));

@@ -16,14 +16,12 @@
                 <div class="col-md-4">
                     <label class="form-label fw-bold">Name</label>
                     <input type="text" class="form-control" formControlName="name" maxlength="50">
-                    <div
-                            *ngIf="f['name']?.touched && f['name']?.invalid"
-                            class="text-danger small">
-                            <span *ngIf="f['name']?.errors?.['required']">Name is
-                              required.</span>
-                            <span *ngIf="f['name']?.errors?.['pattern']">Invalid
-                              characters entered. Please avoid special characters.</span>
-                          </div>
+                    <div *ngIf="f['name']?.touched && f['name']?.invalid" class="text-danger small">
+                        <span *ngIf="f['name']?.errors?.['required']">Name is
+                            required.</span>
+                        <span *ngIf="f['name']?.errors?.['pattern']">Invalid
+                            characters entered. Please avoid special characters.</span>
+                    </div>
                 </div>
                 <div class="col-md-4">
                     <label class="form-label fw-bold">Mobile No.</label>
@@ -61,20 +59,29 @@
                         Division is required.
                     </div>
                 </div>
-                <div class="col-md-4">
-                    <label for="location" class="form-label fw-bold">Location</label>
-                    <select id="location" class="form-select" formControlName="loc"
-                        [ngClass]="{ 'is-invalid': f['loc'].invalid && f['loc'].touched }">
-                        <option value="" disabled>Select a Location</option>
-                        <option *ngFor="let location of locList" [value]="location.LOC_ID">
-                            {{ location.LOC_NAME }}
-                        </option>
-                    </select>
-                    <div *ngIf="f['loc'].invalid && f['loc'].touched" class="text-danger small">
-                        Location is required.
+
+            </div>
+            <div class="row mb-3">
+                <div class="col-md-12">
+                    <label class="form-label fw-bold">Locations</label>
+                    <div formArrayName="locations" class="border p-2 rounded"
+                        style="max-height: 200px; overflow-y: auto;">
+                        <div class="row">
+                            <div *ngFor="let locCtrl of locationControls.controls; let i = index" [formGroupName]="i"
+                                class="col-md-6 mb-2">
+                                <div class="form-check border-bottom pb-1">
+                                    <input type="checkbox" class="form-check-input" formControlName="selected"
+                                        id="loc{{i}}" (change)="onLocationCheckboxChange()">
+                                    <label class="form-check-label ms-2" [for]="'loc' + i">
+                                        {{ locCtrl.value.loc_name }}
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
+
             <div class="row mb-3">
                 <div class="col-md-4">
                     <label class="form-label fw-bold">Email ID</label>

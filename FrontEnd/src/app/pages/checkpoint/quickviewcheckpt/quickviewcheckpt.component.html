@@ -1,31 +1,46 @@
 
 <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
     <h5 class="mb-0">Checkpoint List</h5>
-    <input type="text" class="form-control w-25" #searchBox placeholder="Search..." (input)="onSearch(searchBox.value)">
+    <div class="d-flex align-items-center gap-2">
+        <input type="text" class="form-control w-auto" style="min-width: 200px;" #searchBox placeholder="Search..."
+            (input)="onSearch(searchBox.value)">
+        <button class="btn btn-light btn-sm" (click)="downloadSelectedData()">
+            <i class="bi bi-download"></i> Export to Excel
+        </button>
+    </div>
 </div>
 
 <div class="table-responsive">
     <table class="table table-hover">
         <thead class="table-dark">
             <tr>
+                                <th><input type="checkbox" [(ngModel)]="selectAll" (change)="toggleSelectAll()" /></th>
+
                 <th class="sortable" (click)="sortData('id')">ID <span *ngIf="sortColumn === 'id'">{{ sortAscending ? '▲' : '▼' }}</span></th>
                 <th class="sortable" (click)="sortData('type_name')">Type <span *ngIf="sortColumn === 'type_name'">{{ sortAscending ? '▲' : '▼' }}</span></th>
+                <th class="sortable" (click)="sortData('label')">Label <span *ngIf="sortColumn === 'label'">{{ sortAscending ? '▲' : '▼' }}</span></th>
                 <th class="sortable" (click)="sortData('name')">Name <span *ngIf="sortColumn === 'name'">{{ sortAscending ? '▲' : '▼' }}</span></th>
                 <th class="sortable" (click)="sortData('role_name')">Forward to Role <span *ngIf="sortColumn === 'role_name'">{{ sortAscending ? '▲' : '▼' }}</span></th>
-                <th class="sortable">Actions</th>
+                                <th class="sortable" (click)="sortData('status')">Status<span *ngIf="sortColumn === 'status'">{{ sortAscending ? '▲' : '▼' }}</span></th>
+
+                                <th class="sortable">Actions</th>
             </tr>
         </thead>
         <tbody>
-            <tr *ngFor="let user of filteredData">
-                <td>{{ user.id }}</td>
-                <td>{{ user.type_name }}</td>
+            <tr *ngFor="let user of filteredData; let i = index">
+                <td><input type="checkbox" [checked]="selectedRows.has(i + (currentPage - 1) * itemsPerPage)"
+                        (change)="toggleRowSelection(i + (currentPage - 1) * itemsPerPage)" /></td>
+                <td>{{ i + 1 }}</td>
+                <td>{{ user.TYPE_NAME }}</td>
+                <td>{{ user.LABEL }}</td>
                 <td>{{ user.NAME }}</td>
-                <td>{{ user.role_name }}</td>
+                <td>{{ user.ROLE_NAME }}</td>
+                <td>{{ user.STATUS }}</td>
                 <td>
                     <button class="btn btn-sm btn-primary me-2" (click)="openEditModal(user)">
                         <i class="bi bi-pencil-square"></i> Edit
                     </button>
-                    <button class="btn btn-sm btn-danger" (click)="deleteUser(user.id)">
+                    <button class="btn btn-sm btn-danger" (click)="deleteUser(user.ID)">
                         <i class="bi bi-trash"></i> Delete
                     </button>
                 </td>

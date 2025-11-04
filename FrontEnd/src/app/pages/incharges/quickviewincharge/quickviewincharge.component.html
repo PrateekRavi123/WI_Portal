@@ -1,39 +1,63 @@
-
 <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
     <h5 class="mb-0">Incharges List</h5>
-    <input type="text" class="form-control w-25" #searchBox placeholder="Search..." (input)="onSearch(searchBox.value)">
+    <div class="d-flex align-items-center gap-2">
+        <input type="text" class="form-control w-auto" style="min-width: 200px;" #searchBox placeholder="Search..."
+            (input)="onSearch(searchBox.value)">
+        <button class="btn btn-light btn-sm" (click)="downloadSelectedData()">
+            <i class="bi bi-download"></i> Export to Excel
+        </button>
+    </div>
 </div>
 
 <div class="table-responsive">
     <table class="table table-hover">
         <thead class="table-dark">
             <tr>
-                <th (click)="sortData('EMP_CODE')" class="sortable">ID <span *ngIf="sortColumn === 'EMP_CODE'">{{ sortAscending ? '▲' : '▼' }}</span></th>
-                <th (click)="sortData('EMP_NAME')" class="sortable">Name <span *ngIf="sortColumn === 'EMP_NAME'">{{ sortAscending ? '▲' : '▼' }}</span></th>
-                <th (click)="sortData('MOBILE_NO')" class="sortable">Mobile No <span *ngIf="sortColumn === 'MOBILE_NO'">{{ sortAscending ? '▲' : '▼' }}</span></th>
-                <th (click)="sortData('ROLE')" class="sortable">Role <span *ngIf="sortColumn === 'ROLE'">{{ sortAscending ? '▲' : '▼' }}</span></th>
-                <th (click)="sortData('LOCATION')" class="sortable">Location <span *ngIf="sortColumn === 'LOCATION'">{{ sortAscending ? '▲' : '▼' }}</span></th>
-                <th (click)="sortData('DIVISION')" class="sortable">Division <span *ngIf="sortColumn === 'DIVISION'">{{ sortAscending ? '▲' : '▼' }}</span></th>
-                <th (click)="sortData('CIRCLE')" class="sortable">Circle <span *ngIf="sortColumn === 'CIRCLE'">{{ sortAscending ? '▲' : '▼' }}</span></th>
-                <th (click)="sortData('STATUS')" class="sortable">Status <span *ngIf="sortColumn === 'STATUS'">{{ sortAscending ? '▲' : '▼' }}</span></th>
+                <th><input type="checkbox" [(ngModel)]="selectAll" (change)="toggleSelectAll()" /></th>
+                <th (click)="sortData('emp_code')" class="sortable">ID <span *ngIf="sortColumn === 'EMP_CODE'">{{
+                        sortAscending ? '▲' : '▼' }}</span></th>
+                <th (click)="sortData('emp_name')" class="sortable">Name <span *ngIf="sortColumn === 'EMP_NAME'">{{
+                        sortAscending ? '▲' : '▼' }}</span></th>
+                <th (click)="sortData('mobile_no')" class="sortable">Mobile No <span
+                        *ngIf="sortColumn === 'MOBILE_NO'">{{ sortAscending ? '▲' : '▼' }}</span></th>
+                <th (click)="sortData('role')" class="sortable">Role <span *ngIf="sortColumn === 'ROLE'">{{
+                        sortAscending ? '▲' : '▼' }}</span></th>
+                <th (click)="sortData('LOCATION')" class="sortable">Location <span *ngIf="sortColumn === 'LOCATION'">{{
+                        sortAscending ? '▲' : '▼' }}</span></th>
+                <th (click)="sortData('division')" class="sortable">Division <span *ngIf="sortColumn === 'DIVISION'">{{
+                        sortAscending ? '▲' : '▼' }}</span></th>
+                <th (click)="sortData('circle')" class="sortable">Circle <span *ngIf="sortColumn === 'CIRCLE'">{{
+                        sortAscending ? '▲' : '▼' }}</span></th>
+                <th (click)="sortData('status')" class="sortable">Status <span *ngIf="sortColumn === 'STATUS'">{{
+                        sortAscending ? '▲' : '▼' }}</span></th>
                 <th>Actions</th>
             </tr>
         </thead>
         <tbody>
-            <tr *ngFor="let user of filteredData">
-                <td>{{ user.EMP_CODE }}</td>
-                <td>{{ user.EMP_NAME }}</td>
-                <td>{{ user.MOBILE_NO }}</td>
-                <td>{{ user.ROLE }}</td>
-                <td>{{ user.LOCATION }}</td>
-                <td>{{ user.DIVISION }}</td>
-                <td>{{ user.CIRCLE }}</td>
-                <td>{{ user.STATUS }}</td>
+            <tr *ngFor="let user of filteredData,let i = index">
+                <td><input type="checkbox" [checked]="selectedRows.has(i + (currentPage - 1) * itemsPerPage)"
+                        (change)="toggleRowSelection(i + (currentPage - 1) * itemsPerPage)" /></td>
+                <td>{{ user.emp_code }}</td>
+                <td>{{ user.emp_name }}</td>
+                <td>{{ user.mobile_no }}</td>
+                <td>{{ user.role }}</td>
+                <td>
+                    <select class="form-select">
+                        <option *ngFor="let loc of user.locations" [value]="loc.loc_id">
+                            {{ loc.loc_name }}
+                        </option>
+                        <option *ngIf="user.locations.length === 0">No Location Assigned</option>
+                    </select>
+                </td>
+
+                <td>{{ user.division }}</td>
+                <td>{{ user.circle }}</td>
+                <td>{{ user.status }}</td>
                 <td>
                     <button class="btn btn-sm btn-primary me-2" (click)="openEditModal(user)">
                         <i class="bi bi-pencil-square"></i> Edit
                     </button>
-                    <button class="btn btn-sm btn-danger" (click)="deleteUser(user.ID)">
+                    <button class="btn btn-sm btn-danger" (click)="deleteUser(user.id)">
                         <i class="bi bi-trash"></i> Delete
                     </button>
                 </td>
@@ -43,7 +67,8 @@
 </div>
 
 <div class="card-footer d-flex justify-content-between align-items-center">
-    <span>Showing {{ (currentPage - 1) * itemsPerPage + 1 }} - {{ min(currentPage * itemsPerPage, data.length) }} of {{ data.length }} entries</span>
+    <span>Showing {{ (currentPage - 1) * itemsPerPage + 1 }} - {{ min(currentPage * itemsPerPage, data.length) }} of {{
+        data.length }} entries</span>
     <ul class="pagination mb-0">
         <li class="page-item" [class.disabled]="currentPage === 1">
             <a class="page-link" (click)="changePage(currentPage - 1)">Previous</a>

@@ -36,7 +36,7 @@ export class HeaderComponent {
   getdetails(){
     this.inchargeservice.getIncharge(this.emp_code?this.emp_code:"",this.cnt?this.cnt:"").subscribe({
       next: (data) => {
-        this.username =  data[0].EMP_NAME;
+        this.username =  data.emp_name;
       },
       error: (error) => {
         console.error('Error fetching data:', error);

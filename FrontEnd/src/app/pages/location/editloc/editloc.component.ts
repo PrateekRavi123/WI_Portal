@@ -30,24 +30,27 @@ export class EditlocComponent {
     this.editForm = this.fb.group({
       circle: ['', Validators.required],
       div: ['', Validators.required],
-      name: ['', [Validators.required, Validators.pattern(/^[A-Za-z\/,\-' ]+$/)]], 
+      name: ['', [Validators.required, Validators.pattern(/^[A-Za-z0-9\s.,'_&\/-]*$/)]], 
       office_type: ['', Validators.required], 
+      status: ['', Validators.required]
     });
   }
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes['user'] && this.user) {
       // Enable the form fields and set their values when user input is set
-      if (this.circleList && this.user.circle_code) {
-          this.dashboardservice.getAllDivision(this.user.circle_code).subscribe({
+      console.log(this.user);
+      if (this.circleList && this.user.CIRCLE_CODE) {
+          this.dashboardservice.getAllDivision(this.user.CIRCLE_CODE).subscribe({
             next: (data) => {
               this.divList = data;
               this.editForm.enable();
               this.editForm.patchValue({
-                circle: this.user.circle_code,
-                name: this.user.loc_name,
-                div: this.user.div_code,
-                office_type: this.user.office_type,
+                circle: this.user.CIRCLE_CODE,
+                name: this.user.LOC_NAME,
+                div: this.user.DIV_CODE,
+                office_type: this.user.OFFICE_TYPE_ID,
+                status: this.user.STATUS
               });
             },
             error: (error) => {
@@ -113,11 +116,12 @@ export class EditlocComponent {
 
   onSubmit() {
     const body = {
-      loc_id: this.user.loc_id,
+      loc_id: this.user.LOC_ID,
       loc_name: this.editForm.value.name,
       circle: this.editForm.value.circle,
       div_code: this.editForm.value.div,
       OFFICE_TYPE: this.editForm.value.office_type,
+      status: this.editForm.value.status,
     }
     this.locationservice.updatelocation(body).subscribe({
       next: (data) => {

@@ -1,0 +1,9 @@
+[4/11/2025, 10:07:01 am] Connected to WPINSP Oracle Database
+[4/11/2025, 10:19:54 am] Connected to WPINSP Oracle Database
+[4/11/2025, 10:25:47 am] Failed to delete location. Error: NJS-098: 2 bind placeholders were used in the SQL statement but 1 bind values were provided
+[4/11/2025, 10:27:30 am] Connected to WPINSP Oracle Database
+[4/11/2025, 10:34:59 am] Failed to delete location. Response: {"rowsAffected":0}
+[4/11/2025, 10:35:50 am] Connected to WPINSP Oracle Database
+[4/11/2025, 10:35:50 am] COUNT_A TYPE
+[4/11/2025, 10:35:50 am] Failed to delete location. Response: {"rowsAffected":0}
+[4/11/2025, 10:37:12 am] Connected to WPINSP Oracle Database

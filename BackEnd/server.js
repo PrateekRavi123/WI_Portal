@@ -9,6 +9,12 @@ const checkpointRoutes = require('./routes/checkpoint');
 const checklistRoutes = require('./routes/checklist');
 const roleRoutes = require('./routes/role');
 const officetypeRoutes = require('./routes/office_type');
+const encryphelperRoutes = require('./routes/encyHelp');
+const reportsRoutes = require('./routes/reports');
+const { logWrite } = require('./config/logfile');
+const cron = require('node-cron');
+const { sendMonthlyEmailJob, send15thEmails, send20thEmails } = require('./config/scheduledEmailJob');
+
 const app = express();
 // Middleware
 app.disable('x-powered-by');
@@ -59,23 +65,53 @@ app.use((req, res, next) => {
     res.removeHeader('Server');
     next();
 });
-
+const router = express.Router();
 const helmet = require('helmet');
 app.use(helmet());
-
+// Health check
+router.get('/ping', (req, res) => {
+    res.status(200).json({
+        status: 'OK',
+        message: 'API is live',
+        timestamp: new Date().toISOString()
+    });
+});
 // Routes
-app.use('/api/incharges', inchargesRoutes);
-app.use('/api/sendSMS', sendOtpRoutes);
-app.use('/api/location', locationRoutes);
-app.use('/api/common', commonRoutes);
-app.use('/api/checkpoint', checkpointRoutes);
-app.use('/api/checklist', checklistRoutes);
-app.use('/api/role', roleRoutes);
-app.use('/api/officetype', officetypeRoutes);
+router.use('/incharges', inchargesRoutes);
+router.use('/sendSMS', sendOtpRoutes);
+router.use('/location', locationRoutes);
+router.use('/common', commonRoutes);
+router.use('/checkpoint', checkpointRoutes);
+router.use('/checklist', checklistRoutes);
+router.use('/role', roleRoutes);
+router.use('/officetype', officetypeRoutes);
+router.use('/encryphelper', encryphelperRoutes);
+router.use('/reports', reportsRoutes);
 
+// Mount everything under /wiportalbakcend/api
+app.use('/bywipapi/api', router);
 
 // Start Server
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
 });
+
+
+
+// Run on 15th every month at 10 AM
+cron.schedule('0 10 15 * *', () => {
+  logWrite('Running 15th-of-month email job');
+  send15thEmails();
+});
+
+// Optional: 20th of each month
+cron.schedule('0 10 20 * *', () => {
+  logWrite('Running 20th-of-month email job');
+  send20thEmails();
+});
+
+// cron.schedule('*/2 * * * *', () => {
+//   logWrite('Running every-2-minute email job');
+//   sendMonthlyEmailJob(); 
+// });

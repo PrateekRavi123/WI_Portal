@@ -13,22 +13,26 @@ export class RoleService {
         this.apiUrl = this.apiService.getRoleEndpoint();
       }
 
+      // getAllRole(): Observable<any> {
+      //   return this.http.get<any>(`${this.apiUrl}/getallrole`, {}).pipe(
+      //     map((res) => {
+      //       if (res && res.data) {
+      //         return this.apiService.decryptData(res.data);
+      //       }
+      //       return res;
+      //     }),
+      //     catchError(error => {
+      //       if (error.status === 400) {
+      //         return of(error.status);
+      //       } else {
+      //         console.error('Error occurred:', error);
+      //         return throwError(() => error);
+      //       }
+      //     })
+      //   );
+      // }
       getAllRole(): Observable<any> {
-        return this.http.get<any>(`${this.apiUrl}/getallrole`, {}).pipe(
-          map((res) => {
-            if (res && res.data) {
-              return this.apiService.decryptData(res.data);
-            }
-            return res;
-          }),
-          catchError(error => {
-            if (error.status === 400) {
-              return of(error.status);
-            } else {
-              console.error('Error occurred:', error);
-              return throwError(() => error);
-            }
-          })
-        );
+        return this.http.get<any>(`${this.apiUrl}/getallrole`);
       }
-}
+
+    }

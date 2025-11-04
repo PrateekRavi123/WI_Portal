@@ -1,33 +1,44 @@
 
 <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
     <h5 class="mb-0">Location List</h5>
-    <input type="text" class="form-control w-25" #searchBox placeholder="Search..." (input)="onSearch(searchBox.value)">
+    <div class="d-flex align-items-center gap-2">
+        <input type="text" class="form-control w-auto" style="min-width: 200px;" #searchBox placeholder="Search..."
+            (input)="onSearch(searchBox.value)">
+        <button class="btn btn-light btn-sm" (click)="downloadSelectedData()">
+            <i class="bi bi-download"></i> Export to Excel
+        </button>
+    </div>
 </div>
 
 <div class="table-responsive">
     <table class="table table-hover">
         <thead class="table-dark">
             <tr>
-                <th (click)="sortData('loc_id')" class="sortable">ID <span *ngIf="sortColumn === 'loc_id'">{{ sortAscending ? '▲' : '▼' }}</span></th>
-                <th (click)="sortData('loc_name')" class="sortable">Name <span *ngIf="sortColumn === 'loc_name'">{{ sortAscending ? '▲' : '▼' }}</span></th>
-                <th (click)="sortData('div')" class="sortable">Division <span *ngIf="sortColumn === 'div'">{{ sortAscending ? '▲' : '▼' }}</span></th>
-                <th (click)="sortData('circle')" class="sortable">Circle <span *ngIf="sortColumn === 'circle'">{{ sortAscending ? '▲' : '▼' }}</span></th>
-                <th (click)="sortData('office_type')" class="sortable">Office Type <span *ngIf="sortColumn === 'office_type'">{{ sortAscending ? '▲' : '▼' }}</span></th>
+                <th><input type="checkbox" [(ngModel)]="selectAll" (change)="toggleSelectAll()" /></th>
+                <th (click)="sortData('LOC_ID')" class="sortable">ID <span *ngIf="sortColumn === 'LOC_ID'">{{ sortAscending ? '▲' : '▼' }}</span></th>
+                <th (click)="sortData('LOC_NAME')" class="sortable">Name <span *ngIf="sortColumn === 'LOC_NAME'">{{ sortAscending ? '▲' : '▼' }}</span></th>
+                <th (click)="sortData('DIV')" class="sortable">Division <span *ngIf="sortColumn === 'DIV'">{{ sortAscending ? '▲' : '▼' }}</span></th>
+                <th (click)="sortData('CIRCLE')" class="sortable">Circle <span *ngIf="sortColumn === 'CIRCLE'">{{ sortAscending ? '▲' : '▼' }}</span></th>
+                <th (click)="sortData('OFFICE_TYPE')" class="sortable">Office Type <span *ngIf="sortColumn === 'OFFICE_TYPE'">{{ sortAscending ? '▲' : '▼' }}</span></th>
+                <th (click)="sortData('STATUS')" class="sortable">Status <span *ngIf="sortColumn === 'STATUS'">{{ sortAscending ? '▲' : '▼' }}</span></th>
                 <th>Actions</th>
             </tr>
         </thead>
         <tbody>
-            <tr *ngFor="let user of filteredData">
-                <td>{{ user.loc_id }}</td>
-                <td>{{ user.loc_name }}</td>
-                <td>{{ user.div }}</td>
-                <td>{{ user.circle }}</td>
-                <td>{{ user.office_type }}</td>
+            <tr *ngFor="let user of filteredData,let i = index">
+                <td><input type="checkbox" [checked]="selectedRows.has(i + (currentPage - 1) * itemsPerPage)"
+                        (change)="toggleRowSelection(i + (currentPage - 1) * itemsPerPage)" /></td>
+                <td>{{ user.LOC_ID }}</td>
+                <td>{{ user.LOC_NAME }}</td>
+                <td>{{ user.DIV }}</td>
+                <td>{{ user.CIRCLE }}</td>
+                <td>{{ user.OFFICE_TYPE }}</td>
+                <td>{{ user.STATUS }}</td>
                 <td>
                     <button class="btn btn-sm btn-primary me-2" (click)="openEditModal(user)">
                         <i class="bi bi-pencil-square"></i> Edit
                     </button>
-                    <button class="btn btn-sm btn-danger" (click)="deleteUser(user.loc_id)">
+                    <button class="btn btn-sm btn-danger" (click)="deleteUser(user.LOC_ID)">
                         <i class="bi bi-trash"></i> Delete
                     </button>
                 </td>

@@ -38,7 +38,11 @@ export class EditpendingchecklistComponent {
       div: [{ value: '', disabled: true }],
       remarks: [{ value: '', disabled: true }],
       filename: [{ value: '', disabled: true }],
-      filedata: [{ value: '', disabled: true }]
+      filedata: [{ value: '', disabled: true }],
+      filename2: [{ value: '', disabled: true }],
+      filedata2: [{ value: '', disabled: true }],
+      filename3: [{ value: '', disabled: true }],
+      filedata3: [{ value: '', disabled: true }]
     });
   }
 
@@ -47,10 +51,10 @@ export class EditpendingchecklistComponent {
       this.getsinglechecklistcheckpoint(this.user.ID);
       this.editForm.patchValue({
         checklistid: this.user.CHECKLIST_ID,
-        type_name: this.user.type_name,
+        type_name: this.user.TYPE_NAME,
         name: this.user.NAME,
-        role_name: this.user.role_name,
-        status: this.user.status,
+        role_name: this.user.ROLE_NAME,
+        status: this.user.STATUS,
         loc: this.user.LOC,
         div: this.user.DIV,
       });
@@ -69,9 +73,13 @@ export class EditpendingchecklistComponent {
     this.checklistservice.getsinglechecklistcheckpoint(body).subscribe({
       next: (data) => {
         this.editForm.patchValue({
-          remarks: data[0].remarks,
+          remarks: data[0].REMARKS,
           filename: data[0].FILENAME,
-          filedata: data[0].FILEDATA
+          filedata: data[0].FILEDATA,
+          filename2: data[0].FILENAME2,
+          filedata2: data[0].FILEDATA2,
+          filename3: data[0].FILENAME3,
+          filedata3: data[0].FILEDATA3
         });
       },
       error: (error) => {
@@ -81,49 +89,54 @@ export class EditpendingchecklistComponent {
   }
 
 
-  onFileChange( filename: string, data:  any) {
-    const fileData = data;
-    const fileName = filename;
-    if (!fileData) {
-      console.error("No file data available.");
-      return;
-    }
-    // Check if data is already a Blob
-  let blob: Blob;
-
-  if (data instanceof Blob) {
-    // If it's already a Blob, just use it
-    blob = data;
-  } else if (data instanceof ArrayBuffer) {
-    // If it's an ArrayBuffer, create a Blob from it
-    blob = new Blob([data]);
-  } else if (data && data.type && data.data) {
-    // If it's a custom data structure like { type: 'Buffer', data: Array(9585) }
-    // You may need to convert it into a Blob manually
-    const byteArray = new Uint8Array(data.data); // Assuming data is an array of bytes
-    blob = new Blob([byteArray], { type: data.type });
-  } else {
-    console.error("Provided data is not a valid Blob or ArrayBuffer.");
+ onFileChange(filename: string, base64Data: string) {
+  if (!base64Data) {
+    console.error("No file data available.");
     return;
   }
 
-  // Ensure blob has valid content
-  if (!blob.size) {
-    console.error("Provided Blob has no size (empty file).");
-    return;
-  }
+  try {
+    // Decode base64 to binary
+    const byteCharacters = atob(base64Data);
+    const byteNumbers = new Array(byteCharacters.length).fill(0).map((_, i) => byteCharacters.charCodeAt(i));
+    const byteArray = new Uint8Array(byteNumbers);
+
+    // Guess MIME type from filename (optional but improves UX)
+    const mimeType = this.getMimeTypeFromFilename(filename);
+
+    // Create a Blob
+    const blob = new Blob([byteArray], { type: mimeType });
+
+    // Create a temporary link for download or viewing
     const link = document.createElement('a');
-    link.href = window.URL.createObjectURL(blob);
-    link.download = fileName || 'downloaded_file'; 
+    link.href = URL.createObjectURL(blob);
+    link.download = filename || 'downloaded_file';
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
 
+  } catch (err) {
+    console.error("Error processing file download:", err);
   }
+}
+getMimeTypeFromFilename(filename: string): string {
+  const ext = filename.split('.').pop()?.toLowerCase();
+  switch (ext) {
+    case 'pdf': return 'application/pdf';
+    case 'jpg':
+    case 'jpeg': return 'image/jpeg';
+    case 'png': return 'image/png';
+    case 'doc': return 'application/msword';
+    case 'docx': return 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
+    case 'xls': return 'application/vnd.ms-excel';
+    case 'xlsx': return 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
+    default: return 'application/octet-stream'; // fallback
+  }
+}
 
   onSubmit() {
     const body = {
-      loc_id: this.user.loc_id,
+      loc_id: this.user.LOC_ID,
       loc_name: this.editForm.value.name,
       circle: this.editForm.value.circle,
       div_code: this.editForm.value.div,

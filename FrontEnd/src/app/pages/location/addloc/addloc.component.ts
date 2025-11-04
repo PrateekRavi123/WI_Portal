@@ -27,8 +27,9 @@ editForm: FormGroup;
     this.editForm = this.fb.group({
       circle: ['', Validators.required],
       div: ['', Validators.required],
-      name: ['', [Validators.required, Validators.pattern(/^[A-Za-z0-9\s.,'_-]*$/)]],
-      office_type: ['', Validators.required]
+      name: ['', [Validators.required, Validators.pattern(/^[A-Za-z0-9\s.,'_&\/-]*$/)]],
+      office_type: ['', Validators.required],
+      status: ['', Validators.required]
     });
   }
 
@@ -83,7 +84,8 @@ editForm: FormGroup;
       loc_name: this.editForm.value.name,
       circle: this.editForm.value.circle,
       div_code: this.editForm.value.div,
-      office_type: this.editForm.value.office_type
+      office_type: this.editForm.value.office_type,
+      status: this.editForm.value.status
     }
     this.locationservice.addlocation(body).subscribe({
       next: (data) => {

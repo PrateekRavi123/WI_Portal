@@ -1,0 +1,28 @@
+<div class="card shadow-lg border-0 rounded-3">
+  <nav>
+    <div class="nav nav-tabs bg-warning border-bottom" role="tablist">
+      <button
+        *ngFor="let tab of tabs"
+        (click)="activeTab = tab.key"
+        [ngClass]="{'active': activeTab === tab.key}"
+        class="nav-link text-dark fw-semibold px-4 py-2 rounded-top"
+        type="button"
+        role="tab"
+      >
+        {{ tab.label }}
+      </button>
+    </div>
+  </nav>
+
+  <div class="px-3 py-3">
+    <div *ngIf="activeTab === 'notsubmittedchecklist'">
+      <app-notsubmittedchecklist></app-notsubmittedchecklist>
+    </div>
+    <div *ngIf="activeTab === 'observationsummary'">
+      <app-observationsummary></app-observationsummary>
+    </div>
+    <div *ngIf="activeTab === 'compiledchecksheet'">
+     <app-compiledchecksheet></app-compiledchecksheet>
+    </div>
+  </div>
+</div>

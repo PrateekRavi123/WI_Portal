@@ -54,22 +54,29 @@
                                 <h6>Please enter the one time password <br> to verify your account</h6>
                                 <div> <span>A code has been sent to {{MobileNumber}} </span>  </div>
                                 <div id="otp" class="inputs d-flex flex-row justify-content-center mt-2"> <input
-                                        class="m-2 text-center form-control rounded border border-dark" type="text"
+                                        class="m-2 text-center form-control rounded border border-dark" type="text" inputmode="numeric" 
+  pattern="[0-9]*"
                                         id="first" formControlName="otpFirst" maxlength="1"
                                         (keyup)="onKeyUp($event, 'first')" />
-                                    <input class="m-2 text-center form-control rounded border border-dark" type="text"
+                                    <input class="m-2 text-center form-control rounded border border-dark" type="text" inputmode="numeric" 
+  pattern="[0-9]*"
                                         id="second" formControlName="otpSecond" maxlength="1"
                                         (keyup)="onKeyUp($event, 'second')" />
-                                    <input class="m-2 text-center form-control rounded border border-dark" type="text"
+                                    <input class="m-2 text-center form-control rounded border border-dark" type="text" inputmode="numeric" 
+  pattern="[0-9]*"
                                         id="third" formControlName="otpThird" maxlength="1"
                                         (keyup)="onKeyUp($event, 'third')" />
-                                    <input class="m-2 text-center form-control rounded border border-dark" type="text"
-                                        id="fourth" formControlName="otpFourth" maxlength="1"
+                                    <input class="m-2 text-center form-control rounded border border-dark" type="text"  inputmode="numeric" 
+  pattern="[0-9]*"
+                                        inputmode="numeric" 
+  pattern="[0-9]*" id="fourth" formControlName="otpFourth" maxlength="1"
                                         (keyup)="onKeyUp($event, 'fourth')" />
-                                    <input class="m-2 text-center form-control rounded border border-dark" type="text"
+                                    <input class="m-2 text-center form-control rounded border border-dark" type="text" inputmode="numeric" 
+  pattern="[0-9]*"
                                         id="fifth" formControlName="otpFifth" maxlength="1"
                                         (keyup)="onKeyUp($event, 'fifth')" />
-                                    <input class="m-2 text-center form-control rounded border border-dark" type="text"
+                                    <input class="m-2 text-center form-control rounded border border-dark" type="text" inputmode="numeric" 
+  pattern="[0-9]*"
                                         id="sixth" formControlName="otpSixth" maxlength="1"
                                         (keyup)="onKeyUp($event, 'sixth')" />
                                 </div>

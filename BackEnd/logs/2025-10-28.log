@@ -1,0 +1,75 @@
+[28/10/2025, 10:35:32 am] Connected to WPINSP Oracle Database
+[28/10/2025, 10:35:32 am] Connected to IMS Oracle Database
+[28/10/2025, 10:35:41 am] Connected to IMS Oracle Database
+[28/10/2025, 10:40:27 am] Connected to IMS Oracle Database
+[28/10/2025, 10:40:45 am] Error in sending OTP: NJS-503: connection to host 10.125.75.203 port 1521 could not be established. (CONNECTION_ID=4rcDS04243JhoUuF+67D+g==)
+connect ECONNREFUSED 10.125.75.203:1521
+[28/10/2025, 11:43:01 am] Error in sending OTP: NJS-503: connection to host 10.125.75.217 port 1521 could not be established. (CONNECTION_ID=v+WnH7Dikx+8AyriVbfgFg==)
+connect ECONNREFUSED 10.125.75.217:1521
+[28/10/2025, 12:27:23 pm] Connected to IMS Oracle Database
+[28/10/2025, 12:27:37 pm] Connected to IMS Oracle Database
+[28/10/2025, 12:27:38 pm] Failed to fetch incharge. Error: ORA-01722: invalid number
+Help: https://docs.oracle.com/error-help/db/ora-01722/
+[28/10/2025, 2:18:11 pm] verifyToken error: Error: NJS-503: connection to host 10.125.75.217 port 1521 could not be established. (CONNECTION_ID=swIysEQ5bDkZIXxYp8Z8tA==)
+connect ECONNREFUSED 10.125.75.217:1521
+[28/10/2025, 2:18:29 pm] verifyToken error: Error: NJS-503: connection to host 10.125.75.217 port 1521 could not be established. (CONNECTION_ID=meu/ay0rdk9B9sAqSUyv5A==)
+connect ECONNREFUSED 10.125.75.217:1521
+[28/10/2025, 2:18:47 pm] verifyToken error: Error: NJS-503: connection to host 10.125.75.217 port 1521 could not be established. (CONNECTION_ID=2pVGeiPkOcUFu7Kjfc3P5w==)
+connect ECONNREFUSED 10.125.75.217:1521
+[28/10/2025, 2:19:05 pm] verifyToken error: Error: NJS-503: connection to host 10.125.75.217 port 1521 could not be established. (CONNECTION_ID=TM2P3WpDG8w7Dvo1DBiScA==)
+connect ECONNREFUSED 10.125.75.217:1521
+[28/10/2025, 2:19:23 pm] verifyToken error: Error: NJS-503: connection to host 10.125.75.217 port 1521 could not be established. (CONNECTION_ID=39QPGZsOZhVBoCIOMFHtZQ==)
+connect ECONNREFUSED 10.125.75.217:1521
+[28/10/2025, 2:19:41 pm] verifyToken error: Error: NJS-503: connection to host 10.125.75.217 port 1521 could not be established. (CONNECTION_ID=mdDcw4P0mnV5gS2HcMD6iQ==)
+connect ECONNREFUSED 10.125.75.217:1521
+[28/10/2025, 2:19:58 pm] verifyToken error: Error: NJS-503: connection to host 10.125.75.217 port 1521 could not be established. (CONNECTION_ID=VB0+hlNqLsOBadeV/YQzvA==)
+connect ECONNREFUSED 10.125.75.217:1521
+[28/10/2025, 2:20:16 pm] verifyToken error: Error: NJS-503: connection to host 10.125.75.217 port 1521 could not be established. (CONNECTION_ID=ex2jxl65EqQjGQzo1zQwsg==)
+connect ECONNREFUSED 10.125.75.217:1521
+[28/10/2025, 2:20:34 pm] Error in sending OTP: NJS-503: connection to host 10.125.75.217 port 1521 could not be established. (CONNECTION_ID=p8kbkJNRMnVHs/RFr7kj1w==)
+connect ECONNREFUSED 10.125.75.217:1521
+[28/10/2025, 2:20:51 pm] Error in sending OTP: NJS-503: connection to host 10.125.75.217 port 1521 could not be established. (CONNECTION_ID=blPi4JRzL2EZMhSx5ElVhg==)
+connect ECONNREFUSED 10.125.75.217:1521
+[28/10/2025, 3:16:51 pm] Connected to WPINSP Oracle Database
+[28/10/2025, 3:16:51 pm] Connected to IMS Oracle Database
+[28/10/2025, 3:17:03 pm] Connected to IMS Oracle Database
+[28/10/2025, 3:17:03 pm] Failed to fetch incharge. Error: ORA-01722: invalid number
+Help: https://docs.oracle.com/error-help/db/ora-01722/
+[28/10/2025, 3:24:34 pm] Connected to WPINSP Oracle Database
+[28/10/2025, 3:24:35 pm] Failed to fetch incharge. Error: ORA-01722: invalid number
+Help: https://docs.oracle.com/error-help/db/ora-01722/
+[28/10/2025, 3:24:42 pm] Connected to IMS Oracle Database
+[28/10/2025, 3:24:59 pm] Connected to IMS Oracle Database
+[28/10/2025, 3:24:59 pm] Error in validating OTP: NJS-097: no bind placeholder named ":USER" was found in the statement text
+[28/10/2025, 3:25:53 pm] Connected to WPINSP Oracle Database
+[28/10/2025, 3:25:54 pm] Connected to IMS Oracle Database
+[28/10/2025, 3:26:17 pm] Connected to IMS Oracle Database
+[28/10/2025, 4:15:48 pm] Connected to WPINSP Oracle Database
+[28/10/2025, 4:15:48 pm] Connected to IMS Oracle Database
+[28/10/2025, 4:19:06 pm] Connected to IMS Oracle Database
+[28/10/2025, 4:19:26 pm] Connected to IMS Oracle Database
+[28/10/2025, 4:24:16 pm] Connected to IMS Oracle Database
+[28/10/2025, 4:24:32 pm] Connected to IMS Oracle Database
+[28/10/2025, 4:24:34 pm] Failed to fetch all checklists. Error: ORA-00904: "UL"."EMP_ID": invalid identifier
+Help: https://docs.oracle.com/error-help/db/ora-00904/
+[28/10/2025, 4:24:39 pm] Failed to fetch all checklists. Error: ORA-00904: "UL"."EMP_ID": invalid identifier
+Help: https://docs.oracle.com/error-help/db/ora-00904/
+[28/10/2025, 4:24:48 pm] Failed to fetch all checklists. Error: ORA-00904: "UL"."EMP_ID": invalid identifier
+Help: https://docs.oracle.com/error-help/db/ora-00904/
+[28/10/2025, 4:24:50 pm] Failed to fetch all checklists. Error: ORA-00904: "UL"."EMP_ID": invalid identifier
+Help: https://docs.oracle.com/error-help/db/ora-00904/
+[28/10/2025, 4:25:07 pm] Failed to fetch all checklists. Error: ORA-00904: "UL"."EMP_ID": invalid identifier
+Help: https://docs.oracle.com/error-help/db/ora-00904/
+[28/10/2025, 4:26:07 pm] Connected to WPINSP Oracle Database
+[28/10/2025, 4:26:07 pm] Failed to fetch all checklists. Error: ORA-00904: "UL"."EMP_ID": invalid identifier
+Help: https://docs.oracle.com/error-help/db/ora-00904/
+[28/10/2025, 4:28:00 pm] Connected to WPINSP Oracle Database
+[28/10/2025, 4:36:09 pm] Connected to WPINSP Oracle Database
+[28/10/2025, 4:36:27 pm] Failed to add checklist. Error: ORA-00001: unique constraint (WPINSP.PK_CHECKLIST_MST) violated
+Help: https://docs.oracle.com/error-help/db/ora-00001/
+[28/10/2025, 4:37:30 pm] Connected to IMS Oracle Database
+[28/10/2025, 4:37:47 pm] Connected to IMS Oracle Database
+[28/10/2025, 4:39:37 pm] Connected to IMS Oracle Database
+[28/10/2025, 4:39:50 pm] Connected to IMS Oracle Database
+[28/10/2025, 4:41:03 pm] Connected to IMS Oracle Database
+[28/10/2025, 4:41:21 pm] Connected to IMS Oracle Database

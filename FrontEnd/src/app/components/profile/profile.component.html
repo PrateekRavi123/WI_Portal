@@ -1,62 +1,67 @@
 <div class="text-start">
-  <h4 class="mb-3">Update Profile</h4>
-  <form [formGroup]="profileForm" (ngSubmit)="onSubmit()">
-      <!-- Row 1 -->
-      <div class="row mb-3">
-          <div class="col-md-4">
-              <label class="form-label fw-bold">Employee ID</label>
-              <input type="text" class="form-control" formControlName="emp_code" >
-          </div>
-          <div class="col-md-4">
-              <label class="form-label fw-bold">Full Name</label>
-              <input type="text" class="form-control" formControlName="emp_name">
-              <div *ngIf="f['emp_name'].invalid && f['emp_name'].touched" class="text-danger small">
-                {{ f['emp_name'].errors?.['required'] ? 'Name is required.' : 'Invalid characters entered. Please avoid special characters.' }}
-              </div>
-          </div>
-          <div class="col-md-4">
-              <label class="form-label fw-bold">Email ID</label>
-              <input type="email" class="form-control" formControlName="email">
-              <div *ngIf="f['email'].invalid && f['email'].touched" class="text-danger small">
-                  Enter a valid email.
-              </div>
-          </div>
-      </div>
+    <h4 class="mb-3">Update Profile</h4>
+    <form [formGroup]="profileForm" (ngSubmit)="onSubmit()">
+        <!-- Row 1 -->
+        <div class="row mb-3">
+            <div class="col-md-4">
+                <label class="form-label fw-bold">Employee ID</label>
+                <input type="text" class="form-control" formControlName="emp_code">
+            </div>
+            <div class="col-md-4">
+                <label class="form-label fw-bold">Full Name</label>
+                <input type="text" class="form-control" formControlName="emp_name">
+                <div *ngIf="f['emp_name'].invalid && f['emp_name'].touched" class="text-danger small">
+                    {{ f['emp_name'].errors?.['required'] ? 'Name is required.' : 'Invalid characters entered. Please
+                    avoid special characters.' }}
+                </div>
+            </div>
+            <div class="col-md-4">
+                <label class="form-label fw-bold">Email ID</label>
+                <input type="email" class="form-control" formControlName="email">
+                <div *ngIf="f['email'].invalid && f['email'].touched" class="text-danger small">
+                    Enter a valid email.
+                </div>
+            </div>
+        </div>
 
-      <!-- Row 2 -->
-      <div class="row mb-3">
-          <div class="col-md-4">
-              <label class="form-label fw-bold">Phone</label>
-              <input type="text" class="form-control" formControlName="phone">
-              <div *ngIf="f['phone'].invalid && f['phone'].touched" class="text-danger small">
-                  Enter a valid 10-digit phone number.
-              </div>
-          </div>
-          <div class="col-md-4">
-              <label class="form-label fw-bold">Circle</label>
-              <input type="text" class="form-control" formControlName="circle">
-          </div>
-          <div class="col-md-4">
-              <label class="form-label fw-bold">Division</label>
-              <input type="text" class="form-control" formControlName="division">
-          </div>
-      </div>
+        <!-- Row 2 -->
+        <div class="row mb-3">
+            <div class="col-md-4">
+                <label class="form-label fw-bold">Phone</label>
+                <input type="text" class="form-control" formControlName="phone">
+                <div *ngIf="f['phone'].invalid && f['phone'].touched" class="text-danger small">
+                    Enter a valid 10-digit phone number.
+                </div>
+            </div>
+            <div class="col-md-4">
+                <label class="form-label fw-bold">Circle</label>
+                <input type="text" class="form-control" formControlName="circle">
+            </div>
+            <div class="col-md-4">
+                <label class="form-label fw-bold">Division</label>
+                <input type="text" class="form-control" formControlName="division">
+            </div>
+        </div>
 
-      <!-- Row 3 -->
-      <div class="row mb-3">
-          <div class="col-md-4">
-              <label class="form-label fw-bold">Location</label>
-              <input type="text" class="form-control" formControlName="location">
-          </div>
-          <div class="col-md-4">
-              <label class="form-label fw-bold">Role</label>
-              <input type="text" class="form-control" formControlName="role">
-          </div>
-      </div>
+        <!-- Row 3 -->
+        <div class="row mb-3">
+            <div class="col-md-4">
+                <label class="form-label fw-bold">Locations</label>
+                <select class="form-select"  >
+                    <option *ngFor="let locCtrl of f['locations'].controls">
+                    {{ locCtrl.value }}
+                    </option>
+                </select>
+            </div>
+            <div class="col-md-4">
+                <label class="form-label fw-bold">Role</label>
+                <input type="text" class="form-control" formControlName="role">
+            </div>
+        </div>
 
-      <!-- Submit Button -->
-      <div class="text-end">
-          <button type="submit" class="btn btn-primary" [disabled]="profileForm.invalid">Update</button>
-      </div>
-  </form>
+        <!-- Submit Button -->
+        <div class="text-end">
+            <button type="submit" class="btn btn-primary" [disabled]="profileForm.invalid">Update</button>
+        </div>
+    </form>
 </div>
